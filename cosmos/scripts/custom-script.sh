@@ -24,11 +24,11 @@ benchmarkname=ycsbbenchmarking
 echo "########## Cloning Test Bench repository ##########"
 git clone -b "$BENCHMARKING_TOOLS_BRANCH_NAME" --single-branch "$BENCHMARKING_TOOLS_URL"
 echo "########## Pulling Latest YCSB TOOLS ##########"
-git -C Benckmarking pull
+git -C azure-db-benchmarking pull
 mkdir /tmp/ycsb
 rm -rf /tmp/ycsb/*
-cp -r ./Benckmarking/cosmos/scripts/* /tmp/ycsb
-#cp -r ./Benckmarking/core/data/* /tmp/ycsb
+cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
+#cp -r ./azure-db-benchmarking/core/data/* /tmp/ycsb
 
 #Build YCSB from source
 echo "########## Cloning YCSB repository ##########"
