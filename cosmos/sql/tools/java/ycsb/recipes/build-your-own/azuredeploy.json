@@ -149,7 +149,10 @@
         },
         "diagnosticsLatencyThresholdInMS": {
             "type": "int",
-            "defaultValue": -1
+            "defaultValue": -1,
+            "metadata": {
+                "description": "Specifies request latency threshold for logging clinet request diagnostics. There is no logging by default"
+            }
         },
         "readproportion": {
             "type": "string",
