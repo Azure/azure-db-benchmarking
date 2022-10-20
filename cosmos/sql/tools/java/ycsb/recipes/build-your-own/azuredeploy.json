@@ -1,0 +1,345 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "projectName": {
+            "type": "string",
+            "defaultValue": "Benchmarking",
+            "metadata": {
+                "description": "Specifies a name for generating resource names."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "benchmarking",
+            "metadata": {
+                "description": "Specifies a username for the Virtual Machine."
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies a password for the Virtual Machine."
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3",
+            "metadata": {
+                "description": "Specifies a Virtual Machine size"
+            }
+        },
+        "vmCount": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Specifies the number of Virtual Machines that will part of the test bench"
+            }
+        },
+        "vNetName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('projectName'), '-vnet')]",
+            "metadata": {
+                "description": "Specifies a Virtual Network name"
+            }
+        },
+        "vNetAddressPrefixes": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/16",
+            "metadata": {
+                "description": "Specifies a Virtual Network Address Prefix"
+            }
+        },
+        "vNetSubnetName": {
+            "type": "string",
+            "defaultValue": "default",
+            "metadata": {
+                "description": "Specifies a Virtual Network Subnet name"
+            }
+        },
+        "vNetSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/24",
+            "metadata": {
+                "description": "Specifies a Virtual Network Subnet Address Prefix "
+            }
+        },
+
+        "resultsStorageConnectionString": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies a connection string of the storage account where results will be avaialble"
+            }
+        },
+        "cosmosURI": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the URI of the Cosmos DB account"
+            }
+        },
+        "cosmosKey": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies the key for the Cosmos DB account"
+            }
+        },
+        "workloadType": {
+            "type": "string",
+            "defaultValue": "workloadc",
+            "metadata": {
+                "description": "Specifies the workload"
+            }
+        },
+        "threads": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Specifies the threads per client"
+            }
+        },
+        "targetOperationsPerSecond": {
+            "type": "int",
+            "defaultValue": -1,
+            "metadata": {
+                "description": "Specifies the maximum number of operations per second"
+            }
+        },
+        "ycsbRecordCount": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "ycsbOperationCount": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "ycsbGitHubRepoName": {
+            "type": "string",
+            "defaultValue": "Azure/YCSB",
+            "metadata": {
+                "description": "Specifies the GitHub Url for YCSB source code repository"
+            }
+        },
+        "ycsbGitHubBranchName": {
+            "type": "string",
+            "defaultValue": "main",
+            "metadata": {
+                "description": "Specifies the GitHub branch for YCSB source code repository"
+            }
+        },
+        "benchmarkingToolsRepoName": {
+            "type": "string",
+            "defaultValue": "RaviTella/Benckmarking",
+            "metadata": {
+                "description": "Specifies the GitHub Url for YCSB source code repository"
+            }
+        },
+        "benchmarkingToolsBranchName": {
+            "type": "string",
+            "defaultValue": "main",
+            "metadata": {
+                "description": "Specifies the GitHub branch for YCSB source code repository"
+            }
+        },
+        "diagnosticsLatencyThresholdInMS": {
+            "type": "int",
+            "defaultValue": -1
+        },
+        "readproportion": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies read operation percentage from 0 to 1"
+            }
+        },
+        "updateproportion": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies update operation percentage from 0 to 1"
+            }
+        },
+        "scanproportion": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies scan operation percentage from 0 to 1"
+            }
+        },
+        "insertproportion": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies insert operation percentage from 0 to 1"
+            }
+        },
+        "writeOnlyOperation": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies writeOnlyOperation true or false, if true it will override the workload and run 100% write, transaction wont fail on single error unlike load phase"
+            }
+        },
+        "requestdistribution": {
+            "type": "string",
+            "defaultValue": "uniform",
+            "metadata": {
+                "description": "Specifies request distribution"
+            }
+        },
+        "insertorder": {
+            "type": "string",
+            "defaultValue": "hashed",
+            "metadata": {
+                "description": "Specifies insert data in ordered or hashed manner"
+            }
+        },
+        "includeExceptionStackInLog": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies includeExceptionStackInLog true or false, it will print the complete exception trace on error"
+            }
+        },
+        "fieldcount": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies field count in the item"
+            }
+        },
+        "skipLoadPhase": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies skipLoadPhase true or false, if set true load phase will not trigger before the transaction phase"
+            }
+        }
+    },
+    "variables": {
+        "templateURL": "[concat('https://raw.githubusercontent.com/',parameters('benchmarkingToolsRepoName'),'/',parameters('benchmarkingToolsBranchName'),'/cosmos/infra/azuredeploy.json')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "[concat(deployment().name,'LinkedTemplate')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templateURL')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "projectName": {
+                        "value": "[parameters('projectName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    },
+                    "vmCount": {
+                        "value": "[parameters('vmCount')]"
+                    },
+                    "vNetName": {
+                        "value": "[parameters('vNetName')]"
+                    },
+                    "vNetAddressPrefixes": {
+                        "value": "[parameters('vNetAddressPrefixes')]"
+                    },
+                    "vNetSubnetName": {
+                        "value": "[parameters('vNetSubnetName')]"
+                    },
+                    "vNetSubnetAddressPrefix": {
+                        "value": "[parameters('vNetSubnetAddressPrefix')]"
+                    },
+                    "resultsStorageConnectionString": {
+                        "value": "[parameters('resultsStorageConnectionString')]"
+                    },
+                    "cosmosURI": {
+                        "value": "[parameters('cosmosURI')]"
+                    },
+                    "cosmosKey": {
+                        "value": "[parameters('cosmosKey')]"
+                    },
+                    "workloadType": {
+                        "value": "[parameters('workloadType')]"
+                    },
+                    "threads": {
+                        "value": "[parameters('threads')]"
+                    },
+                    "targetOperationsPerSecond": {
+                        "value": "[parameters('targetOperationsPerSecond')]"
+                    },
+                    "ycsbRecordCount": {
+                        "value": "[parameters('ycsbRecordCount')]"
+                    },
+                    "ycsbOperationCount": {
+                        "value": "[parameters('ycsbOperationCount')]"
+                    },
+                    "ycsbGitHubRepoName": {
+                        "value": "[parameters('ycsbGitHubRepoName')]"
+                    },
+                    "ycsbGitHubBranchName": {
+                        "value": "[parameters('ycsbGitHubBranchName')]"
+                    },
+                    "benchmarkingToolsRepoName": {
+                        "value": "[parameters('benchmarkingToolsRepoName')]"
+                    },
+                    "benchmarkingToolsBranchName": {
+                        "value": "[parameters('benchmarkingToolsBranchName')]"
+                    },
+                    "diagnosticsLatencyThresholdInMS": {
+                        "value": "[parameters('diagnosticsLatencyThresholdInMS')]"
+                    },
+                    "readproportion": {
+                        "value": "[parameters('readproportion')]"
+                    },
+                    "updateproportion": {
+                        "value": "[parameters('updateproportion')]"
+                    },
+                    "scanproportion": {
+                        "value": "[parameters('scanproportion')]"
+                    },
+                    "insertproportion": {
+                        "value": "[parameters('insertproportion')]"
+                    },
+                    "writeOnlyOperation": {
+                        "value": "[parameters('writeOnlyOperation')]"
+                    },
+                    "requestdistribution": {
+                        "value": "[parameters('requestdistribution')]"
+                    },
+                    "insertorder": {
+                        "value": "[parameters('insertorder')]"
+                    },
+                    "includeExceptionStackInLog": {
+                        "value": "[parameters('includeExceptionStackInLog')]"
+                    },
+                    "fieldcount": {
+                        "value": "[parameters('fieldcount')]"
+                    },
+                    "skipLoadPhase": {
+                        "value": "[parameters('skipLoadPhase')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+    }
+}
