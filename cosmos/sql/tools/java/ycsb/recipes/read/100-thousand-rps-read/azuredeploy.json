@@ -137,16 +137,16 @@
         },
         "benchmarkingToolsRepoName": {
             "type": "string",
-            "defaultValue": "RaviTella/Benckmarking",
+            "defaultValue": "Azure/azure-db-benchmarking",
             "metadata": {
-                "description": "Specifies the GitHub Url for YCSB source code repository"
+                "description": "Specifies the GitHub Url for benchmakring framwork code repository"
             }
         },
         "benchmarkingToolsBranchName": {
             "type": "string",
             "defaultValue": "main",
             "metadata": {
-                "description": "Specifies the GitHub branch for YCSB source code repository"
+                "description": "Specifies the GitHub branch for benchmakring framwork code repository"
             }
         },
         "diagnosticsLatencyThresholdInMS": {
