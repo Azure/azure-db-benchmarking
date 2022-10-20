@@ -1,14 +1,52 @@
-# Project
+# Azure DB Benchmakring framework 
+For many years relational databases have been the de facto option for every type of problem. The advent of public clouds and the ever-increasing array of database options they provide, forced people to discover alternative options that better serve their purpose. In Azure alone there are a plethora of database services ranging from relational to NoSQL. Choice is wonderful when you know exactly what you want, otherwise could lead to decision paralysis.
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+While there are many factors that influence the choice of a database, one factor that is always of importance is performance. This project aims to provide an easy-to-use framework for measuring performances of azure databases to allow you to make an informed decision. 
 
-As the maintainer of this project, please make a few updates:
+Of course, there are many good open-source tools for benchmarking databases, but they do require some manual work to execute which is cumbersome and error prone, especially for executing large workloads requiring multiple client machines. This framework fills the gap by automating:
+-	Client provisioning 
+-	Client configuration 
+-	Execution
+- Results aggregation 
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+The provided recipes encapsulate the workload definitions that are passed to the underlying benchmarking tool for a "1-Click" experience. The workload definitions were designed based on the [best practices](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/performance-tips-java-sdk-v4?tabs=api-async) published by Cosmos DB team and the benchmarking tool. The recipes have been tested and validated for consistent results. 
+
+The first version of the framework uses [YCSB](https://github.com/Azure/YCSB), a popular open-source benchmarking tool, for performance benchmarking Cosmos DB SQL API. We will be adding recipes for Cosmos DB  Mongo API and Cassandra API soon. We will also onboard additional benchmarking tools in the future. We welcome contributions.
+
+## Tech Stack
+- ARM Templates
+- Bash Scripts
+- Python 
+- Azure VMs
+- Azure Storage Account
+- GitHub
+
+## Architecture
+
+### System
+![image](/images/system.png)
+
+### Execution
+1.	Azure VMs provisioned
+2.	cloud-init installs required packages on all the VMs 
+3.	Benchmarking framework is downloaded from GitHub on every VM
+4.	On each VM, the benchmarking framework agent triggers the benchmarking task 
+5.	On the VM with the name "{pojectName}-vm1", the benchmarking agent additionally, aggregates the results from all the VMs, uploads the results to storage container
+ 
+## Project Structure
+   - [/system](/system)  System setup scripts
+   - [/cosmos](/cosmos)  Cosmos DB specific artifacts
+     - [/cosmos/scripts](/cosmos/scripts)  Scripts for framework agent and result aggregation
+     - [/cosmos/infra](/cosmos/infra)  Common resource creation templates  
+     - [/cosmos/sql/tools/java/ycsb](/cosmos/sql/tools/java/ycsb) SQL API YCSB Recipes 
+
+
+## Getting Started
+
+   |  Database   |  Benchmakring Tool  | Instructions
+   | --- | --- |--- |
+   | Cosmos SQL API | YCSB | [Getting Started ](/cosmos/sql/tools/java/ycsb)
+
 
 ## Contributing
 
