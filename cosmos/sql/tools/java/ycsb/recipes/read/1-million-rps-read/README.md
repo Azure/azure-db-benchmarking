@@ -42,7 +42,4 @@ The job metadata and results will be available in the following locations in the
  [More details about job status and results](../../../#monitoring)
 
 
-## Result visualization
-A visualization tool of choice can be used to visualize the latency over time. Following is a visual from Power BI.
-![image](https://user-images.githubusercontent.com/8218120/194117090-5b6abbbc-deb9-43e4-a0ab-a35b58b8433c.png)
 
