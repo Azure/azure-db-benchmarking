@@ -135,7 +135,7 @@
         },
         "benchmarkingToolsRepoName": {
             "type": "string",
-            "defaultValue": "RaviTella/Benckmarking",
+            "defaultValue": "Azure/azure-db-benchmarking",
             "metadata": {
                 "description": "Specifies the GitHub Url for YCSB source code repository"
             }
