@@ -1,4 +1,4 @@
-# Azure Databases Benchmarking framework 
+# Azure atabases Benchmarking Framework 
 For many years relational databases have been the de facto option for every type of problem. The advent of public clouds and the ever-increasing array of database options they provide, forced people to discover alternative options that better serve their purpose. In Azure alone there are a plethora of database services ranging from relational to NoSQL. Choice is wonderful when you know exactly what you want, otherwise could lead to decision paralysis.
 
 While there are many factors that influence the choice of a database, one factor that is always of importance is performance. This project aims to provide an easy-to-use framework for measuring performances of azure databases to allow you to make an informed decision. 
