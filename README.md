@@ -43,7 +43,7 @@ The first version of the framework uses [YCSB](https://github.com/Azure/YCSB), a
 
 ## Getting Started
 
-   |  Database   |  Benchmakring Tool  | Instructions
+   |  Database   |  Benchmarking Tool  | Instructions
    | --- | --- |--- |
    | Cosmos SQL API | YCSB | [Getting Started ](/cosmos/sql/tools/java/ycsb)
 
