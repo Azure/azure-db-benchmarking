@@ -12,7 +12,7 @@ A quick getting started exercise to get a feel for the framework. The results sh
    | Container Name | usertable | 
    | Partition Key  | /id |
    | Container Throughput  | Manual |  
-   | Container Throughput | 400 RU/s | 
+   | Throughput | 400 RU/s | 
    
    
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
