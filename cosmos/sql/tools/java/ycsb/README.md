@@ -1,10 +1,20 @@
 ## Overview
-[YCSB](https://github.com/Azure/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes, encapsulate the workload definitions that are passed to the underlying benchmarking tool for a "1-Click" experience. When using YCSB directly, the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. The "Try it" recipe in the next section is a read workload that combines the load phase and run phase. 
+[YCSB](https://github.com/Azure/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes, encapsulate the workload definitions that are passed to the underlying benchmarking tool for a "1-Click" experience. When using YCSB directly, the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. The "Getting started" recipe in the next section is a read workload that combines the load phase and run phase. 
 
-## Try it
+## Getting started
 A quick getting started exercise to get a feel for the framework. The results should be available in 15-20 minutes after initiating the deployment.
 
-1. Create a [Cosmos DB SQL API account](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal), with a database "ycsb" and container "usertable" with manual throughput of 400 RU/s. Note down the endpoint and primary key
+1. Create a [Cosmos DB SQL API container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
+
+   |  Setting   |  value  | 
+   | --- | --- |
+   | Database Name | ycsb | 
+   | Container Name | usertable | 
+   | Partition Key  | /id |
+   | Container Throughput  | Manual |  
+   | Container Throughput | 400 RU/s | 
+   
+   
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
 4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
 5. Click the deploy to Azure button and fill in the following missing parameter values:
@@ -46,7 +56,7 @@ A quick getting started exercise to get a feel for the framework. The results sh
    | Admin Username | benchmarking | The username for the VM's admin account |
    | Admin Password |  | password for the VM's admin account |
    | Threads | varies by recipe | Number of YCSB client threads  |
-   | YCSB Record Count |varies by recipe |Number of records in the dataset at the start of the workload. Used when loading for read workloads|  
+   | YCSB Record Count |varies by recipe |Number of records in the dataset at the start of the workload|  
    | Target Operations Per Second |varies by recipe | Maximum number of operations per second to be performed by each client/vm |
    | YCSB Operation Count  |varies by recipe |The number of operations to perform in the workload by each client/vm|
    | YCSB Git Hub Repo Name | Azure/YCSB |GitHub repository name for fetching YCSB code|
@@ -76,7 +86,7 @@ Once a benchmarking job is triggered its status and few useful properties will b
 
 
 ## Results 
-After the job finishes, the results will be available in a newly created container, with a name of the format "ycsbbenchmarking-<Date>".
+Once the "JobStatus" key has a value of "Finished", the results will be available in a newly created container, with a name of the format "ycsbbenchmarking-<Date>".
    
    |  File   |  Description  | 
    | --- | --- |
