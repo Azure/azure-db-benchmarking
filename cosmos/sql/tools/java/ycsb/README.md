@@ -2,7 +2,7 @@
 [YCSB](https://github.com/Azure/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. This page provides all the details required to use the benchmarking framework with YCSB. 
 
 ## Try it
-1. Create a [cosmos DB SQL API account](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal) and note down the endpoint and primary key 
+1. Create a [Cosmos DB SQL API account](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal), with a database "ycsb" and container "usertable" with manual throughput of 400 RU/s. Note down the endpoint and primary key
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
 4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
 5. Click the deploy to Azure button and fill in the following missing parameter values:
@@ -15,7 +15,7 @@
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password |
 
-   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2F10-thousand-rps-read%2Fazuredeploy.json)
+   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Ftry-it-read%2Fazuredeploy.json)
 
 5. Navigate to the storage account created in step 2 to see the jobs status and results.
 
