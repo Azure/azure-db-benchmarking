@@ -1,7 +1,9 @@
 ## Overview
-[YCSB](https://github.com/Azure/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. This page provides all the details required to use the benchmarking framework with YCSB. 
+[YCSB](https://github.com/Azure/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes, encapsulate the workload definitions that are passed to the underlying benchmarking tool for a "1-Click" experience. When using YCSB directly, the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. The "Try it" recipe in the next section is a read workload that combines the load phase and run phase. 
 
 ## Try it
+A quick getting started exercise to get a feel for the framework. The results should be available in 15-20 minutes after initiating the deployment.
+
 1. Create a [Cosmos DB SQL API account](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal), with a database "ycsb" and container "usertable" with manual throughput of 400 RU/s. Note down the endpoint and primary key
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
 4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
@@ -30,12 +32,6 @@
    - aggregation.csv has the aggregated results from all clients
     
      ![image](../../../../../images/results-csv.png)
-
-
-## Recipes
-The provided recipes encapsulate the workload configurations that are passed to YCSB for a one click experience. The workload definitions were designed based on the best practices published by Cosmos DB team and YCSB. The recipes have been tested and validated for consistent results.
-
-When using YCSB directly, the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience.
 
 ## Basic Configuration
    
@@ -66,8 +62,7 @@ When using YCSB directly, the load phase needs to be executed before the run pha
    | Vnet Name | [concat(parameters('projectName'), '-vnet')] | VNet name |
    | Vnet Address Prefixes | 10.2.0.0/16 | VNet address prefix |   
    | Vnet Subnet Name | default | subnet name | 
-   | Vnet Subnet Address Prefix | 10.2.0.0/24 |  subnet address prefix |
-   
+   | Vnet Subnet Address Prefix | 10.2.0.0/24 |  subnet address prefix |   
 ## Monitoring
 Once a benchmarking job is triggered its status and few useful properties will be available in a storage table named "ycsbbenchmarkingMetadata". Each row represents one benchmarking job. A job can have one or more clients, each running on its own VM. The number of clients will always equal number of VMs. 
 
