@@ -28,9 +28,9 @@ This recipe encapsulates a read only workload with a maximum requests per second
    | Container Throughput Type | Manual |  
    | Container Throughput | 12,000 RU/s | 
    
-3. Create an Azure storage account and note down the connection string 
-4. Create a resource group in the same region as the Cosmos DB account 
-5. Click the deploy to Azure button and fill in the following missing parameter values:
+3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
+4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos 
+6. Click the deploy to Azure button and fill in the following missing parameter values:
 
    |  Parameter   |  Value  |
    | --- | --- |
