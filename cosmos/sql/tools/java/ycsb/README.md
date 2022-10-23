@@ -57,7 +57,7 @@ When using YCSB directly, the load phase needs to be executed before the run pha
    | YCSB Git Hub Branch Name | main |GitHub branch name for fetching YCSB code |
    | Benchmarking Tools Repo Name |Azure/azure-db-benchmarking | GitHub repository name for benchmarking framwork code |
    | Benchmarking Tools Branch Name | main | GitHub branch name for benchmarking framwork code |
-   | Skip Load Phase | varies by recipe | "True" will execute the YCSB load pshase |
+   | Skip Load Phase | varies by recipe | "True" will skip the YCSB load pshase |
    
 ## Advanced Configuration
    The default configuration is used to create a VNet and Subnet, but custom configuration can be provided.
