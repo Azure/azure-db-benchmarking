@@ -1,5 +1,5 @@
 # 1 Million Reads Per Second
-This recipe was created to simulate a read only workload with a maximum requests per second of 1 million. This "1-Click" recipe combines both the load and run phases of YCSB.
+This recipe encapsulates a read only workload with a maximum requests per second of 1 million. This "1-Click" recipe combines both the load and run phases of YCSB.
 
 ## Recipe definition 
 
