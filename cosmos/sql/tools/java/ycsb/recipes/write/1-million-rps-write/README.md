@@ -8,7 +8,6 @@ This recipe encapsulates a write only workload with a maximum requests per secon
 | --- | --- |
 | Database | Cosmos SQL API |
 | Container throughput | 11,000,000 RU/s* |
-| Indexing | default |
 | Benchmarking tool | YCSB |
 | Workload | Write |
 | Max RPS | 1 Million|
