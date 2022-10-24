@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 cloud-init status --wait
 echo "##########CUSTOM_SCRIPT_URL###########: $CUSTOM_SCRIPT_URL"
 # Running custom-script in background, arm template completion wont wait on this
