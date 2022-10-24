@@ -8,7 +8,6 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | --- | --- |
 | Database | Cosmos SQL API |
 | Container throughput | 400 RU/s* |
-| Indexing | default |
 | Benchmarking tool | YCSB |
 | Workload | Read |
 | Max RPS | 300 |
