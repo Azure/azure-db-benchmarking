@@ -6,8 +6,6 @@ This recipe encapsulates a read only workload with a maximum requests per second
 |  Config   |  Value   |
 | --- | --- |
 | Database | Cosmos SQL API |
-| Container throughput | 1,200,000 RU/s* |
-| Indexing | default |
 | Benchmarking tool | YCSB |
 | Workload | Read |
 | Max RPS | 1 Million |
@@ -15,7 +13,6 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Data size |150,000 documents|
 | Document Size | ≈1 KB(YCSB default) |
 
-*Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew
 
 ## Execute
 1. Create a [Cosmos DB SQL API container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
@@ -26,7 +23,9 @@ This recipe encapsulates a read only workload with a maximum requests per second
    | Container Name | usertable | 
    | Partition Key  | /id |
    | Container Throughput Type | Manual |  
-   | Container Throughput | 1,200,000 RU/s | 
+   | Container throughput | 1,200,000 RU/s[^1] | 
+
+[^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew. For more details about capacity planning refer to [Cosmos DB capacity planner](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/estimate-ru-with-capacity-planner)
    
 3. Create an Azure storage account and note down the connection string 
 4. Create a resource group in the same region as the Cosmos DB account 
@@ -46,7 +45,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
    
 ## Output
 The job status and results will be available in the following locations in the storage account provided
-|     |     |
+| Type | Location |
 | --- | --- |
 | Status  | ycsbbenchmarkingMetadata (Table) |
 | Results | ycsbbenchmarking-{Date} (Container) |

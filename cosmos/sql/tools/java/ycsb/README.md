@@ -1,8 +1,8 @@
 ## Overview
-[YCSB](https://github.com/Azure/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes, encapsulate the workload definitions that are passed to the underlying benchmarking tool for a "1-Click" experience. When using YCSB directly, the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. The "Getting started" recipe in the next section is a read workload that combines the load phase and run phase. 
+[YCSB](https://github.com/Azure/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes encapsulate the workload definitions that are passed to YCSB for a "1-Click" experience. When using YCSB directly, sometimes the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. The "Getting started" recipe in the next section is a read workload that combines both the phases. 
 
 ## Getting started
-A quick getting started exercise to get a feel for the framework. The results should be available in 15-20 minutes after initiating the deployment.
+A [getting started recipe](recipes/read/getting-started-read) to get a feel for the framework. The results should be available in 15-20 minutes after initiating the deployment.
 
 1. Create a [Cosmos DB SQL API container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
 
@@ -27,7 +27,7 @@ A quick getting started exercise to get a feel for the framework. The results sh
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password |
 
-   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Ftry-it-read%2Fazuredeploy.json)
+   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Fgetting-started-read%2Fazuredeploy.json)
 
 5. Navigate to the storage account created in step 2 to see the jobs status and results.
 
