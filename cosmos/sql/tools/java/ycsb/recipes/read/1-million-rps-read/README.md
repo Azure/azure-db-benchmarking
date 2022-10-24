@@ -39,7 +39,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
    
- [More details about the parameters](../../../#monitoring)
+ [More details about the parameters](../../../#basic-configuration)
 
    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2F1-million-rps-read%2Fazuredeploy.json)
    
