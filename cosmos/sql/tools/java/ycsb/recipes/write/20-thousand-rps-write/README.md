@@ -48,7 +48,7 @@ This recipe encapsulates a write only workload with a maximum requests per secon
 
 ## Output
 The job status and results will be available in the following locations in the storage account provided
-|     |     |
+| Type | Location |
 | --- | --- |
 | Status  | ycsbbenchmarkingMetadata (Table) |
 | Results | ycsbbenchmarking-{Date} (Container) |
