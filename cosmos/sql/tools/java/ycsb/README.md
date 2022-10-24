@@ -2,7 +2,7 @@
 [YCSB](https://github.com/Azure/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes encapsulate the workload definitions that are passed to YCSB for a "1-Click" experience. When using YCSB directly, sometimes the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. The "Getting started" recipe in the next section is a read workload that combines both the phases. 
 
 ## Getting started
-A quick getting started exercise to get a feel for the framework. The results should be available in 15-20 minutes after initiating the deployment.
+A [getting started recipe](recipes/read/getting-started-read) to get a feel for the framework. The results should be available in 15-20 minutes after initiating the deployment.
 
 1. Create a [Cosmos DB SQL API container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
 
