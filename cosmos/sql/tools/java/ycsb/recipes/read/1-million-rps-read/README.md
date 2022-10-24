@@ -25,7 +25,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
    | Container Throughput Type | Manual |  
    | Container throughput | 1,200,000 RU/s[^1] | 
 
-[^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew
+[^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew. For more details about capacity planning refer to [Cosmos DB capacity planner](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/estimate-ru-with-capacity-planner)
    
 3. Create an Azure storage account and note down the connection string 
 4. Create a resource group in the same region as the Cosmos DB account 
