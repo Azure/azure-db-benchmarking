@@ -278,8 +278,11 @@
                     "scanproportion": {
                         "value": "0"
                     },
-                    "writeOnlyOperation": {
+                    "insertproporti": {
                         "value": "0"
+                    },
+                    "writeOnlyOperation": {
+                        "value": false
                     },
                     "requestdistribution": {
                         "value": "[parameters('requestdistribution')]"
