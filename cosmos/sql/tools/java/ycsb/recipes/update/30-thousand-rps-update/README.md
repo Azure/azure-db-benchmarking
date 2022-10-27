@@ -22,7 +22,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
    | Container Name | usertable | 
    | Partition Key  | /id |
    | Container Throughput Type | Manual |  
-   | Container throughput | 161,900 RU/s[^1] |
+   | Container throughput | 485,700 RU/s[^1] |
 
 [^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew. For more details about capacity planning refer to [Cosmos DB capacity planner](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/estimate-ru-with-capacity-planner)
    
