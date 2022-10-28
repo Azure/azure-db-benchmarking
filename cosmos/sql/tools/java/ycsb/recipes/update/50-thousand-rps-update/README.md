@@ -8,7 +8,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Database | Cosmos SQL API |
 | Benchmarking tool | YCSB |
 | Workload | Update |
-| Max RPS | 10 Thousand |
+| Max RPS | 50 Thousand |
 | Duration | 1 Hour |
 | Data size |1000 documents|
 | Document Size | ≈1 KB(YCSB default) |
@@ -40,7 +40,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
    
  [More details about the parameters](../../../#basic-configuration)
  
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fusers%2Fratella%2Fupdate-recipes%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fupdate%2F10-thousand-rps-update%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fusers%2Fratella%2Fupdate-recipes%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fupdate%2F50-thousand-rps-update%2Fazuredeploy.json)
 
 ## Output
 The job status and results will be available in the following locations in the storage account provided
