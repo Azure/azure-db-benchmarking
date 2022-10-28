@@ -1,5 +1,5 @@
-# 10 Thousand Updates Per Second
-This recipe encapsulates a read only workload with a maximum requests per second of 10 thousand. This "1-Click" recipe combines both the load and run phases of YCSB.
+# 20 Thousand Updates Per Second
+This recipe encapsulates a read only workload with a maximum requests per second of 20 thousand. This "1-Click" recipe combines both the load and run phases of YCSB.
 
 ## Recipe definition 
 
