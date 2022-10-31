@@ -10,7 +10,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Workload | Update |
 | Max RPS | 10 Thousand |
 | Duration | 1 Hour |
-| Data size |100000 documents|
+| Data size |100,000 documents|
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
