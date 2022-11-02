@@ -40,6 +40,10 @@ if [ ! -z "$fieldcount" ]; then
    sed -i "$ afieldcount=$fieldcount" workloads/$workload
 fi
 
+if [ ! -z "$core_workload_insertion_retry_limit" ]; then
+   sed -i "$ acore_workload_insertion_retry_limit=$core_workload_insertion_retry_limit" workloads/$workload
+fi
+
 if [ ! -z "$readproportion" ]; then
    sed -i "s/^[#]*\s*readproportion=.*/readproportion=$readproportion/" workloads/$workload
 fi
