@@ -36,15 +36,15 @@ A read recipe with a small read workload to familiarize you with the framework. 
 
    - Job status can be found by browsing to the table in table storage browser 
    
-     ![image](../../../../../images/metadata-status.png)
+     ![image](../../../../../../images/metadata-status.png)
  
    - Once the job status says "Finished", results will be availabe in a container within the same storage account
    
-     ![image](../../../../../images/results-container.png)
+     ![image](../../../../../../images/results-container.png)
    
    - aggregation.csv has the aggregated results from all clients
     
-     ![image](../../../../../images/results-csv.png)
+     ![image](../../../../../../images/results-csv.png)
 
 ## Basic Configuration
    
