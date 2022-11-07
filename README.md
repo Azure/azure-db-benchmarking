@@ -44,7 +44,7 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
 ## Getting Started
 
    |  Database   |  Benchmarking Tool  | Instructions
-   | --- | --- |--- |
+   | :--:  | :--:  | :--:  |
    | Cosmos SQL API | YCSB | [Getting Started ](/cosmos/sql/tools/java/ycsb)
 
 

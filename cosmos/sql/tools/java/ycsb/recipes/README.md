@@ -10,7 +10,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 1. Create a [Cosmos DB SQL API container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
 
    |  Setting   |  value  | 
-   | --- | --- |
+   | :--:  | :--:  |
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
@@ -23,7 +23,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 5. Click the deploy to Azure button and fill in the following missing parameter values:
 
    |  Parameter   |  Value  |
-   | --- | --- |
+   | :--:  | :--:  |
    | Resource group | name of the resource group from spet 3 |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
@@ -49,7 +49,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 ## Basic Configuration
    
    |  Parameter   |  Default Value  | Description |
-   | --- | --- | ---| 
+   | :--:  | :--:  | :--: | 
    | Project Name | Benchmarking | this will become part of the VM name(ex: Benchmarking-vm1 ) |
    | Location | [resourceGroup().location] | location of the resource group |
    | Results Storage Connection String  |  | connection string of a storage account |
@@ -71,7 +71,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 ## Advanced Configuration
    The default configuration is used to create a VNet and Subnet, but custom configuration can be provided.
    |  Parameter   |  Default Value  | Description |
-   | --- | --- | ---| 
+   | :--:  | :--:  | :--: | 
    | Vnet Name | [concat(parameters('projectName'), '-vnet')] | VNet name |
    | Vnet Address Prefixes | 10.2.0.0/16 | VNet address prefix |   
    | Vnet Subnet Name | default | subnet name | 
@@ -81,7 +81,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 Once a benchmarking job is triggered its status and few useful properties will be available in a storage table named "ycsbbenchmarkingMetadata". Each row represents one benchmarking job. A job can have one or more clients, each running on its own VM. The number of clients will always equal number of VMs. 
 
    |  Key   |  Description  | 
-   | --- | --- |
+   | :--:  | :--: |
    | JobStartTime | Start time of the job | 
    | JobFinishTime | Finish time of the job | 
    | JobStatus| can be either "Started" or "Finished"| 
@@ -93,7 +93,7 @@ Once a benchmarking job is triggered its status and few useful properties will b
 Once the "JobStatus" key has a value of "Finished", the results will be available in a newly created container, with a name of the format "ycsbbenchmarking-<Date>".
    
    |  File   |  Description  | 
-   | --- | --- |
+   | :--:  | :--:  |
    | aggregation.csv | aggregated result from all the clients |    
    | Benchmarking-vm<n>-ycsb.log| YCSB log file for the run phase. There will be as many files as the clients| 
    | Benchmarking-vm<n>-ycsb.csv | an intermediary CSV file generated from the YCSB log file. Used to produce the final aggregated results | 
