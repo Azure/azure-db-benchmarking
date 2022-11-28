@@ -51,7 +51,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
     
      ![image](../../../../../../images/results-csv.png)
 
- 6. Alternatively, create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Be sure to populate the parameter values in the parameter file.
+6. Alternatively, create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Be sure to populate the parameter values in the parameter file.
     -  Local Template
      ```
      az deployment group create \
@@ -67,7 +67,6 @@ A read recipe with a small read workload to familiarize you with the framework. 
       --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/getting-started-read/azuredeploy.json" \
       --parameters parameter.json
     ```
-
 ## Basic Configuration
    
    |  Parameter   |  Default Value  | Description |
