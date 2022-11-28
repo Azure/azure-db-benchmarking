@@ -1,7 +1,11 @@
 ## Overview
 [YCSB](https://github.com/brianfrankcooper/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes encapsulate the workload definitions that are passed to YCSB for a "1-Click" experience. When using YCSB directly, sometimes the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. As you can see above, the recipes are organized by workload type and each recipe comes with instructions to help you execute them.
 
-The next section walks you through the process of executing a small read recipe to familiarize you with the framework before you run the actual recipes. If you feel comfortable you can skip this step and move to the actual recipes.
+The next section walks you through the process of executing a small read recipe to familiarize you with the framework before you run the actual recipes. If you feel comfortable you can skip this step and move to the actual recipes. 
+ - [read-recipes](./read)
+ - [write-recipes](./write)
+ - [update-recipes](./update)
+ - [read-recipes](./scan)
 
 
 ## Try It 
