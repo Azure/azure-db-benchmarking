@@ -1,7 +1,20 @@
 ## Overview
-[YCSB](https://github.com/brianfrankcooper/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes encapsulate the workload definitions that are passed to YCSB for a "1-Click" experience. When using YCSB directly, sometimes the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. As you can see above, the recipes are organized by workload type and each recipe comes with instructions to help you execute them.
+[YCSB](https://github.com/brianfrankcooper/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes encapsulate the workload definitions that are passed to YCSB. When using YCSB directly, sometimes the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) can also be used to execute the recipes. As you can see above, the recipes are organized by workload type and each recipe comes with instructions to help you execute them.
 
-The next section walks you through the process of executing a small read recipe to familiarize you with the framework before you run the actual recipes. If you feel comfortable you can skip this step and move to the actual recipes.
+You can expect to see the following latencies for all the read and write workloads:
+
+#### Read workload:
+![image](../../../../../../images/read-latency.png)
+
+#### Write workload:
+![image](../../../../../../images/write-latency.png)
+
+Next section walks you through the process of executing a small read recipe to familiarize you with the framework before you start with the actual recipes. If you feel comfortable you can skip this step and move to the actual recipes. 
+
+ - [read-recipes](./read)
+ - [write-recipes](./write)
+ - [update-recipes](./update)
+ - [scan-recipes](./scan)
 
 
 ## Try It 
@@ -30,9 +43,9 @@ A read recipe with a small read workload to familiarize you with the framework. 
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password |
 
-   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Fgetting-started-read%2Fazuredeploy.json)
+   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Ftry-it-read%2Fazuredeploy.json)
 
-5. Navigate to the storage account created in step 2 to see the jobs status and results.
+6. Navigate to the storage account created in step 2 to see the jobs status and results.
 
    - Job status can be found by browsing to the table in table storage browser 
    
@@ -46,6 +59,24 @@ A read recipe with a small read workload to familiarize you with the framework. 
     
      ![image](../../../../../../images/results-csv.png)
 
+6. Alternatively, create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Be sure to populate the parameter values in the parameter file.
+    -  Local Template
+     ```
+     az deployment group create \
+       --name <deploymen-name> \
+       --resource-group <resource-group-name> \
+       --template-file azuredeploy.json  \
+       --parameters parameter.json  
+      ```
+    - Remote Template
+    ```
+    az deployment group create --name <deploymen-name> \
+      --resource-group <resource-group-name> \
+      --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/getting-started-read/azuredeploy.json" \
+      --parameters parameter.json
+    ```
+7. re-executing the recipe by setting "Skip Load Phase" to "true" , while leaving the rest of the parameter values unchanged, will execute just the read phase of the workload again, using the VM from the previous execution. 
+
 ## Basic Configuration
    
    |  Parameter   |  Default Value  | Description |
@@ -53,7 +84,8 @@ A read recipe with a small read workload to familiarize you with the framework. 
    | Project Name | Benchmarking | this will become part of the VM name(ex: Benchmarking-vm1 ) |
    | Location | [resourceGroup().location] | location of the resource group |
    | Results Storage Connection String  |  | connection string of a storage account |
-   | Cosmos Key  |  | URI of the Cosmos DB account |
+   | Cosmos URI  |  | Cosmos DB account URI |
+   | Cosmos Key  |  | Cosmos DB account KEY |
    | VM Size  | varies by recipe | VM size |
    | VM Count | varies by recipe | Number of VMs |
    | Admin Username | benchmarking | The username for the VM's admin account |
@@ -64,9 +96,9 @@ A read recipe with a small read workload to familiarize you with the framework. 
    | YCSB Operation Count  |varies by recipe |The number of operations to perform in the workload by each client/vm|
    | YCSB Git Hub Repo Name | Azure/YCSB |GitHub repository name for fetching YCSB code|
    | YCSB Git Hub Branch Name | main |GitHub branch name for fetching YCSB code |
-   | Benchmarking Tools Repo Name |Azure/azure-db-benchmarking | GitHub repository name for benchmarking framwork code |
-   | Benchmarking Tools Branch Name | main | GitHub branch name for benchmarking framwork code |
-   | Skip Load Phase | varies by recipe | "True" will skip the YCSB load pshase |
+   | Benchmarking Tools Repo Name |Azure/azure-db-benchmarking | GitHub repository name for benchmarking framework code |
+   | Benchmarking Tools Branch Name | main | GitHub branch name for benchmarking framework code |
+   | Skip Load Phase | false | "True" will skip the YCSB load pshase. Used to execute the run phase without running load again |
    
 ## Advanced Configuration
    The default configuration is used to create a VNet and Subnet, but custom configuration can be provided.

@@ -40,7 +40,7 @@ This recipe encapsulates a write only workload with a maximum requests per secon
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
    
- [More details about the parameters](../../../#basic-configuration)
+ [More details about the parameters](../../#basic-configuration)
 
 
 
@@ -53,4 +53,4 @@ The job status and results will be available in the following locations in the s
 | Status  | ycsbbenchmarkingMetadata (Table) |
 | Results | ycsbbenchmarking-{Date} (Container) |
 
- [More details about job status and results](../../../#monitoring)
+ [More details about job status and results](../../#monitoring)
