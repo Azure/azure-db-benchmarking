@@ -5,7 +5,7 @@ The next section walks you through the process of executing a small read recipe 
  - [read-recipes](./read)
  - [write-recipes](./write)
  - [update-recipes](./update)
- - [read-recipes](./scan)
+ - [scan-recipes](./scan)
 
 
 ## Try It 
