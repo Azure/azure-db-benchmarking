@@ -67,6 +67,8 @@ A read recipe with a small read workload to familiarize you with the framework. 
       --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/getting-started-read/azuredeploy.json" \
       --parameters parameter.json
     ```
+7. re-executing the recipe by setting "Skip Load Phase" to "true" , while leaving the rest of the parameter values unchanged, will execute just the read phase of the workload again, using the VM from the previous execution. 
+
 ## Basic Configuration
    
    |  Parameter   |  Default Value  | Description |
@@ -74,7 +76,8 @@ A read recipe with a small read workload to familiarize you with the framework. 
    | Project Name | Benchmarking | this will become part of the VM name(ex: Benchmarking-vm1 ) |
    | Location | [resourceGroup().location] | location of the resource group |
    | Results Storage Connection String  |  | connection string of a storage account |
-   | Cosmos Key  |  | URI of the Cosmos DB account |
+   | Cosmos URI  |  | Cosmos DB account URI |
+   | Cosmos Key  |  | Cosmos DB account KEY |
    | VM Size  | varies by recipe | VM size |
    | VM Count | varies by recipe | Number of VMs |
    | Admin Username | benchmarking | The username for the VM's admin account |
@@ -85,9 +88,9 @@ A read recipe with a small read workload to familiarize you with the framework. 
    | YCSB Operation Count  |varies by recipe |The number of operations to perform in the workload by each client/vm|
    | YCSB Git Hub Repo Name | Azure/YCSB |GitHub repository name for fetching YCSB code|
    | YCSB Git Hub Branch Name | main |GitHub branch name for fetching YCSB code |
-   | Benchmarking Tools Repo Name |Azure/azure-db-benchmarking | GitHub repository name for benchmarking framwork code |
-   | Benchmarking Tools Branch Name | main | GitHub branch name for benchmarking framwork code |
-   | Skip Load Phase | varies by recipe | "True" will skip the YCSB load pshase |
+   | Benchmarking Tools Repo Name |Azure/azure-db-benchmarking | GitHub repository name for benchmarking framework code |
+   | Benchmarking Tools Branch Name | main | GitHub branch name for benchmarking framework code |
+   | Skip Load Phase | false | "True" will skip the YCSB load pshase. Used to execute the run phase without running load again |
    
 ## Advanced Configuration
    The default configuration is used to create a VNet and Subnet, but custom configuration can be provided.
