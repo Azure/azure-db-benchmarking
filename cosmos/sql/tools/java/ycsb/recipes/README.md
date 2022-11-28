@@ -9,7 +9,7 @@ You can expect to see the following latencies for all the read and write workloa
 #### Write workload:
 ![image](../../../../../../images/write-latency.png)
 
-Next section walks you through the process of executing a small read recipe to familiarize you with the framework before you run the actual recipes. If you feel comfortable you can skip this step and move to the actual recipes. 
+Next section walks you through the process of executing a small read recipe to familiarize you with the framework before you start with the actual recipes. If you feel comfortable you can skip this step and move to the actual recipes. 
 
  - [read-recipes](./read)
  - [write-recipes](./write)
