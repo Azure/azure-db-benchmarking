@@ -36,7 +36,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 
    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Fgetting-started-read%2Fazuredeploy.json)
 
-5. Navigate to the storage account created in step 2 to see the jobs status and results.
+6. Navigate to the storage account created in step 2 to see the jobs status and results.
 
    - Job status can be found by browsing to the table in table storage browser 
    
@@ -49,6 +49,16 @@ A read recipe with a small read workload to familiarize you with the framework. 
    - aggregation.csv has the aggregated results from all clients
     
      ![image](../../../../../../images/results-csv.png)
+
+ 6. Alternatively, the provided [parameter file](./parameter-files) can be used to execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) with the following command. Be sure to populate the parameter values in the parameter file.
+
+     ```
+     az deployment group create \
+       --name <deploymen-name> \
+       --resource-group <resource-group-name> \
+       --template-file azuredeploy.json  \
+       --parameters parameter.json  
+      ```
 
 ## Basic Configuration
    
