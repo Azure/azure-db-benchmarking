@@ -189,8 +189,8 @@ sudo python3 converting_log_to_csv.py $user_home/"$VM_NAME-ycsb.log"
 sudo azcopy copy "$VM_NAME-ycsb.csv" "$result_storage_url"
 sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
 if [ "$COPY_COSMOS_LOGS" = True ] || [ "$COPY_COSMOS_LOGS" = true ]; then
-  sudo mv /tmp/cosmos "/tmp/$VM_NAME-logs"
-  sudo azcopy copy "/tmp/$VM_NAME-logs" "$result_storage_url" --recursive=true
+  sudo mv /tmp/cosmos_client_logs "/tmp/$VM_NAME-cosmos-client-logs"
+  sudo azcopy copy "/tmp/$VM_NAME-cosmos-client-logs" "$result_storage_url" --recursive=true
 fi
 
 if [ $MACHINE_INDEX -eq 1 ]; then
