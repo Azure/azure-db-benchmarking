@@ -32,6 +32,7 @@ echo "########## Pulling Latest YCSB TOOLS ##########"
 git -C azure-db-benchmarking pull
 mkdir /tmp/ycsb
 rm -rf /tmp/ycsb/*
+rm -rf "/tmp/$VM_NAME-cosmos-client-logs"
 cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 #cp -r ./azure-db-benchmarking/core/data/* /tmp/ycsb
 
