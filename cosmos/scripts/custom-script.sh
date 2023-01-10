@@ -9,11 +9,13 @@ echo "##########MACHINE_INDEX###########: $MACHINE_INDEX"
 echo "##########YCSB_OPERATION_COUNT###########: $YCSB_OPERATION_COUNT"
 echo "##########VM_COUNT###########: $VM_COUNT"
 echo "##########WRITE_ONLY_OPERATION###########: $WRITE_ONLY_OPERATION"
+echo "##########COPY_COSMOS_LOGS###########: $COPY_COSMOS_LOGS"
 
 echo "##########BENCHMARKING_TOOLS_BRANCH_NAME###########: $BENCHMARKING_TOOLS_BRANCH_NAME"
 echo "##########BENCHMARKING_TOOLS_URL###########: $BENCHMARKING_TOOLS_URL"
 echo "##########YCSB_GIT_BRANCH_NAME###########: $YCSB_GIT_BRANCH_NAME"
 echo "##########YCSB_GIT_REPO_URL###########: $YCSB_GIT_REPO_URL"
+
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
@@ -186,6 +188,10 @@ cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb.log"
 sudo python3 converting_log_to_csv.py $user_home/"$VM_NAME-ycsb.log"
 sudo azcopy copy "$VM_NAME-ycsb.csv" "$result_storage_url"
 sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
+if [ "$COPY_COSMOS_LOGS" = True ] || [ "$COPY_COSMOS_LOGS" = true ]; then
+  sudo mv /tmp/cosmos "/tmp/$VM_NAME-logs"
+  sudo azcopy copy "/tmp/$VM_NAME-logs" "$result_storage_url" --recursive=true
+fi
 
 if [ $MACHINE_INDEX -eq 1 ]; then
   if [ $VM_COUNT -gt 1 ]; then
