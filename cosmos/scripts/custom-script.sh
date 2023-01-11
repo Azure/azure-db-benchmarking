@@ -16,7 +16,6 @@ echo "##########BENCHMARKING_TOOLS_URL###########: $BENCHMARKING_TOOLS_URL"
 echo "##########YCSB_GIT_BRANCH_NAME###########: $YCSB_GIT_BRANCH_NAME"
 echo "##########YCSB_GIT_REPO_URL###########: $YCSB_GIT_REPO_URL"
 
-
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
 # Records already in the DB + records to be added, during load
@@ -31,6 +30,7 @@ git clone -b "$BENCHMARKING_TOOLS_BRANCH_NAME" --single-branch "$BENCHMARKING_TO
 echo "########## Pulling Latest YCSB TOOLS ##########"
 git -C azure-db-benchmarking pull
 mkdir /tmp/ycsb
+# Clearing data from previous run
 rm -rf /tmp/ycsb/*
 rm -rf "/tmp/$VM_NAME-cosmos-client-logs"
 cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
