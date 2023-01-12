@@ -31,7 +31,7 @@ git -C azure-db-benchmarking pull
 mkdir /tmp/ycsb
 # Clearing data from previous run
 rm -rf /tmp/ycsb/*
-rm -rf "/tmp/$VM_NAME-cosmos-client-logs"
+rm -rf "/tmp/$VM_NAME-system-diagnostics"
 cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 #cp -r ./azure-db-benchmarking/core/data/* /tmp/ycsb
 
