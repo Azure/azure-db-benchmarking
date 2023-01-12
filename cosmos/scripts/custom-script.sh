@@ -9,7 +9,6 @@ echo "##########MACHINE_INDEX###########: $MACHINE_INDEX"
 echo "##########YCSB_OPERATION_COUNT###########: $YCSB_OPERATION_COUNT"
 echo "##########VM_COUNT###########: $VM_COUNT"
 echo "##########WRITE_ONLY_OPERATION###########: $WRITE_ONLY_OPERATION"
-echo "##########COPY_COSMOS_LOGS###########: $COPY_COSMOS_LOGS"
 
 echo "##########BENCHMARKING_TOOLS_BRANCH_NAME###########: $BENCHMARKING_TOOLS_BRANCH_NAME"
 echo "##########BENCHMARKING_TOOLS_URL###########: $BENCHMARKING_TOOLS_URL"
@@ -189,10 +188,9 @@ cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb.log"
 sudo python3 converting_log_to_csv.py $user_home/"$VM_NAME-ycsb.log"
 sudo azcopy copy "$VM_NAME-ycsb.csv" "$result_storage_url"
 sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
-if [ "$COPY_COSMOS_LOGS" = True ] || [ "$COPY_COSMOS_LOGS" = true ]; then
-  sudo mv /tmp/cosmos_client_logs "/tmp/$VM_NAME-cosmos-client-logs"
-  sudo azcopy copy "/tmp/$VM_NAME-cosmos-client-logs" "$result_storage_url" --recursive=true
-fi
+sudo mv /tmp/cosmos_client_logs "/tmp/$VM_NAME-system-diagnostics"
+sudo cp "$user_home/custom-script.out" "$user_home/custom-script.err" "/tmp/$VM_NAME-system-diagnostics"
+sudo azcopy copy "/tmp/$VM_NAME-system-diagnostics" "$result_storage_url" --recursive=true
 
 if [ $MACHINE_INDEX -eq 1 ]; then
   if [ $VM_COUNT -gt 1 ]; then
