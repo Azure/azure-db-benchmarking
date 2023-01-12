@@ -29,7 +29,9 @@ git clone -b "$BENCHMARKING_TOOLS_BRANCH_NAME" --single-branch "$BENCHMARKING_TO
 echo "########## Pulling Latest YCSB TOOLS ##########"
 git -C azure-db-benchmarking pull
 mkdir /tmp/ycsb
+# Clearing data from previous run
 rm -rf /tmp/ycsb/*
+rm -rf "/tmp/$VM_NAME-system-diagnostics"
 cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 #cp -r ./azure-db-benchmarking/core/data/* /tmp/ycsb
 
@@ -186,6 +188,9 @@ cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb.log"
 sudo python3 converting_log_to_csv.py $user_home/"$VM_NAME-ycsb.log"
 sudo azcopy copy "$VM_NAME-ycsb.csv" "$result_storage_url"
 sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
+sudo mv /tmp/cosmos_client_logs "/tmp/$VM_NAME-system-diagnostics"
+sudo cp "$user_home/agent.out" "$user_home/agent.err" "/tmp/$VM_NAME-system-diagnostics"
+sudo azcopy copy "/tmp/$VM_NAME-system-diagnostics" "$result_storage_url" --recursive=true
 
 if [ $MACHINE_INDEX -eq 1 ]; then
   if [ $VM_COUNT -gt 1 ]; then
