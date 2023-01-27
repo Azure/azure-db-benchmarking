@@ -45,7 +45,7 @@ echo "########## Pulling Latest YCSB ##########"
 git pull
 echo "########## Building YCSB ##########"
 mvn -pl "site.ycsb:${ycsbbindingname}-binding" -am clean package
-cp -r ./${ycsbbindingname}/target/"ycsb-${ycsbbindingname}-binding*.tar.gz" /tmp/ycsb
+cp -r ./${ycsbbindingname}/target/ycsb-${ycsbbindingname}-binding*.tar.gz" /tmp/ycsb
 cp -r ./${ycsbbindingname}/conf/* /tmp/ycsb
 cd /tmp/ycsb/
 
