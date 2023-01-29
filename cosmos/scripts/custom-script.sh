@@ -22,7 +22,7 @@ recordcount=$((YCSB_RECORD_COUNT * MACHINE_INDEX))
 # Record count for Run. Since we run read workload after load this is the total number of records loaded by all VMs/clients during load.
 totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
 benchmarkname=ycsbbenchmarking
-bindingname=azurecosmos
+bindingname=mongodbreactivestreams
 
 #Cloning Test Bench Repo
 echo "########## Cloning Test Bench repository ##########"
