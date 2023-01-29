@@ -22,6 +22,7 @@ recordcount=$((YCSB_RECORD_COUNT * MACHINE_INDEX))
 # Record count for Run. Since we run read workload after load this is the total number of records loaded by all VMs/clients during load.
 totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
 benchmarkname=ycsbbenchmarking
+bindingname=azurecosmos
 
 #Cloning Test Bench Repo
 echo "########## Cloning Test Bench repository ##########"
@@ -43,18 +44,18 @@ cd YCSB
 echo "########## Pulling Latest YCSB ##########"
 git pull
 echo "########## Building YCSB ##########"
-mvn -pl site.ycsb:azurecosmos-binding -am clean package
-cp -r ./azurecosmos/target/ycsb-azurecosmos-binding*.tar.gz /tmp/ycsb
-cp -r ./azurecosmos/conf/* /tmp/ycsb
+mvn -pl site.ycsb:${bindingname}-binding -am clean package
+cp -r ./${bindingname}/target/ycsb-${bindingname}-binding*.tar.gz /tmp/ycsb
+cp -r ./${bindingname}/conf/* /tmp/ycsb
 cd /tmp/ycsb/
 
-ycsb_folder_name=ycsb-azurecosmos-binding-*-SNAPSHOT
+ycsb_folder_name=ycsb-${bindingname}-binding-*-SNAPSHOT
 user_home="/home/${ADMIN_USER_NAME}"
 
 echo "########## Extracting YCSB ##########"
-tar xfvz ycsb-azurecosmos-binding*.tar.gz
+tar xfvz ycsb-${bindingname}-binding*.tar.gz
 cp ./run.sh ./$ycsb_folder_name
-cp ./azurecosmos.properties ./$ycsb_folder_name
+cp ./${bindingname}.properties ./$ycsb_folder_name
 cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
 cd ./$ycsb_folder_name
