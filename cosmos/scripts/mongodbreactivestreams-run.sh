@@ -67,7 +67,7 @@ fi
 
 # REQUIRED URI
 if [ ! -z "$uri" ]; then
-   sed -i "s|^[#]*\s*mongodbreactivestreams.uri\ =.*|mongodbreactivestreams.uri\ =\ $uri|" mongodbreactivestreams.properties
+   sed -i "s|^[#]*\s*mongodbreactivestreams.url\ =.*|mongodbreactivestreams.url\ =\ $uri|" mongodbreactivestreams.properties
 fi
 
 
