@@ -67,7 +67,7 @@ fi
 
 # REQUIRED URI
 if [ ! -z "$uri" ]; then
-   sed -i "s|^[#]*\s*mongodbreactivestreams.url\ =.*|mongodbreactivestreams.url\ =\ $uri|" mongodbreactivestreams.properties
+   sed -i "s|^[#]*\s*mongodb.url\ =.*|mongodb.url\ =\ $uri|" mongodb.properties
 fi
 
 
@@ -75,13 +75,13 @@ log_filename="/tmp/ycsb.log"
 
 if [ ! -z "$threads" ] && [ ! -z "$target" ]
 then
-  ./bin/ycsb.sh $operation mongodbreactivestreams -P workloads/$workload -P mongodbreactivestreams.properties -s -threads $threads -target $target 2>&1 | tee -a "$log_filename"
+  ./bin/ycsb.sh $operation mongodbreactivestreams -P workloads/$workload -P mongodb.properties -s -threads $threads -target $target 2>&1 | tee -a "$log_filename"
 elif [ ! -z "$threads" ]
 then
-  ./bin/ycsb.sh $operation mongodbreactivestreams -P workloads/$workload -P mongodbreactivestreams.properties -s -threads $threads 2>&1 | tee -a "$log_filename"
+  ./bin/ycsb.sh $operation mongodbreactivestreams -P workloads/$workload -P mongodb.properties -s -threads $threads 2>&1 | tee -a "$log_filename"
 elif [ ! -z "$target" ]
 then
-  ./bin/ycsb.sh $operation mongodbreactivestreams -P workloads/$workload -P mongodbreactivestreams.properties -s -target $target 2>&1 | tee -a "$log_filename"
+  ./bin/ycsb.sh $operation mongodbreactivestreams -P workloads/$workload -P mongodb.properties -s -target $target 2>&1 | tee -a "$log_filename"
 else
-  ./bin/ycsb.sh $operation mongodbreactivestreams -P workloads/$workload -P mongodbreactivestreams.properties -s 2>&1 | tee -a "$log_filename"
+  ./bin/ycsb.sh $operation mongodbreactivestreams -P workloads/$workload -P mongodb.properties -s 2>&1 | tee -a "$log_filename"
 fi
