@@ -3,7 +3,6 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-echo "##########COSMOS_URI###########: $COSMOS_URI"
 echo "##########VM NAME###########: $VM_NAME"
 echo "##########YCSB_RECORD_COUNT###########: $YCSB_RECORD_COUNT"
 echo "##########MACHINE_INDEX###########: $MACHINE_INDEX"
@@ -56,7 +55,7 @@ user_home="/home/${ADMIN_USER_NAME}"
 echo "########## Extracting YCSB ##########"
 tar xfvz ycsb-${bindingname}-binding*.tar.gz
 cp ./${bindingname}-run.sh ./$ycsb_folder_name
-cp ./${bindingname}.properties ./$ycsb_folder_name
+cp ./*.properties ./$ycsb_folder_name
 cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
 cd ./$ycsb_folder_name
