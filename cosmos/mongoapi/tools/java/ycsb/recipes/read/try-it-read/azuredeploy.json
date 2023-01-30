@@ -271,7 +271,7 @@
                         "value": "[parameters('benchmarkingToolsRepoName')]"
                     },
                     "ycsbDatabaseBindingName": {
-                        "value": "[parameters('ycsbDatabaseBindingName')]"
+                        "value": "mongodbreactivestreams"
                     },
                     "benchmarkingToolsBranchName": {
                         "value": "[parameters('benchmarkingToolsBranchName')]"
