@@ -8,6 +8,9 @@
     "adminPassword": {
       "value": ""
     },
+    "ycsbDatabaseBindingName": {
+      "value": ""
+    },
     "resultsStorageConnectionString": {
       "value": ""
     },
