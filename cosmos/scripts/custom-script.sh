@@ -95,7 +95,7 @@ if [ $MACHINE_INDEX -eq 1 ]; then
   fi
    
   if [[ $DB_BINDING_NAME == "azurecosmos" ]]; then
-       tool_api="${tool_api}"
+       tool_api="ycsb_sql"
   elif [[ $DB_BINDING_NAME == "mongodb"* ]]; then
        tool_api="ycsb_mongo"
          elif [[ $DB_BINDING_NAME == "cassandra"* ]]; then
