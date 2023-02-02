@@ -67,7 +67,8 @@ fi
 
 # REQUIRED URI
 if [ ! -z "$uri" ]; then
-   sed -i "s|^[#]*\s*mongodb.url\ =.*|mongodb.url\ =\ $uri|" mongodb.properties
+   uri_esc=$(sed 's/[\*\.&]/\\&/g' <<<"$uri")
+   sed -i "s|^[#]*\s*mongodb.url\ =.*|mongodb.url\ =\ $uri_esc|" mongodb.properties
 fi
 
 
