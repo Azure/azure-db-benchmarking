@@ -173,9 +173,9 @@ else
   else
     echo "Not sleeping on clients sync time $job_start_time as it already past"
   fi
-  sudo rm -f "$user_home/$VM_NAME-ycsb-load.txt"
-  cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb-load.txt"
-  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.txt" "$result_storage_url"
+  sudo rm -f "$user_home/$VM_NAME-ycsb-load.log"
+  cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb-load.log"
+  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.log" "$result_storage_url"
   # Clearing log file from above load operation
   sudo rm -f /tmp/ycsb.log
 
@@ -222,6 +222,7 @@ if [ $MACHINE_INDEX -eq 1 ]; then
   new_storage_url="$url_first_part$regex_to_append$url_second_part"
   aggregation_dir="$user_home/aggregation"
   sudo azcopy copy $new_storage_url $aggregation_dir --recursive=true
+  sudo rm -rf $aggregation_dir/*load.log
   sudo python3 /tmp/ycsb/$ycsb_folder_name/aggregate_multiple_file_results.py $aggregation_dir
   sudo azcopy copy aggregation.csv "$result_storage_url"
 
