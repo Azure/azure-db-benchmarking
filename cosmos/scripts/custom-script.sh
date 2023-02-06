@@ -60,6 +60,14 @@ cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
 cd ./$ycsb_folder_name
 
+if [[ $DB_BINDING_NAME == "azurecosmos" ]]; then
+  tool_api="ycsb_sql"
+elif [[ $DB_BINDING_NAME == "mongodb"* ]]; then
+  tool_api="ycsb_mongo"
+elif [[ $DB_BINDING_NAME == "cassandra"* ]]; then
+  tool_api="ycsb_cassandra"
+fi
+
 if [ $MACHINE_INDEX -eq 1 ]; then
   table_exist=$(az storage table exists --name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING | jq '.exists')
   if [ "$table_exist" = true ]; then
@@ -92,14 +100,6 @@ if [ $MACHINE_INDEX -eq 1 ]; then
     job_start_time=$(date -u -d "5 minutes" '+%Y-%m-%dT%H:%M:%SZ') # date in ISO 8601 format
   else
     job_start_time=$(date -u '+%Y-%m-%dT%H:%M:%SZ') # date in ISO 8601 format
-  fi
-   
-  if [[ $DB_BINDING_NAME == "azurecosmos" ]]; then
-       tool_api="ycsb_sql"
-  elif [[ $DB_BINDING_NAME == "mongodb"* ]]; then
-       tool_api="ycsb_mongo"
-         elif [[ $DB_BINDING_NAME == "cassandra"* ]]; then
-       tool_api="ycsb_cassandra"
   fi
 
   latest_table_entry=$(az storage entity insert --entity PartitionKey="${tool_api}" RowKey="${GUID}" JobStartTime=$job_start_time JobFinishTime="" JobStatus="Started" NoOfClientsCompleted=0 NoOfClientsStarted=1 SAS_URL=$result_storage_url --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING)
@@ -139,8 +139,8 @@ else
       echo "NoOfClientsStarted updated"
       break
     fi
-     echo "Reading latest table entry for updating NoOfClientsStarted"
-     latest_table_entry=$(az storage entity show --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --partition-key "${tool_api}" --row-key "${GUID}")
+    echo "Reading latest table entry for updating NoOfClientsStarted"
+    latest_table_entry=$(az storage entity show --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --partition-key "${tool_api}" --row-key "${GUID}")
   done
   ## Removing quotes from the job_start_time and result_storage_url retrieved from table
   job_start_time=${job_start_time:1:-1}
