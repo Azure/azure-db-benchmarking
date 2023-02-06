@@ -201,6 +201,7 @@ cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb.log"
 sudo python3 converting_log_to_csv.py $user_home/"$VM_NAME-ycsb.log"
 sudo azcopy copy "$VM_NAME-ycsb.csv" "$result_storage_url"
 sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
+sudo mkdir "/tmp/$VM_NAME-system-diagnostics"
 sudo mv /tmp/cosmos_client_logs "/tmp/$VM_NAME-system-diagnostics"
 sudo cp "$user_home/agent.out" "$user_home/agent.err" "/tmp/$VM_NAME-system-diagnostics"
 sudo azcopy copy "/tmp/$VM_NAME-system-diagnostics" "$result_storage_url" --recursive=true
