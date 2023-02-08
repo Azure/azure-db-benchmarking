@@ -72,7 +72,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
     ```
     az deployment group create --name <deploymen-name> \
       --resource-group <resource-group-name> \
-      --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/getting-started-read/azuredeploy.json" \
+      --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
       --parameters parameter.json
     ```
 7. re-executing the recipe by setting "Skip Load Phase" to "true" , while leaving the rest of the parameter values unchanged, will execute just the read phase of the workload again, using the VM from the previous execution. 
