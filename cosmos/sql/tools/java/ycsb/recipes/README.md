@@ -59,7 +59,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
     
      ![image](../../../../../../images/results-csv.png)
    
-   - There will be a folder per VM with the detailed system diagnostics logs. These logs will help you diagnose issues.
+   - There will be a folder per VM with the detailed system diagnostics logs. These logs will help you diagnose issues. Check [common errors](#common-errors) section for details on errors.
 
      ![image](../../../../../../images/results-diagnostics.png)
 
