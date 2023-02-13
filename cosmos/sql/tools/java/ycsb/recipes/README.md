@@ -81,12 +81,17 @@ A read recipe with a small read workload to familiarize you with the framework. 
 Following are some of the common user mistakes that lead to errors.The error logs will be avilable in conatiner within the storage account provided. The only exception being if the storage account itself is unrechable. In which case, the longs will be available only in the VM. 
 
 1. Following error will appear in "agent.out" in the "/home/benchmarking" of the client VM, if a incorrect storage connecting is passed. 
+   ```
    Error while accessing storage account, exiting from this machine in agent.out on the VM 
+   ```
 2. Following error will appear in "agent.out" in the VM and in a folder within the results storage container if the Cosmos DB URI is incorrect or unreachable 
+   ```
    Caused by: java.net.UnknownHostException: rtcosmosdbsss.documents.azure.com: Name or service not known 
+   ```
 3. Following error will appear in agent.out in the VM and in a folder within the results storage container if the Cosmos DB Key is incorrect
-    The input authorization token can't serve the request. The wrong key is being used….
-
+   ```
+   The input authorization token can't serve the request. The wrong key is being used….
+   ```
 
 ## Basic Configuration
    
