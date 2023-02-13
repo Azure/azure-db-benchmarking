@@ -78,7 +78,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 7. re-executing the recipe by setting "Skip Load Phase" to "true" , while leaving the rest of the parameter values unchanged, will execute just the read phase of the workload again, using the VM from the previous execution. 
 
 ## Common Errors
-Following are some of the common user mistakes that lead to errors.The error logs will be avilable in conatiner within the storage account provided. The only exception being if the storage account itself is unrechable. In which case, the longs will be available only in the VM. 
+Following are the most common user mistakes that lead to errors. The error logs will be available in a container within the storage account provided. The only exception being the first error listed below. The storage account unreachable. In which case, the longs will be available only in the VM.
 
 1. Following error will appear in "agent.out" in the "/home/benchmarking" of the client VM, if a incorrect storage connecting is passed. 
    ```
