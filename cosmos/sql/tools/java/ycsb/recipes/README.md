@@ -63,22 +63,30 @@ A read recipe with a small read workload to familiarize you with the framework. 
 
      ![image](../../../../../../images/results-diagnostics.png)
 
-6. Alternatively, create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Be sure to populate the parameter values in the parameter file.
-    -  Local Template
+6. Alternatively, you can execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). 
+
+    -  Pass parameters inline:
      ```
      az deployment group create \
-       --name <deploymen-name> \
-       --resource-group <resource-group-name> \
-       --template-file azuredeploy.json  \
-       --parameters parameter.json  
+        --resource-group "<resource-group-name>" \
+        --name "<deploymen-name>" \
+        --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
+        --parameters \
+	         adminPassword="<VM-Password>" \
+	         resultsStorageConnectionString="<Results-Storage-Connection-String>" \
+	         cosmosURI="<Cosmos-DB-URI>" \
+            cosmosKey="<Cosmos-DB-Key>"
       ```
-    - Remote Template
+   - Create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe. Be sure to populate the parameter values in the parameter file.
+
     ```
-    az deployment group create --name <deploymen-name> \
-      --resource-group <resource-group-name> \
-      --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
-      --parameters parameter.json
+     az deployment group create \
+        --resource-group <resource-group-name> \
+        --name <deploymen-name> \
+        --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
+        --parameters parameter.json
     ```
+
 7. re-executing the recipe by setting "Skip Load Phase" to "true" , while leaving the rest of the parameter values unchanged, will execute just the read phase of the workload again, using the VM from the previous execution. 
 
 ## Common Errors
