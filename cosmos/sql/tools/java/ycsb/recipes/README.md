@@ -31,9 +31,9 @@ A read recipe with a small read workload to familiarize you with the framework. 
    | Throughput | 400 RU/s | 
    
    
-3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
-4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
-5. Click the deploy to Azure button and fill in the following missing parameter values:
+2. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
+3. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
+4. Click the deploy to Azure button and fill in the following missing parameter values:
 
    |  Parameter   |  Value  |
    | :--:  | :--:  |
@@ -45,7 +45,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 
    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Ftry-it-read%2Fazuredeploy.json)
 
-6. Navigate to the storage account created in step 2 to see the jobs status and results.
+5. Navigate to the storage account created in step 2 to see the jobs status and results.
 
    - Job status can be found by browsing to the table in table storage browser 
    
@@ -58,6 +58,10 @@ A read recipe with a small read workload to familiarize you with the framework. 
    - aggregation.csv has the aggregated results from all clients
     
      ![image](../../../../../../images/results-csv.png)
+   
+   - There will be a folder per VM with the detailed system diagnostics logs. These logs will help you diagnose issues.
+
+     ![image](../../../../../../images/results-diagnostics.png)
 
 6. Alternatively, create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Be sure to populate the parameter values in the parameter file.
     -  Local Template
