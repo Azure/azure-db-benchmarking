@@ -45,25 +45,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
 
    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Ftry-it-read%2Fazuredeploy.json)
 
-5. Navigate to the storage account created in step 2 to see the jobs status and results.
-
-   - Job status can be found by browsing to the table in table storage browser 
-   
-     ![image](../../../../../../images/metadata-status.png)
- 
-   - Once the job status says "Finished", results will be availabe in a container within the same storage account
-   
-     ![image](../../../../../../images/results-container.png)
-   
-   - aggregation.csv has the aggregated results from all clients
-    
-     ![image](../../../../../../images/results-csv.png)
-   
-   - There will be a folder per VM with the detailed system diagnostics logs. These logs will help you diagnose issues. Check [common errors](#common-errors) section for details on errors.
-
-     ![image](../../../../../../images/results-diagnostics.png)
-
-6. Alternatively, you can execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). 
+5. Alternatively, you can execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). 
 
     -  Pass parameters inline:
      ```
@@ -86,6 +68,25 @@ A read recipe with a small read workload to familiarize you with the framework. 
         --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
         --parameters parameter.json
     ```
+
+6. Navigate to the storage account created in step 2 to see the jobs status and results.
+
+   - Job status can be found by browsing to the table in table storage browser 
+   
+     ![image](../../../../../../images/metadata-status.png)
+ 
+   - Once the job status says "Finished", results will be availabe in a container within the same storage account
+   
+     ![image](../../../../../../images/results-container.png)
+   
+   - aggregation.csv has the aggregated results from all clients
+    
+     ![image](../../../../../../images/results-csv.png)
+   
+   - There will be a folder per VM with the detailed system diagnostics logs. These logs will help you diagnose issues. Check [common errors](#common-errors) section for details on errors.
+
+     ![image](../../../../../../images/results-diagnostics.png)
+
 
 7. re-executing the recipe by setting "Skip Load Phase" to "true" , while leaving the rest of the parameter values unchanged, will execute just the read phase of the workload again, using the VM from the previous execution. 
 
