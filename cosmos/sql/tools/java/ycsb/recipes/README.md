@@ -69,7 +69,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
         --parameters parameter.json
     ```
 
-6. Navigate to the storage account created in step 2 to see the jobs status and results.
+6. Navigate to the storage account created in step 2 to see the job status and results.
 
    - Job status can be found by browsing to the table in table storage browser 
    
