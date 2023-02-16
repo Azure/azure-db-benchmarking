@@ -1,5 +1,5 @@
 ## Overview
-[YCSB](https://github.com/brianfrankcooper/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes encapsulate the workload definitions that are passed to YCSB. When using YCSB directly, sometimes the load phase needs to be executed before the run phase. The recipes combine the load and run phases to provide a one-click experience. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) can also be used to execute the recipes. As you can see above, the recipes are organized by workload type and each recipe comes with instructions to help you execute them.
+[YCSB](https://github.com/brianfrankcooper/YCSB) is a popular java based open-source benchmarking tool for performance benchmarking NoSQL databases. The provided recipes encapsulate the workload definitions that are passed to YCSB. When using YCSB directly, sometimes the load phase needs to be executed before the run phase. The framework combines the load and run phases to provide a one-click experience. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) can also be used to execute the recipes. As you can see above, the recipes are organized by workload type and each recipe comes with instructions to help you execute them.
 
 You can expect to see the following latencies for all the read and write workloads:
 
@@ -31,9 +31,9 @@ A read recipe with a small read workload to familiarize you with the framework. 
    | Throughput | 400 RU/s | 
    
    
-3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
-4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
-5. Click the deploy to Azure button and fill in the following missing parameter values:
+2. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
+3. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
+4. Click the deploy to Azure button and fill in the following missing parameter values:
 
    |  Parameter   |  Value  |
    | :--:  | :--:  |
@@ -45,7 +45,31 @@ A read recipe with a small read workload to familiarize you with the framework. 
 
    [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2Ftry-it-read%2Fazuredeploy.json)
 
-6. Navigate to the storage account created in step 2 to see the jobs status and results.
+5. Alternatively, you can execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). 
+
+    -  Pass parameters inline:
+     ```
+     az deployment group create \
+        --resource-group "<resource-group-name>" \
+        --name "<deploymen-name>" \
+        --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
+        --parameters \
+	         adminPassword="<VM-Password>" \
+	         resultsStorageConnectionString="<Results-Storage-Connection-String>" \
+	         cosmosURI="<Cosmos-DB-URI>" \
+            cosmosKey="<Cosmos-DB-Key>"
+      ```
+   - Create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe. Be sure to populate the parameter values in the parameter file.
+
+    ```
+     az deployment group create \
+        --resource-group <resource-group-name> \
+        --name <deploymen-name> \
+        --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
+        --parameters parameter.json
+    ```
+
+6. Navigate to the storage account created in step 2 to see the job status and results.
 
    - Job status can be found by browsing to the table in table storage browser 
    
@@ -58,24 +82,29 @@ A read recipe with a small read workload to familiarize you with the framework. 
    - aggregation.csv has the aggregated results from all clients
     
      ![image](../../../../../../images/results-csv.png)
+   
+   - There will be a folder per VM with the detailed system diagnostics logs. These logs will help you diagnose issues. Check [common errors](#common-errors) section for details on errors.
 
-6. Alternatively, create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Be sure to populate the parameter values in the parameter file.
-    -  Local Template
-     ```
-     az deployment group create \
-       --name <deploymen-name> \
-       --resource-group <resource-group-name> \
-       --template-file azuredeploy.json  \
-       --parameters parameter.json  
-      ```
-    - Remote Template
-    ```
-    az deployment group create --name <deploymen-name> \
-      --resource-group <resource-group-name> \
-      --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
-      --parameters parameter.json
-    ```
+     ![image](../../../../../../images/results-diagnostics.png)
+
+
 7. re-executing the recipe by setting "Skip Load Phase" to "true" , while leaving the rest of the parameter values unchanged, will execute just the read phase of the workload again, using the VM from the previous execution. 
+
+## Common Errors
+Following are the most common user mistakes that lead to errors. The error logs will be available in a container within the storage account provided. The only exception being the first error listed below. A unreachable storage account. In which case, the longs will be available only in the VM.
+
+1. Following error will appear in "agent.err" in the "/home/benchmarking" of the client VM, if a incorrect storage connecting is passed. 
+   ```
+   Error while accessing storage account, exiting from this machine in agent.out on the VM 
+   ```
+2. Following error will appear in "agent.out" in the VM and in a folder within the results storage container if the Cosmos DB URI is incorrect or unreachable 
+   ```
+   Caused by: java.net.UnknownHostException: rtcosmosdbsss.documents.azure.com: Name or service not known 
+   ```
+3. Following error will appear in "agent.out" in the VM and in a folder within the results storage container if the Cosmos DB Key is incorrect
+   ```
+   The input authorization token can't serve the request. The wrong key is being used….
+   ```
 
 ## Basic Configuration
    
