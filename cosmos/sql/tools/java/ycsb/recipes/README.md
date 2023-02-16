@@ -101,7 +101,7 @@ Following are the most common user mistakes that lead to errors. The error logs 
    ```
    Caused by: java.net.UnknownHostException: rtcosmosdbsss.documents.azure.com: Name or service not known 
    ```
-3. Following error will appear in agent.out in the VM and in a folder within the results storage container if the Cosmos DB Key is incorrect
+3. Following error will appear in "agent.out" in the VM and in a folder within the results storage container if the Cosmos DB Key is incorrect
    ```
    The input authorization token can't serve the request. The wrong key is being used….
    ```
