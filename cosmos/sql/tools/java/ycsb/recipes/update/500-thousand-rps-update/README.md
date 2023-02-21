@@ -10,7 +10,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
 | Workload | Update |
 | Max RPS | 500 Thousand |
 | Duration | 1 Hour |
-| Data size |5,000,000 documents|
+| Number of documents in DB |5,000,000|
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute

@@ -11,7 +11,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Workload | Read |
 | Max RPS | 300 |
 | Duration | 10 minutes |
-| Data size |2000 documents|
+| Number of documents in DB |2000|
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
