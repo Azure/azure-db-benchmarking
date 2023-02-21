@@ -116,9 +116,9 @@ Following are the most common user mistakes that lead to errors. The error logs 
 		"details": [{
 			"code": "Conflict",
 			"message": "{\r\n  \"error\": {\r\n    \"code\": \"PropertyChangeNotAllowed\",\r\n    \"message\": \"Changing property 'customData' is not allowed.\",\r\n    \"target\": \"customData\"\r\n  }\r\n}"
-		}]
-	}
-}
+		      }]
+	     }
+      }
    ```
 ## Basic Configuration
    
