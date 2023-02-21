@@ -106,7 +106,11 @@ Following are the most common user mistakes that lead to errors. The error logs 
    ```
    The input authorization token can't serve the request. The wrong key is being used….
    ```
+4. When reusing VM(s) for previous executions if you see the following error, please delete the VM(s) and re-execute the recipe. 
+   ```
+   {    "status": "Failed",    "error": {        "code": "DeploymentFailed",        "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",        "details": [            {                "code": "Conflict",                "message": "{\r\n  \"error\": {\r\n    \"code\": \"PropertyChangeNotAllowed\",\r\n    \"message\": \"Changing property 'customData' is not allowed.\",\r\n    \"target\": \"customData\"\r\n  }\r\n}"            }        ]    }}
 
+   ```
 ## Basic Configuration
    
    |  Parameter   |  Default Value  | Description |
