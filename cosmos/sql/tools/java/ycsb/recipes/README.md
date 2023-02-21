@@ -108,7 +108,7 @@ Following are the most common user mistakes that lead to errors. The error logs 
    ```
 4. When reusing VM(s) for previous executions if you see the following error, please delete the VM(s) and re-execute the recipe. 
    ```
-{
+    {
 	"status": "Failed",
 	"error": {
 		"code": "DeploymentFailed",
