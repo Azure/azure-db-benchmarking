@@ -11,7 +11,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Workload | Read |
 | Max RPS | 20 Thousand |
 | Duration | 1 Hour |
-| Data size |2000 documents|
+| Number of documents in DB |2000|
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
@@ -25,16 +25,15 @@ This recipe encapsulates a read only workload with a maximum requests per second
    | Container Throughput Type | Manual |  
    | Container throughput | 24,000 RU/s[^1] |
 
-[^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew. For more details about capacity planning refer to [Cosmos DB capacity planner](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/estimate-ru-with-capacity-planner)
-
-   
-3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) and note down the connection string 
-4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos 
-6. Click the deploy to Azure button and fill in the following missing parameter values:
+[^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew. For more details about capacity planning refer to [Cosmos DB capacity planner](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/estimate-ru-with-capacity-planner)   
+2. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) 
+3. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
+4. Click the deploy to Azure button and fill in the following missing parameter values:
 
    |  Parameter   |  Value  |
    | --- | --- |
    | Resource group | name of the resource group from spet 3 |
+   | Region | Make sure the region is the same as the Cosmos DB account region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |

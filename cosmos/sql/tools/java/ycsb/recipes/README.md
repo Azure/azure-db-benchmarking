@@ -38,6 +38,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
    |  Parameter   |  Value  |
    | :--:  | :--:  |
    | Resource group | name of the resource group from spet 3 |
+   | Region | Make sure the region is the same as the Cosmos DB account region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
@@ -105,7 +106,6 @@ Following are the most common user mistakes that lead to errors. The error logs 
    ```
    The input authorization token can't serve the request. The wrong key is being used….
    ```
-
 ## Basic Configuration
    
    |  Parameter   |  Default Value  | Description |
