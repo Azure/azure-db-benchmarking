@@ -3,6 +3,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
+echo "???????????????????DELETE_ME???????????: $DELETE_ME"
 echo "##########VM NAME###########: $VM_NAME"
 echo "##########YCSB_RECORD_COUNT###########: $YCSB_RECORD_COUNT"
 echo "##########MACHINE_INDEX###########: $MACHINE_INDEX"
