@@ -30,14 +30,14 @@
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_D2s_v3",
+            "defaultValue": "Standard_D8s_v4",
             "metadata": {
                 "description": "Specifies a Virtual Machine size"
             }
         },
         "vmCount": {
             "type": "int",
-            "defaultValue": 1,
+            "defaultValue": 2,
             "metadata": {
                 "description": "Specifies the number of Virtual Machines/clients"
             }
@@ -85,25 +85,25 @@
         },
         "threads": {
             "type": "int",
-            "defaultValue": 4,
+            "defaultValue": 80,
             "metadata": {
                 "description": "Specifies the threads per client"
             }
         },
         "ycsbRecordCount": {
             "type": "int",
-            "defaultValue": 30
+            "defaultValue": 100000
         },
         "targetOperationsPerSecond": {
             "type": "int",
-            "defaultValue": 300,
+            "defaultValue": 10000,
             "metadata": {
                 "description": "Specifies the maximum number of operations each client pefroms per second"
             }
         },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 180000,
+            "defaultValue": 36000000,
             "metadata": {
                 "description": "Specifies the total number of operations each client perfoms"
             }
@@ -269,6 +269,18 @@
                     },
                     "diagnosticsLatencyThresholdInMS": {
                         "value": "[parameters('diagnosticsLatencyThresholdInMS')]"
+                    },
+                    "readproportion": {
+                        "value": "0"
+                    },
+                    "updateproportion": {
+                        "value": "1"
+                    },
+                    "scanproportion": {
+                        "value": "0"
+                    },
+                    "insertproportion": {
+                        "value": "0"
                     },
                     "writeOnlyOperation": {
                         "value": false

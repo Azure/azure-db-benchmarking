@@ -30,7 +30,7 @@
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_D2s_v3",
+            "defaultValue": "Standard_D8s_v4",
             "metadata": {
                 "description": "Specifies a Virtual Machine size"
             }
@@ -85,25 +85,25 @@
         },
         "threads": {
             "type": "int",
-            "defaultValue": 4,
+            "defaultValue": 28,
             "metadata": {
                 "description": "Specifies the threads per client"
             }
         },
         "ycsbRecordCount": {
             "type": "int",
-            "defaultValue": 30
+            "defaultValue": 1000
         },
         "targetOperationsPerSecond": {
             "type": "int",
-            "defaultValue": 300,
+            "defaultValue": 10000,
             "metadata": {
                 "description": "Specifies the maximum number of operations each client pefroms per second"
             }
         },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 180000,
+            "defaultValue": 36000000,
             "metadata": {
                 "description": "Specifies the total number of operations each client perfoms"
             }
@@ -113,6 +113,13 @@
             "defaultValue": false,
             "metadata": {
                 "description": "Specifies skipLoadPhase true or false, if set true load phase will not trigger before the transaction phase"
+            }
+        },
+        "writeOnlyOperation": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies writeOnlyOperation true or false, if true it will override the workload and run 100% write, transaction wont fail on single error unlike load phase"
             }
         },
         "ycsbGitHubRepoName": {
@@ -271,7 +278,7 @@
                         "value": "[parameters('diagnosticsLatencyThresholdInMS')]"
                     },
                     "writeOnlyOperation": {
-                        "value": false
+                        "value":  "[parameters('writeOnlyOperation')]"
                     },
                     "requestdistribution": {
                         "value": "[parameters('requestdistribution')]"
