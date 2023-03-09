@@ -239,6 +239,7 @@
             "metadata": {
                 "description": "Specifies YCSB database binding name"
             }
+		}
     },
     "variables": {
         "vmName": "[concat(parameters('projectName'), '-vm')]",
