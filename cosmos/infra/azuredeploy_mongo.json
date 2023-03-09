@@ -127,13 +127,6 @@
                 "description": "Specifies the GitHub branch for YCSB source code repository"
             }
         },
-        "ycsbDatabaseBindingName": {
-            "type": "string",
-            "defaultValue": "main",
-            "metadata": {
-                "description": "Specifies YCSB database binding name"
-            }
-        },
         "benchmarkingToolsRepoName": {
             "type": "string",
             "defaultValue": "Azure/azure-db-benchmarking",
@@ -239,7 +232,13 @@
             "metadata": {
                 "description": "Specifies application insight connection string for live monitering"
             }
-        }
+        },
+        "ycsbDatabaseBindingName": {
+            "type": "string",
+            "defaultValue": "mongodbreactivestreams",
+            "metadata": {
+                "description": "Specifies YCSB database binding name"
+            }
     },
     "variables": {
         "vmName": "[concat(parameters('projectName'), '-vm')]",
