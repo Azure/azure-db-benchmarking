@@ -4,7 +4,7 @@
     "parameters": {
         "projectName": {
             "type": "string",
-            "defaultValue": "Benchmarking-100k-rps-read",
+            "defaultValue": "Benchmarking",
             "metadata": {
                 "description": "Specifies a name for generating resource names."
             }
