@@ -11,10 +11,7 @@
     "resultsStorageConnectionString": {
       "value": ""
     },
-    "cosmosURI": {
-      "value": ""
-    },
-    "cosmosKey": {
+    "cosmosConnectionString": {
       "value": ""
     },
     "vmCount": {
