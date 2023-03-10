@@ -129,13 +129,6 @@
                 "description": "Specifies the GitHub branch for YCSB source code repository"
             }
         },
-        "ycsbDatabaseBindingName": {
-            "type": "string",
-            "defaultValue": "main",
-            "metadata": {
-                "description": "Specifies YCSB database binding name"
-            }
-        },
         "benchmarkingToolsRepoName": {
             "type": "string",
             "defaultValue": "Azure/azure-db-benchmarking",
@@ -260,9 +253,6 @@
                     },
                     "benchmarkingToolsRepoName": {
                         "value": "[parameters('benchmarkingToolsRepoName')]"
-                    },
-                    "ycsbDatabaseBindingName": {
-                        "value": "mongodbreactivestreams"
                     },
                     "benchmarkingToolsBranchName": {
                         "value": "[parameters('benchmarkingToolsBranchName')]"
