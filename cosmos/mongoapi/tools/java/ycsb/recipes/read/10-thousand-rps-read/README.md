@@ -5,7 +5,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 
 |  Config   |  Value   |
 | --- | --- |
-| Database | Cosmos DB for MongoDB |
+| Database | Cosmos DB for Mongo DB |
 | Benchmarking tool | YCSB |
 | Workload | Read |
 | Max RPS | 10 Thousand |
@@ -14,7 +14,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
-1. Create a [MongoDB collection](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/quickstart-java)
+1. Create a [Mongo DB collection](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/quickstart-java)
 
    |  Setting   |  value  | 
    | --- | --- |
