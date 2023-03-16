@@ -15,7 +15,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
-1. Create a [MongoDB collection](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/quickstart-java)
+1. Create a [Mongo DB collection](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/quickstart-java)
 
    |  Setting   |  value  | 
    | --- | --- |
@@ -36,7 +36,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
    | Resource group | name of the resource group from spet 3 |
    | Region | Make sure the region is the same as the Cosmos DB account region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
-   | Cosmos URI  | URI of the Cosmos DB account from step 1 |
+   | Cosmos URI  | URI of the account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
    
