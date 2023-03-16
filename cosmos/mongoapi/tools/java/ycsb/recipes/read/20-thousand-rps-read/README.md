@@ -6,7 +6,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 
 |  Config   |  Value   |
 | --- | --- |
-| Database | Cosmos DB for MongoDB |
+| Database | Cosmos DB for Mongo DB |
 | Benchmarking tool | YCSB |
 | Workload | Read |
 | Max RPS | 20 Thousand |
