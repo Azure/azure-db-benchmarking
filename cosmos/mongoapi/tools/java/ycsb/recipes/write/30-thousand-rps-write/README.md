@@ -9,7 +9,7 @@ This recipe encapsulates a write only workload with a maximum requests per secon
 | Database | Cosmos DB for Mongo DB |
 | Benchmarking tool | YCSB |
 | Workload | Write |
-| Max RPS | 500 Thousand |
+| Max RPS | 30 Thousand |
 | Duration | 1 Hour |
 | Document Size | ≈1 KB(YCSB default) |
 
