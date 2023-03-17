@@ -8,9 +8,9 @@ This recipe encapsulates a update only workload with a maximum requests per seco
 | Database | Cosmos DB for Mongo DB |
 | Benchmarking tool | YCSB |
 | Workload | Update |
-| Max RPS | 10 Thousand |
+| Max RPS | 5 Thousand |
 | Duration | 1 Hour |
-| Number of documents in DB |100,000 |
+| Number of documents in DB |50,000 |
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
@@ -22,7 +22,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
    | Container Name | usertable | 
    | Partition Key  | _id |
    | Container Throughput Type | Manual |  
-   | Container throughput | 168,000 RU/s[^1] |
+   | Container throughput | 84,000 RU/s[^1] |
 
 [^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew. For more details about capacity planning refer to [Cosmos DB capacity planner](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/estimate-ru-capacity-planner)  
    
@@ -40,7 +40,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
    | Admin Password | Admin account password for the VM |
    
  
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fmongoapi%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fupdate%2F10-thousand-rps-update%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fmongoapi%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fupdate%2F5-thousand-rps-update%2Fazuredeploy.json)
 
 ## Output
 The job status and results will be available in the following locations in the storage account provided
