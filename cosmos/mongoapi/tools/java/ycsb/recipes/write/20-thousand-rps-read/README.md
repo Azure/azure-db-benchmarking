@@ -40,7 +40,6 @@ This recipe encapsulates a write only workload with a maximum requests per secon
    | Cosmos Key  | Primary key of the account from step 1 |
    | Admin Password | Admin account password for the VM |
    
-
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fmongoapi%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fwrite%2F20-thousand-rps-write%2Fazuredeploy.json)
 
 ## Output
