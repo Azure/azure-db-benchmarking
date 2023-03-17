@@ -13,8 +13,6 @@ This recipe encapsulates a write only workload with a maximum requests per secon
 | Duration | 1 Hour |
 | Document Size | ≈1 KB(YCSB default) |
 
-
-
 ## Execute
 1. Create a [Mongo DB collection](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/quickstart-java)
 
