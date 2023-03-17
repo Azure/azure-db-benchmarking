@@ -1,4 +1,4 @@
-# 10 Thousand Writes Per Second
+# 5 Thousand Writes Per Second
 
 This recipe encapsulates a write only workload with a maximum requests per second of 10 thousand.
 
