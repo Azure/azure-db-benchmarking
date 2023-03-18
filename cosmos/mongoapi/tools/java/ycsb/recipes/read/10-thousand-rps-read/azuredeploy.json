@@ -142,7 +142,7 @@
             "metadata": {
                 "description": "Specifies the GitHub branch for benchmakring framwork code repositor"
             }
-        }
+        },
         "requestdistribution": {
             "type": "string",
             "defaultValue": "uniform",
