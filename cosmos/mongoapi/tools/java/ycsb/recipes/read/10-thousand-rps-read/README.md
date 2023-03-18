@@ -34,8 +34,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
    | Resource group | name of the resource group from spet 3 |
    | Region | Make sure the region is the same as the Cosmos DB account region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
-   | Cosmos URI  | URI of the account from step 1 |
-   | Cosmos Key  | Primary key of the account from step 1 |
+   | Cosmos Connection String  | Primary Connection String for the account from step 1 |
    | Admin Password | Admin account password for the VM |
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fusers%2Fratella%2FMongo%2Fcosmos%2Fmongoapi%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fread%2F10-thousand-rps-read%2Fazuredeploy.json)
