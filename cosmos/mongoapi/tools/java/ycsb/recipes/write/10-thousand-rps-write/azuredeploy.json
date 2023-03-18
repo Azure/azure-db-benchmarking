@@ -132,13 +132,6 @@
                 "description": "Specifies the GitHub branch for benchmakring framwork code repositor"
             }
         },
-        "diagnosticsLatencyThresholdInMS": {
-            "type": "int",
-            "defaultValue": -1,
-            "metadata": {
-                "description": "Specifies request latency threshold for logging clinet request diagnostics. There is no logging by default"
-            }
-        },
         "requestdistribution": {
             "type": "string",
             "defaultValue": "uniform",
@@ -151,13 +144,6 @@
             "defaultValue": "hashed",
             "metadata": {
                 "description": "Specifies insert data in ordered or hashed manner"
-            }
-        },
-        "includeExceptionStackInLog": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Specifies includeExceptionStackInLog true or false, it will print the complete exception trace on error"
             }
         },
         "fieldcount": {
@@ -241,7 +227,7 @@
                         "value": "[parameters('benchmarkingToolsBranchName')]"
                     },
                     "diagnosticsLatencyThresholdInMS": {
-                        "value": "[parameters('diagnosticsLatencyThresholdInMS')]"
+                        "value": -1
                     },
                     "writeOnlyOperation": {
                         "value":  true
@@ -253,7 +239,7 @@
                         "value": "[parameters('insertorder')]"
                     },
                     "includeExceptionStackInLog": {
-                        "value": "[parameters('includeExceptionStackInLog')]"
+                        "value": false
                     },
                     "fieldcount": {
                         "value": "[parameters('fieldcount')]"
