@@ -42,7 +42,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
      az deployment group create \
         --resource-group "<resource-group-name>" \
         --name "<deploymen-name>" \
-        --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
+        --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/mongoapi/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
         --parameters \
 	         adminPassword="<VM-Password>" \
 	         resultsStorageConnectionString="<Results-Storage-Connection-String>" \
@@ -55,7 +55,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
      az deployment group create \
         --resource-group <resource-group-name> \
         --name <deploymen-name> \
-        --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/sql/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
+        --template-uri "https://raw.githubusercontent.com/Azure/azure-db-benchmarking/main/cosmos/mongoapi/tools/java/ycsb/recipes/read/try-it-read/azuredeploy.json" \
         --parameters parameter.json
     ```
 
