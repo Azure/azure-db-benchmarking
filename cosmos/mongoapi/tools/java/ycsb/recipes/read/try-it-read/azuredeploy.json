@@ -92,7 +92,7 @@
         },
         "ycsbRecordCount": {
             "type": "int",
-            "defaultValue": 30
+            "defaultValue": 18
         },
         "targetOperationsPerSecond": {
             "type": "int",
