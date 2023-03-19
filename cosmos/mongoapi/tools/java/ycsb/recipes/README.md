@@ -45,7 +45,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
         --parameters \
 	         adminPassword="<VM-Password>" \
 	         resultsStorageConnectionString="<Results-Storage-Connection-String>" \
-	         cosmosConnectionStrin="<Cosmos-DB-URI>"             
+	         cosmosConnectionString="<Cosmos-DB-URI>"             
       ```
    - Create a paratemetr file or use the provided [sample parameter file](./parameter-files) to execute the recipe. Be sure to populate the parameter values in the parameter file.
 
