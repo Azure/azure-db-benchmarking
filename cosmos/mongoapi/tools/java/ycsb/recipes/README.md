@@ -106,7 +106,7 @@ Once a benchmarking job is triggered its status and few useful properties will b
 
 
 ## Results 
-Once the "JobStatus" key has a value of "Finished", the results will be available in a newly created container, with a name of the format "ycsbbenchmarking-<Date>".
+Once the "JobStatus" key has a value of "Finished", the results will be available in a newly created container, with a name of the format "ycsbbenchmarking-{DateTime}".
    
    |  File   |  Description  | 
    | :--:  | :--:  |
