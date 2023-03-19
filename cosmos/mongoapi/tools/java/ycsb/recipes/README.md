@@ -85,10 +85,28 @@ Following are the most common user mistakes that lead to errors. The error logs 
    ```
    Error while accessing storage account, exiting from this machine in agent.out on the VM 
    ```
-2. Following error will appear in "agent.out" in the VM and in a folder within the results storage container if the Cosmos DB URI is incorrect or unreachable 
+2. Following error will appear in "agent.out" in the VM and in a folder within the results storage container if the "Cosmos Connection String" is incorrect or unreachable
    ```
-   Caused by: java.net.UnknownHostException: rtcosmosdbsss.documents.azure.com: Name or service not known 
+   com.mongodb.MongoSecurityException: Exception authenticating MongoCredential
    ```
-3. Following error will appear in "agent.out" in the VM and in a folder within the results storage container if the Cosmos DB Key is incorrect
-   ```
-   The input authorization token can't serve the request. The wrong key is being used….
+   
+ ## Monitoring
+Once a benchmarking job is triggered its status and few useful properties will be available in a storage table named "ycsbbenchmarkingMetadata". Each row represents one benchmarking job. A job can have one or more clients, each running on its own VM. The number of clients will always equal number of VMs. 
+
+   |  Key   |  Description  | 
+   | :--:  | :--: |
+   | JobStartTime | Start time of the job | 
+   | JobFinishTime | Finish time of the job | 
+   | JobStatus| can be either "Started" or "Finished"| 
+   | NoOfClientsStarted | Total number of clients used for the Job |
+   | NoOfClientsCompleted | Total number of clients that completed their workload task | 
+
+
+## Results 
+Once the "JobStatus" key has a value of "Finished", the results will be available in a newly created container, with a name of the format "ycsbbenchmarking-{DateTime}".
+   
+   |  File   |  Description  | 
+   | :--:  | :--:  |
+   | aggregation.csv | aggregated result from all the clients |    
+   | Benchmarking-vm<n>-ycsb.log| YCSB log file for the run phase. There will be as many files as the clients| 
+   | Benchmarking-vm<n>-ycsb.csv | an intermediary CSV file generated from the YCSB log file. Used to produce the final aggregated results | 
