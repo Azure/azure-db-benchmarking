@@ -23,7 +23,7 @@ This recipe encapsulates a write only workload with a maximum requests per secon
    | Container Name | usertable | 
    | Partition Key  | _id |
    | Container Throughput Type | Manual |  
-   | Container throughput | 240,000 RU/s[^1] |
+   | Container throughput | 480,000 RU/s[^1] |
 
 [^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew. For more details about capacity planning refer to [Cosmos DB capacity planner](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/estimate-ru-capacity-planner)  
 
@@ -33,7 +33,7 @@ This recipe encapsulates a write only workload with a maximum requests per secon
 
    |  Parameter   |  Value  |
    | --- | --- |
-   | Resource group | name of the resource group from spet 3 |
+   | Resource group | name of the resource group from step 3 |
    | Region | Make sure the region is the same as the Cosmos DB account region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos Connection String  | Primary Connection String for the account from step 1 |

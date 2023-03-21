@@ -22,7 +22,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
    | Container Name | usertable | 
    | Partition Key  | /id |
    | Container Throughput Type | Manual |  
-   | Container throughput | 161,900 RU/s[^1] |
+   | Container throughput | 84,000 RU/s[^1] |
 
 [^1]: Container throughput is slightly higher than normal to accommodate for the YCSB request distribution skew. For more details about capacity planning refer to [Cosmos DB capacity planner](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/estimate-ru-with-capacity-planner)
    
@@ -32,7 +32,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
 
    |  Parameter   |  Value  |
    | --- | --- |
-   | Resource group | name of the resource group from spet 3 |
+   | Resource group | name of the resource group from step 3 |
    | Region | Make sure the region is the same as the Cosmos DB account region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos Connection String  | Primary Connection String for the account from step 1 |
