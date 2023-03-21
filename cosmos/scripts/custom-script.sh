@@ -172,7 +172,7 @@ else
   if [ "$SKIP_LOAD_PHASE" = False ] || [ "$SKIP_LOAD_PHASE" = false ]; then
     ## Execute load operation for YCSB tests
     echo "########## Load operation for YCSB tests ###########"
-    ## Reducing the load phase RPS by decreasing the number of YCSB threads to eliminate throttling. The Throughput used for “read” recipes is lesser than that is required for load phase resulting in throttling. 
+    ## Reducing the load phase RPS by decreasing the number of YCSB threads to eliminate throttling. The Throughput used for transaction phase is generally lesser than that is required for load phase resulting in throttling. 
     loadthreadcount=$((THREAD_COUNT / 5))
     if [ $loadthreadcount -eq 0 ];then 
       loadthreadcount=1
