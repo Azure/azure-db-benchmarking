@@ -10,7 +10,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
 | Workload | Update |
 | Max RPS | 10 Thousand |
 | Duration | 1 Hour |
-| Number of documents in DB |50,000 |
+| Number of documents in DB |100,000 |
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
@@ -40,7 +40,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
 
 [More details about the parameters](../../#basic-configuration)   
  
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fmongoapi%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fupdate%2F5-thousand-rps-update%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fmongoapi%2Ftools%2Fjava%2Fycsb%2Frecipes%2Fupdate%2F10-thousand-rps-update%2Fazuredeploy.json)
 
 ## Output
 The job status and results will be available in the following locations in the storage account provided
