@@ -32,7 +32,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
 
    |  Parameter   |  Value  |
    | --- | --- |
-   | Resource group | name of the resource group from spet 3 |
+   | Resource group | name of the resource group from step 3 |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |

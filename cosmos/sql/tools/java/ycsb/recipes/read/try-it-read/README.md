@@ -11,7 +11,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Workload | Read |
 | Max RPS | 300 |
 | Duration | 10 minutes |
-| Number of documents in DB |2000|
+| Number of documents in DB | 30 |
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
@@ -32,7 +32,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
 
    |  Parameter   |  Value  |
    | --- | --- |
-   | Resource group | name of the resource group from spet 3 |
+   | Resource group | name of the resource group from step 3 |
    | Region | Make sure the region is the same as the Cosmos DB account region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
