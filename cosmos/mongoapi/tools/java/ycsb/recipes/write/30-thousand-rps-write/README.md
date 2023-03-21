@@ -48,3 +48,4 @@ The job status and results will be available in the following locations in the s
 | Status  | ycsbbenchmarkingMetadata (Table) |
 | Results | ycsbbenchmarking-{Date} (Container) |
 
+ [More details about job status and results](../../#monitoring)
