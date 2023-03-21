@@ -33,7 +33,7 @@ This recipe encapsulates a write only workload with a maximum requests per secon
 
    |  Parameter   |  Value  |
    | --- | --- |
-   | Resource group | name of the resource group from spet 3 |
+   | Resource group | name of the resource group from step 3 |
    | Region | Make sure the region is the same as the Cosmos DB account region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
