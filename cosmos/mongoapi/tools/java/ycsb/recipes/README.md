@@ -89,6 +89,36 @@ Following are the most common user mistakes that lead to errors. The error logs 
    ```
    com.mongodb.MongoSecurityException: Exception authenticating MongoCredential
    ```
+ ## Basic Configuration
+   
+   |  Parameter   |  Default Value  | Description |
+   | :--:  | :--:  | :--: | 
+   | Project Name | Benchmarking | this will become part of the VM name(ex: Benchmarking-vm1 ) |
+   | Location | [resourceGroup().location] | location of the resource group |
+   | Results Storage Connection String  |  | connection string of a storage account |
+   | Cosmos Connection String  |  | Primary Connection String for the account |   
+   | VM Size  | varies by recipe | VM size |
+   | VM Count | varies by recipe | Number of VMs |
+   | Admin Username | benchmarking | The username for the VM's admin account |
+   | Admin Password |  | password for the VM's admin account |
+   | Threads | varies by recipe | Number of YCSB client threads  |
+   | YCSB Record Count |varies by recipe |Number of records in the dataset at the start of the workload|  
+   | Target Operations Per Second |varies by recipe | Maximum number of operations per second to be performed by each client/vm |
+   | YCSB Operation Count  |varies by recipe |The number of operations to perform in the workload by each client/vm|
+   | YCSB Git Hub Repo Name | Azure/YCSB |GitHub repository name for fetching YCSB code|
+   | YCSB Git Hub Branch Name | main |GitHub branch name for fetching YCSB code |
+   | Benchmarking Tools Repo Name |Azure/azure-db-benchmarking | GitHub repository name for benchmarking framework code |
+   | Benchmarking Tools Branch Name | main | GitHub branch name for benchmarking framework code |
+   | Skip Load Phase | false | "True" will skip the YCSB load pshase. Used to execute the run phase without running load again |
+   
+## Advanced Configuration
+   The default configuration is used to create a VNet and Subnet, but custom configuration can be provided.
+   |  Parameter   |  Default Value  | Description |
+   | :--:  | :--:  | :--: | 
+   | Vnet Name | [concat(parameters('projectName'), '-vnet')] | VNet name |
+   | Vnet Address Prefixes | 10.2.0.0/16 | VNet address prefix |   
+   | Vnet Subnet Name | default | subnet name | 
+   | Vnet Subnet Address Prefix | 10.2.0.0/24 |  subnet address prefix |   
    
  ## Monitoring
 Once a benchmarking job is triggered its status and few useful properties will be available in a storage table named "ycsbbenchmarkingMetadata". Each row represents one benchmarking job. A job can have one or more clients, each running on its own VM. The number of clients will always equal number of VMs. 
