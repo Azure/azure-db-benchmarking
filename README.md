@@ -38,8 +38,8 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
    - [/cosmos](/cosmos)  Cosmos DB specific artifacts
      - [/cosmos/scripts](/cosmos/scripts)  Scripts for framework agent and result aggregation
      - [/cosmos/infra](/cosmos/infra)  Common resource creation templates  
-     - [/cosmos/sql/tools/java/ycsb/recipes](/cosmos/sql/tools/java/ycsb) SQL API YCSB Recipes 
-     - [/cosmos/mongoapi/tools/java/ycsb/recipes](/cosmos/mongoapi/tools/java/ycsb) Mongo API YCSB Recipes 
+     - [/cosmos/sql/tools/java/ycsb/recipes](/cosmos/sql/tools/java/ycsb/recipes) SQL API YCSB Recipes 
+     - [/cosmos/mongoapi/tools/java/ycsb/recipes](/cosmos/mongoapi/tools/java/ycsb/recipes) Mongo API YCSB Recipes 
 
 
 ## Getting Started
