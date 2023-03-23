@@ -15,7 +15,7 @@ A read recipe with a small read workload to familiarize you with the framework. 
    | :--:  | :--:  |
    | Database Name | ycsb | 
    | Container Name | usertable | 
-   | Partition Key  |  _id |
+   | Shard key |  _id |
    | Container Throughput  | Manual |  
    | Throughput | 400 RU/s | 
    
