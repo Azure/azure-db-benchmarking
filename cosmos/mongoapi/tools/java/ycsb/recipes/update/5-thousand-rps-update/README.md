@@ -20,7 +20,7 @@ This recipe encapsulates a update only workload with a maximum requests per seco
    | --- | --- |
    | Database Name | ycsb | 
    | Container Name | usertable | 
-   | Partition Key  | /id |
+   | Shard key | _id |
    | Container Throughput Type | Manual |  
    | Container throughput | 84,000 RU/s[^1] |
 
