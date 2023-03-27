@@ -44,7 +44,7 @@ cd YCSB
 echo "########## Pulling Latest YCSB ##########"
 git pull
 echo "########## Building YCSB ##########"
-mvn -pl site.ycsb:$DB_BINDING_NAME-binding -am clean package
+mvn -pl site.ycsb:$DB_BINDING_NAME-binding -am clean  -q
 cp -r ./$DB_BINDING_NAME/target/ycsb-$DB_BINDING_NAME-binding*.tar.gz /tmp/ycsb
 cp -r ./$DB_BINDING_NAME/conf/* /tmp/ycsb
 cd /tmp/ycsb/
