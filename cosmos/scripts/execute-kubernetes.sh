@@ -6,9 +6,13 @@
 echo "#####Building custom script url####"
 customScriptUrl="https://raw.githubusercontent.com/${BENCHMARKING_FRAMEWORK_REPO}/${BENCHMARKING_FRAMEWORK_BRANCH}/cosmos/scripts/custom-script.sh"
 export BENCHMARKING_TOOLS_URL="https://github.com/${BENCHMARKING_FRAMEWORK_REPO}.git"
+export BENCHMARKING_TOOLS_BRANCH_NAME=$BENCHMARKING_FRAMEWORK_BRANCH
 export YCSB_GIT_REPO_URL="https://github.com/${YCSB_REPO}.git"
+export YCSB_GIT_BRANCH_NAME=$YCSB_BRANCH
 echo "BENCHMARKING_TOOLS_URL: $BENCHMARKING_TOOLS_URL"
+echo "BENCHMARKING_TOOLS_BRANCH_NAME: $BENCHMARKING_TOOLS_BRANCH_NAME"
 echo "YCSB_GIT_REPO_URL: $YCSB_GIT_REPO_URL"
+echo "YCSB_GIT_BRANCH_NAME: $YCSB_GIT_BRANCH_NAME"
 echo "customScriptUrl: $customScriptUrl"
 curl -o custom-script.sh $customScriptUrl
 
