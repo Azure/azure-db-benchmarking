@@ -9,9 +9,9 @@ Of course, there are many good open-source tools for benchmarking databases, but
 -	Execution
 - Results aggregation 
 
-The provided recipes encapsulate the workload definitions that are passed to the underlying benchmarking tool for a "1-Click" experience. The workload definitions were designed based on the [best practices](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/performance-tips-java-sdk-v4?tabs=api-async) published by Cosmos DB team and the benchmarking tool. The recipes have been tested and validated for consistent results. 
+The provided recipes encapsulate the workload definitions that are passed to the underlying benchmarking tool for a "1-Click" experience. The workload definitions were designed based on the best practices published for the database, the SDK/connector and the benchmarking tool. The recipes have been tested and validated for consistent results. 
 
-The first version of the framework uses [YCSB](https://github.com/brianfrankcooper/YCSB), a popular open-source benchmarking tool, for performance benchmarking Cosmos DB SQL API. We will be adding recipes for Cosmos DB  Mongo API and Cassandra API soon. We will also onboard additional benchmarking tools in the future. We welcome contributions.
+The first version of the framework uses [YCSB](https://github.com/brianfrankcooper/YCSB), a popular open-source benchmarking tool, for performance benchmarking Cosmos DB SQL API and Mongo API. We intend to onboard more databases and benchmarking tools in the future. We welcome contributions.
 
 ## Tech Stack
 - ARM Templates
@@ -38,7 +38,8 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
    - [/cosmos](/cosmos)  Cosmos DB specific artifacts
      - [/cosmos/scripts](/cosmos/scripts)  Scripts for framework agent and result aggregation
      - [/cosmos/infra](/cosmos/infra)  Common resource creation templates  
-     - [/cosmos/sql/tools/java/ycsb](/cosmos/sql/tools/java/ycsb) SQL API YCSB Recipes 
+     - [/cosmos/sql/tools/java/ycsb/recipes](/cosmos/sql/tools/java/ycsb/recipes) SQL API YCSB Recipes 
+     - [/cosmos/mongoapi/tools/java/ycsb/recipes](/cosmos/mongoapi/tools/java/ycsb/recipes) Mongo API YCSB Recipes 
 
 
 ## Getting Started
@@ -46,6 +47,7 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
    |  Database   |  Benchmarking Tool  | Instructions
    | :--:  | :--:  | :--:  |
    | Cosmos SQL API | YCSB | [Getting Started ](/cosmos/sql/tools/java/ycsb/recipes)
+   | Cosmos Mongo API | YCSB | [Getting Started ](/cosmos/mongoapi/tools/java/ycsb/recipes)
 
 
 ## Contributing

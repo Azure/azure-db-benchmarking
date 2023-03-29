@@ -21,7 +21,7 @@ This recipe encapsulates a write only workload with a maximum requests per secon
    | --- | --- |
    | Database Name | ycsb | 
    | Container Name | usertable | 
-   | Partition Key  | _id |
+   | Shard key  | _id |
    | Container Throughput Type | Manual |  
    | Container throughput | 480,000 RU/s[^1] |
 
