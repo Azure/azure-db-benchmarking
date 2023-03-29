@@ -11,7 +11,7 @@ Of course, there are many good open-source tools for benchmarking databases, but
 
 The provided recipes encapsulate the workload definitions that are passed to the underlying benchmarking tool for a "1-Click" experience. The workload definitions were designed based on the best pratices published for the database, the SDK/connetor and the benchmakring tool. The recipes have been tested and validated for consistent results. 
 
-The first version of the framework uses [YCSB](https://github.com/brianfrankcooper/YCSB), a popular open-source benchmarking tool, for performance benchmarking Cosmos DB SQL API and Mongo API. We intend to onboard more daatabases and benchmarking tools in the future. We welcome contributions.
+The first version of the framework uses [YCSB](https://github.com/brianfrankcooper/YCSB), a popular open-source benchmarking tool, for performance benchmarking Cosmos DB SQL API and Mongo API. We intend to onboard more databases and benchmarking tools in the future. We welcome contributions.
 
 ## Tech Stack
 - ARM Templates
