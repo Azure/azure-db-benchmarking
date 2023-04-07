@@ -9,6 +9,9 @@ export BENCHMARKING_TOOLS_URL="https://github.com/${BENCHMARKING_FRAMEWORK_REPO}
 export BENCHMARKING_TOOLS_BRANCH_NAME=$BENCHMARKING_FRAMEWORK_BRANCH
 export YCSB_GIT_REPO_URL="https://github.com/${YCSB_REPO}.git"
 export YCSB_GIT_BRANCH_NAME=$YCSB_BRANCH
+export VM_NAME=$POD_NAME
+export MACHINE_INDEX=$POD_INDEX
+export VM_COUNT=$POD_COUNT
 
 curl -o custom-script.sh $customScriptUrl
 
