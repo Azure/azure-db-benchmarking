@@ -3,6 +3,7 @@ kind: Job
 metadata:
   name: bootstrapperjob-simple
 spec:
+  ttlSecondsAfterFinished: 10
   template:
     spec:
       containers:
@@ -10,6 +11,10 @@ spec:
         image: ravitella/bootstrapper:latest
         imagePullPolicy: Always
         command: ["./execute-kubernetes.sh"]
+        resources:
+           limits:
+             memory: "4G"
+             cpu: "6000m"
         env:
         - name: ADMIN_USER_NAME
           value: "benchmarking"
@@ -21,23 +26,23 @@ spec:
           value: "1"  
         - name: RESULT_STORAGE_CONNECTION_STRING
           valueFrom:
-             configMapKeyRef:
-               name: test-env-config
+             secretKeyRef:
+               name: benchmarking-secrets
                key: RESULT_STORAGE_CONNECTION_STRING
         - name: COSMOS_URI
           valueFrom:
-             configMapKeyRef:
-               name: test-env-config
+             secretKeyRef:
+               name: benchmarking-secrets
                key: COSMOS_URI
         - name: COSMOS_KEY
           valueFrom:
-             configMapKeyRef:
-               name: test-env-config
+             secretKeyRef:
+               name: benchmarking-secrets
                key: COSMOS_KEY  
         - name: GUID
           valueFrom:
-             configMapKeyRef:
-               name: test-env-config
+             secretKeyRef:
+               name: benchmarking-secrets
                key: GUID   
         - name: TARGET_OPERATIONS_PER_SECOND
           valueFrom:

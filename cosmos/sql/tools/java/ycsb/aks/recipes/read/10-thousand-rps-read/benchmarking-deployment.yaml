@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: bootstrapperjob-simple-1-2
+  name: benchmarking-1-2
 spec:
   ttlSecondsAfterFinished: 10
   template:
@@ -47,112 +47,112 @@ spec:
         - name: TARGET_OPERATIONS_PER_SECOND
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: TARGET_OPERATIONS_PER_SECOND
         - name: THREAD_COUNT
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: THREAD_COUNT
         - name: YCSB_OPERATION_COUNT
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: YCSB_OPERATION_COUNT
         - name: WORKLOAD_TYPE
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: WORKLOAD_TYPE
         - name: YCSB_RECORD_COUNT
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: YCSB_RECORD_COUNT
         - name: USE_GATEWAY
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: USE_GATEWAY
         - name: DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS        
         - name: REQUEST_DISTRIBUTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: REQUEST_DISTRIBUTION
         - name: INSERT_ORDER
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: INSERT_ORDER
         - name: INCLUDE_EXCEPTION_STACK
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: INCLUDE_EXCEPTION_STACK
         - name: FIELD_COUNT
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: FIELD_COUNT
         - name: SKIP_LOAD_PHASE
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: SKIP_LOAD_PHASE
         - name: WRITE_ONLY_OPERATION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: WRITE_ONLY_OPERATION    
         - name: READ_PROPORTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: READ_PROPORTION
         - name: SCAN_PROPORTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: SCAN_PROPORTION
         - name: UPDATE_PROPORTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: UPDATE_PROPORTION
         - name: INSERT_PROPORTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: INSERT_PROPORTION
         - name: BENCHMARKING_FRAMEWORK_REPO
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: BENCHMARKING_FRAMEWORK_REPO
         - name: BENCHMARKING_FRAMEWORK_BRANCH
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: BENCHMARKING_FRAMEWORK_BRANCH
         - name: YCSB_REPO
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: YCSB_REPO
         - name: YCSB_BRANCH
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: YCSB_BRANCH
         - name: DB_BINDING_NAME
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: DB_BINDING_NAME
       restartPolicy: Never
   backoffLimit: 0
@@ -162,7 +162,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: bootstrapperjob-simple-2-2
+  name: benchmarking-2-2
 spec:
   ttlSecondsAfterFinished: 10
   template:
@@ -208,112 +208,112 @@ spec:
         - name: TARGET_OPERATIONS_PER_SECOND
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: TARGET_OPERATIONS_PER_SECOND
         - name: THREAD_COUNT
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: THREAD_COUNT
         - name: YCSB_OPERATION_COUNT
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: YCSB_OPERATION_COUNT
         - name: WORKLOAD_TYPE
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: WORKLOAD_TYPE
         - name: YCSB_RECORD_COUNT
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: YCSB_RECORD_COUNT
         - name: USE_GATEWAY
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: USE_GATEWAY
         - name: DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS        
         - name: REQUEST_DISTRIBUTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: REQUEST_DISTRIBUTION
         - name: INSERT_ORDER
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: INSERT_ORDER
         - name: INCLUDE_EXCEPTION_STACK
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: INCLUDE_EXCEPTION_STACK
         - name: FIELD_COUNT
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: FIELD_COUNT
         - name: SKIP_LOAD_PHASE
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: SKIP_LOAD_PHASE
         - name: WRITE_ONLY_OPERATION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: WRITE_ONLY_OPERATION    
         - name: READ_PROPORTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: READ_PROPORTION
         - name: SCAN_PROPORTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: SCAN_PROPORTION
         - name: UPDATE_PROPORTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: UPDATE_PROPORTION
         - name: INSERT_PROPORTION
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: INSERT_PROPORTION
         - name: BENCHMARKING_FRAMEWORK_REPO
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: BENCHMARKING_FRAMEWORK_REPO
         - name: BENCHMARKING_FRAMEWORK_BRANCH
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: BENCHMARKING_FRAMEWORK_BRANCH
         - name: YCSB_REPO
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: YCSB_REPO
         - name: YCSB_BRANCH
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: YCSB_BRANCH
         - name: DB_BINDING_NAME
           valueFrom:
              configMapKeyRef:
-               name: test-env-config
+               name: benchmarking-recipe-config
                key: DB_BINDING_NAME
       restartPolicy: Never
   backoffLimit: 0
