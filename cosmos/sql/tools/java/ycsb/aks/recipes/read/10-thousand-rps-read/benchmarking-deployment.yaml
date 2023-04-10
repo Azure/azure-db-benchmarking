@@ -16,6 +16,8 @@ spec:
              memory: "4G"
              cpu: "6000m"
         env:
+        - name: DB_BINDING_NAME
+          value: "azurecosmos"
         - name: ADMIN_USER_NAME
           value: "benchmarking"
         - name: POD_NAME
@@ -26,6 +28,8 @@ spec:
           value: "2"  
         - name: WRITE_ONLY_OPERATION
           value: "false"
+        - name: WORKLOAD_TYPE
+          value: "workloadc"
         - name: RESULT_STORAGE_CONNECTION_STRING
           valueFrom:
              secretKeyRef:
@@ -61,11 +65,6 @@ spec:
              configMapKeyRef:
                name: benchmarking-recipe-config
                key: YCSB_OPERATION_COUNT
-        - name: WORKLOAD_TYPE
-          valueFrom:
-             configMapKeyRef:
-               name: benchmarking-recipe-config
-               key: WORKLOAD_TYPE
         - name: YCSB_RECORD_COUNT
           valueFrom:
              configMapKeyRef:
@@ -126,11 +125,6 @@ spec:
              configMapKeyRef:
                name: benchmarking-recipe-config
                key: YCSB_BRANCH
-        - name: DB_BINDING_NAME
-          valueFrom:
-             configMapKeyRef:
-               name: benchmarking-recipe-config
-               key: DB_BINDING_NAME
       restartPolicy: Never
   backoffLimit: 0
   
@@ -154,6 +148,8 @@ spec:
              memory: "4G"
              cpu: "6000m"
         env:
+        - name: DB_BINDING_NAME
+          value: "azurecosmos"
         - name: ADMIN_USER_NAME
           value: "benchmarking"
         - name: POD_NAME
@@ -164,6 +160,8 @@ spec:
           value: "2"  
         - name: WRITE_ONLY_OPERATION
           value: "false"
+        - name: WORKLOAD_TYPE
+          value: "workloadc"
         - name: RESULT_STORAGE_CONNECTION_STRING
           valueFrom:
              secretKeyRef:
@@ -199,11 +197,6 @@ spec:
              configMapKeyRef:
                name: benchmarking-recipe-config
                key: YCSB_OPERATION_COUNT
-        - name: WORKLOAD_TYPE
-          valueFrom:
-             configMapKeyRef:
-               name: benchmarking-recipe-config
-               key: WORKLOAD_TYPE
         - name: YCSB_RECORD_COUNT
           valueFrom:
              configMapKeyRef:
@@ -264,10 +257,5 @@ spec:
              configMapKeyRef:
                name: benchmarking-recipe-config
                key: YCSB_BRANCH
-        - name: DB_BINDING_NAME
-          valueFrom:
-             configMapKeyRef:
-               name: benchmarking-recipe-config
-               key: DB_BINDING_NAME
       restartPolicy: Never
   backoffLimit: 0
