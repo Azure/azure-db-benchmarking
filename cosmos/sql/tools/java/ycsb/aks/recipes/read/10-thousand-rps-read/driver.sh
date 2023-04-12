@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# get cluster credentials
+az aks get-credentials -n $4 -g $5
+
 # setting the cluster
 kubectl config use-context $4
 
