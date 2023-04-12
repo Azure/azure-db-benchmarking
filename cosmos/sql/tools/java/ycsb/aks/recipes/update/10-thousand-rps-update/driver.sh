@@ -21,3 +21,4 @@ fi
 kubectl create secret generic $BENCHMARKING_SECRETS --from-literal=GUID=$UUID --from-literal=RESULT_STORAGE_CONNECTION_STRING=$1 --from-literal=COSMOS_URI=$2 --from-literal=COSMOS_KEY=$3
 
 kubectl apply -f benchmarking-deployment.yaml
+
