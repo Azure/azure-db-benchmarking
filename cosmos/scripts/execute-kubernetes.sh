@@ -15,6 +15,6 @@ export VM_COUNT=$POD_COUNT
 
 curl -o custom-script.sh $customScriptUrl
 
-# stdout and stderr will be logged in <$HOME>/custom-script.out, <$HOME>/custom-script.err and all output will go to the console
+# stdout and stderr will be logged in <$HOME>/agent.out, <$HOME>/agent.err and all output will go to the console
 bash custom-script.sh > >(tee $"/home/${ADMIN_USER_NAME}/agent.out") 2> >(tee "/home/${ADMIN_USER_NAME}/agent.err" >&2)
 
