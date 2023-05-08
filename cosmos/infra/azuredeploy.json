@@ -246,7 +246,7 @@
                 "description": "Specifies YCSB database binding name"
             }
         },
-		 "preferredRegionList": {
+        "preferredRegionList": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
