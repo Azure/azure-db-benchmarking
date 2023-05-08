@@ -98,6 +98,10 @@ if [ ! -z "$userAgent" ]; then
    sed -i "s/^[#]*\s*azurecosmos.userAgent\ =.*/azurecosmos.userAgent\ =\ $userAgent/" azurecosmos.properties
 fi
 
+if [ ! -z "$preferredRegionList" ]; then
+   sed -i "s/^[#]*\s*azurecosmos.preferredRegionList\ =.*/azurecosmos.preferredRegionList\ =\ $preferredRegionList/" azurecosmos.properties
+fi
+
 # CONNECTION OPTIONS
 if [ ! -z "$useGateway" ]; then
    sed -i "s/^[#]*\s*azurecosmos.useGateway\ =.*/azurecosmos.useGateway\ =\ $useGateway/" azurecosmos.properties
