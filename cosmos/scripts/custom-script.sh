@@ -15,6 +15,7 @@ echo "##########BENCHMARKING_TOOLS_BRANCH_NAME###########: $BENCHMARKING_TOOLS_B
 echo "##########BENCHMARKING_TOOLS_URL###########: $BENCHMARKING_TOOLS_URL"
 echo "##########YCSB_GIT_BRANCH_NAME###########: $YCSB_GIT_BRANCH_NAME"
 echo "##########YCSB_GIT_REPO_URL###########: $YCSB_GIT_REPO_URL"
+echo "##########PREFERRED_REGION_LIST###########: $PREFERRED_REGION_LIST"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
