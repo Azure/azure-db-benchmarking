@@ -76,5 +76,8 @@ then
 fi
 kubectl create secret generic $BENCHMARKING_SECRETS --from-literal=GUID=$UUID --from-literal=RESULT_STORAGE_CONNECTION_STRING=$storageconnstring --from-literal=COSMOS_URI=$cosmosuri --from-literal=COSMOS_KEY=$cosmosmkey
 
+# generate base deployment template 
+./generate-deploymnet-file.sh
+
 # create resources
-kubectl apply -f benchmarking-deployment.yaml
+kubectl apply -f benchmarking-deployment-generated.yaml
