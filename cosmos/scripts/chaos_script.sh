@@ -37,8 +37,10 @@ echo "masterkey $masterkey"
 echo "endpoint $endpoint"
 echo "databaseid $databaseid"
 echo "containerid $containerid"
+echo "wait_for_fault_to_start_in_sec $wait_for_fault_to_start_in_sec"
+echo "duration_of_fault_in_sec $duration_of_fault_in_sec"
 
-sleep $wait_for_fault_to_start_in_min
+sleep $wait_for_fault_to_start_in_sec
 
 database_account_response=$(pwsh -Command ./GetDatabaseAccount.ps1 -Endpoint $endpoint -MasterKey $masterkey -DatabaseID $databaseid -ContainerId $containerid)
 echo "database_account_response = $database_account_response"
@@ -91,7 +93,7 @@ done
 
 sudo iptables -L --line-numbers
 
-sleep $duration_of_fault_in_min
+sleep $duration_of_fault_in_sec
 
 sudo iptables -F OUTPUT
 sudo iptables -L --line-numbers

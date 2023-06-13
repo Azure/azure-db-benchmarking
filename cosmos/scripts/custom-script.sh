@@ -15,8 +15,8 @@ echo "##########BENCHMARKING_TOOLS_BRANCH_NAME###########: $BENCHMARKING_TOOLS_B
 echo "##########BENCHMARKING_TOOLS_URL###########: $BENCHMARKING_TOOLS_URL"
 echo "##########YCSB_GIT_BRANCH_NAME###########: $YCSB_GIT_BRANCH_NAME"
 echo "##########YCSB_GIT_REPO_URL###########: $YCSB_GIT_REPO_URL"
-echo "##########WAIT_FOR_FAULT_TO_START_IN_MIN###########: $WAIT_FOR_FAULT_TO_START_IN_MIN"
-echo "##########DURATION_OF_FAULT_IN_MIN###########: $DURATION_OF_FAULT_IN_MIN"
+echo "##########WAIT_FOR_FAULT_TO_START_IN_SEC###########: $WAIT_FOR_FAULT_TO_START_IN_SEC"
+echo "##########DURATION_OF_FAULT_IN_SEC###########: $DURATION_OF_FAULT_IN_SEC"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
@@ -161,8 +161,8 @@ job_start_time=$(date -d "$job_start_time" +'%s')
 sudo rm -f /tmp/ycsb.log
 
 # Starting chaos script if opt in
-if [ $WAIT_FOR_FAULT_TO_START_IN_MIN -gt -1 ] && [ $DURATION_OF_FAULT_IN_MIN -gt -1 ]; then
-  databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_min=$WAIT_FOR_FAULT_TO_START_IN_MIN duration_of_fault_in_min=$DURATION_OF_FAULT_IN_MIN bash chaos_script.sh > "/home/${ADMIN_USER_NAME}/chaos.out" 2> "/home/${ADMIN_USER_NAME}/chaos.err" &
+if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt -1 ] && [ $DURATION_OF_FAULT_IN_SEC -gt -1 ]; then
+  databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC bash chaos_script.sh > "/home/${ADMIN_USER_NAME}/chaos.out" 2> "/home/${ADMIN_USER_NAME}/chaos.err" &
 fi
 
 #Execute YCSB test
