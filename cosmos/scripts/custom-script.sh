@@ -160,11 +160,6 @@ job_start_time=$(date -d "$job_start_time" +'%s')
 # Clearing log file from last run if applicable
 sudo rm -f /tmp/ycsb.log
 
-# Starting chaos script if opt in
-if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt -1 ] && [ $DURATION_OF_FAULT_IN_SEC -gt -1 ]; then
-  databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC bash chaos_script.sh > "/home/${ADMIN_USER_NAME}/chaos.out" 2> "/home/${ADMIN_USER_NAME}/chaos.err" &
-fi
-
 #Execute YCSB test
 if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; then
   now=$(date +"%s")
@@ -177,6 +172,12 @@ if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; the
   fi
   ## Records count for write only ops which start with items count created by previous(machine_index -1) client machine
   recordcountForWriteOps=$((YCSB_OPERATION_COUNT * MACHINE_INDEX))
+
+  # Starting chaos script if opt in
+  if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt -1 ] && [ $DURATION_OF_FAULT_IN_SEC -gt -1 ]; then
+    databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
+  fi
+
   ## Execute run phase for YCSB tests with write only workload
   echo "########## Run operation with write only workload for YCSB tests ###########"
   uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR preferredRegionList=$PREFERRED_REGION_LIST bash $DB_BINDING_NAME-run.sh
@@ -184,12 +185,12 @@ else
   if [ "$SKIP_LOAD_PHASE" = False ] || [ "$SKIP_LOAD_PHASE" = false ]; then
     ## Execute load operation for YCSB tests
     echo "########## Load operation for YCSB tests ###########"
-    ## Reducing the load phase RPS by decreasing the number of YCSB threads to eliminate throttling. The Throughput used for transaction phase is generally lesser than that is required for load phase resulting in throttling. 
+    ## Reducing the load phase RPS by decreasing the number of YCSB threads to eliminate throttling. The Throughput used for transaction phase is generally lesser than that is required for load phase resulting in throttling.
     loadthreadcount=$((THREAD_COUNT / 5))
-    if [ $loadthreadcount -eq 0 ];then 
+    if [ $loadthreadcount -eq 0 ]; then
       loadthreadcount=1
     fi
-    echo "##########loadthreadcount###########: $loadthreadcount"   
+    echo "##########loadthreadcount###########: $loadthreadcount"
     uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="load" recordcount=$recordcount insertstart=$insertstart insertcount=$YCSB_RECORD_COUNT threads=$loadthreadcount target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR core_workload_insertion_retry_limit=5 preferredRegionList=$PREFERRED_REGION_LIST bash $DB_BINDING_NAME-run.sh
   fi
   now=$(date +"%s")
@@ -205,6 +206,11 @@ else
   sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.log" "$result_storage_url"
   # Clearing log file from above load operation
   sudo rm -f /tmp/ycsb.log
+
+  # Starting chaos script if opt in
+  if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt -1 ] && [ $DURATION_OF_FAULT_IN_SEC -gt -1 ]; then
+    databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
+  fi
 
   ## Execute run phase for YCSB tests
   echo "########## Run operation for YCSB tests ###########"
