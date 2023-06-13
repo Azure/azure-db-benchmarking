@@ -17,6 +17,7 @@ echo "##########YCSB_GIT_BRANCH_NAME###########: $YCSB_GIT_BRANCH_NAME"
 echo "##########YCSB_GIT_REPO_URL###########: $YCSB_GIT_REPO_URL"
 echo "##########WAIT_FOR_FAULT_TO_START_IN_SEC###########: $WAIT_FOR_FAULT_TO_START_IN_SEC"
 echo "##########DURATION_OF_FAULT_IN_SEC###########: $DURATION_OF_FAULT_IN_SEC"
+echo "##########RESULT_STORAGE_CONNECTION_STRING###########: $RESULT_STORAGE_CONNECTION_STRING"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
