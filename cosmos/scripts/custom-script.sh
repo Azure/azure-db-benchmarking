@@ -15,6 +15,8 @@ echo "##########BENCHMARKING_TOOLS_BRANCH_NAME###########: $BENCHMARKING_TOOLS_B
 echo "##########BENCHMARKING_TOOLS_URL###########: $BENCHMARKING_TOOLS_URL"
 echo "##########YCSB_GIT_BRANCH_NAME###########: $YCSB_GIT_BRANCH_NAME"
 echo "##########YCSB_GIT_REPO_URL###########: $YCSB_GIT_REPO_URL"
+echo "##########WAIT_FOR_FAULT_TO_START_IN_MIN###########: $WAIT_FOR_FAULT_TO_START_IN_MIN"
+echo "##########DURATION_OF_FAULT_IN_MIN###########: $DURATION_OF_FAULT_IN_MIN"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
@@ -58,6 +60,11 @@ cp ./$DB_BINDING_NAME-run.sh ./$ycsb_folder_name
 cp ./*.properties ./$ycsb_folder_name
 cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
+
+# Adding chaos scripts
+cp ./chaos_script.sh ./$ycsb_folder_name
+cp ./*.ps1 ./$ycsb_folder_name
+
 cd ./$ycsb_folder_name
 
 if [[ $DB_BINDING_NAME == "azurecosmos" ]]; then
@@ -152,6 +159,11 @@ job_start_time=$(date -d "$job_start_time" +'%s')
 
 # Clearing log file from last run if applicable
 sudo rm -f /tmp/ycsb.log
+
+# Starting chaos script if opt in
+if [ $WAIT_FOR_FAULT_TO_START_IN_MIN -gt -1 ] && [ $DURATION_OF_FAULT_IN_MIN -gt -1 ]; then
+  databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_min=$WAIT_FOR_FAULT_TO_START_IN_MIN duration_of_fault_in_min=$DURATION_OF_FAULT_IN_MIN bash chaos_script.sh > "/home/${ADMIN_USER_NAME}/chaos.out" 2> "/home/${ADMIN_USER_NAME}/chaos.err" &
+fi
 
 #Execute YCSB test
 if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; then
