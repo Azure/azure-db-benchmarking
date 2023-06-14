@@ -5,7 +5,6 @@ packages:
   - python3.10
   - azure-cli
   - jq
-  - powershell
 
 runcmd:
   - wget https://aka.ms/downloadazcopy-v10-linux
