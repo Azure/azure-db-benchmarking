@@ -20,12 +20,12 @@ echo "duration_of_fault_in_sec $duration_of_fault_in_sec"
 
 sleep $wait_for_fault_to_start_in_sec
 
-database_account_response=$(pwsh -Command ./GetDatabaseAccount.ps1 -Endpoint $endpoint -MasterKey $masterkey -DatabaseID $databaseid -ContainerId $containerid)
+database_account_response=$(pwsh -Command ./GetDatabaseAccount.ps1 -Endpoint $endpoint -MasterKey $masterkey)
 echo "database_account_response = $database_account_response"
 
 account_locations=$(echo $database_account_response | jq '.writableLocations[] | .name, .databaseAccountEndpoint')
 
-pk_ranges_response=$(pwsh -Command ./GetPKRange.ps1 -Endpoint $endpoint -MasterKey $masterkey)
+pk_ranges_response=$(pwsh -Command ./GetPKRange.ps1 -Endpoint $endpoint -MasterKey $masterkey -DatabaseID $databaseid -ContainerId $containerid)
 echo "pk_ranges_response = $pk_ranges_response"
 
 partition_key_ranges=$(echo $pk_ranges_response | jq '.PartitionKeyRanges[] | .id')
