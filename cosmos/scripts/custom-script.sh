@@ -228,7 +228,11 @@ sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
 sudo mkdir "/tmp/$VM_NAME-system-diagnostics"
 sudo mv /tmp/cosmos_client_logs "/tmp/$VM_NAME-system-diagnostics"
 sudo cp "$user_home/agent.out" "$user_home/agent.err" "/tmp/$VM_NAME-system-diagnostics"
-sudo cp "$user_home/chaos.out" "$user_home/chaos.err" "/tmp/$VM_NAME-system-diagnostics"
+
+if [ -f "$user_home/chaos.out" ] || [ -f "$user_home/chaos.err" ]; then
+  sudo cp "$user_home/chaos.out" "$user_home/chaos.err" "/tmp/$VM_NAME-system-diagnostics"
+fi
+
 sudo azcopy copy "/tmp/$VM_NAME-system-diagnostics" "$result_storage_url" --recursive=true
 
 if [ $MACHINE_INDEX -eq 1 ]; then
