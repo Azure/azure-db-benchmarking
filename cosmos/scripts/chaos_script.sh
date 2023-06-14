@@ -12,7 +12,6 @@ fetch_host_port() {
   echo "${host_port_arr[@]}"
 }
 
-echo "masterkey $masterkey"
 echo "endpoint $endpoint"
 echo "databaseid $databaseid"
 echo "containerid $containerid"
