@@ -57,7 +57,7 @@ do
 done <<<"$backend_addresses"
 
 # if drop probability is not mentioned then drop all packets
-if [ -z "$drop_probablity" ]; then
+if [ -z "$drop_probability" ]; then
   drop_probability=1
 fi
 
