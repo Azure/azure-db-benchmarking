@@ -210,7 +210,7 @@ else
 
   # Starting chaos script if opt in
   if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt -1 ] && [ $DURATION_OF_FAULT_IN_SEC -gt -1 ]; then
-    databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
+    databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
   fi
 
   ## Execute run phase for YCSB tests
