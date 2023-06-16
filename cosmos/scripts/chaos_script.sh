@@ -17,7 +17,7 @@ echo "databaseid $databaseid"
 echo "containerid $containerid"
 echo "wait_for_fault_to_start_in_sec $wait_for_fault_to_start_in_sec"
 echo "duration_of_fault_in_sec $duration_of_fault_in_sec"
-echo "drop_probability $probability"
+echo "drop_probability $drop_probability"
 
 sleep $wait_for_fault_to_start_in_sec
 
