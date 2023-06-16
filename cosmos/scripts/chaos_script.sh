@@ -66,13 +66,13 @@ while
   read -r endpoint_url
 do
   result=($(fetch_host_port $endpoint_url))
-  sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -j DROP
+  sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic  --mode random --probability $drop_probability -j DROP
 done <<<"$account_locations"
 
 uniq_backend_url=($(for url in "${backend_url[@]}"; do echo "${url}"; done | sort -u))
 for i in "${uniq_backend_url[@]}"; do
   result=($(fetch_host_port $i))
-  sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -j DROP
+  sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic  --mode random --probability $drop_probability -j DROP
 done
 
 sudo iptables -L --line-numbers
