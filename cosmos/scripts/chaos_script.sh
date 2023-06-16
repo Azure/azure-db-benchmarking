@@ -17,6 +17,7 @@ echo "databaseid $databaseid"
 echo "containerid $containerid"
 echo "wait_for_fault_to_start_in_sec $wait_for_fault_to_start_in_sec"
 echo "duration_of_fault_in_sec $duration_of_fault_in_sec"
+echo "drop_probability $probability"
 
 sleep $wait_for_fault_to_start_in_sec
 
@@ -54,6 +55,11 @@ do
   result=($(fetch_host_port $endpoint_url))
   backend_url+=(${result[0]}:${result[1]})
 done <<<"$backend_addresses"
+
+# if drop probability is not mentioned then drop all packets
+if [ -z "$drop_probablity" ]; then
+  drop_probability=1
+fi
 
 while
   read -r name
