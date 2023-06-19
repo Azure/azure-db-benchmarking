@@ -17,6 +17,7 @@ echo "databaseid $databaseid"
 echo "containerid $containerid"
 echo "wait_for_fault_to_start_in_sec $wait_for_fault_to_start_in_sec"
 echo "duration_of_fault_in_sec $duration_of_fault_in_sec"
+echo "fault_region $fault_region"
 echo "drop_probability $drop_probability"
 
 sleep $wait_for_fault_to_start_in_sec
@@ -24,7 +25,20 @@ sleep $wait_for_fault_to_start_in_sec
 database_account_response=$(pwsh -Command ./GetDatabaseAccount.ps1 -Endpoint $endpoint -MasterKey $masterkey)
 echo "database_account_response = $database_account_response"
 
-account_locations=$(echo $database_account_response | jq '.writableLocations[] | .name, .databaseAccountEndpoint')
+if [ ! -z "$fault_region" ]; then
+  account_locations=$(echo $database_account_response | jq '.readableLocations[] | .name, .databaseAccountEndpoint')
+  while
+    read -r name
+    read -r endpoint_url
+  do
+    name="${name%\"}"
+    name="${name#\"}"
+    if [ "${name,,}" = "${fault_region,,}" ]; then
+      endpoint=$endpoint_url
+      break
+    fi
+  done <<<$account_locations
+fi
 
 pk_ranges_response=$(pwsh -Command ./GetPKRange.ps1 -Endpoint $endpoint -MasterKey $masterkey -DatabaseID $databaseid -ContainerId $containerid)
 echo "pk_ranges_response = $pk_ranges_response"
@@ -61,13 +75,8 @@ if [ -z "$drop_probability" ]; then
   drop_probability=1
 fi
 
-while
-  read -r name
-  read -r endpoint_url
-do
-  result=($(fetch_host_port $endpoint_url))
-  sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic  --mode random --probability $drop_probability -j DROP
-done <<<"$account_locations"
+gateway_endpoint_host_port=($(fetch_host_port $endpoint))
+echo "sudo iptables -I OUTPUT -d ${gateway_endpoint_host_port[0]} -p tcp --dport ${gateway_endpoint_host_port[1]} -j DROP"
 
 uniq_backend_url=($(for url in "${backend_url[@]}"; do echo "${url}"; done | sort -u))
 for i in "${uniq_backend_url[@]}"; do
