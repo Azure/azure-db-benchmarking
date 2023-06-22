@@ -17,3 +17,4 @@ runcmd:
   - rm packages-microsoft-prod.deb
   - sudo apt-get update
   - sudo apt-get install -y powershell
+  - sudo apt install net-tools
