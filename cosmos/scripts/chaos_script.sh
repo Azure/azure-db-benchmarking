@@ -19,8 +19,6 @@ echo "wait_for_fault_to_start_in_sec $wait_for_fault_to_start_in_sec"
 echo "duration_of_fault_in_sec $duration_of_fault_in_sec"
 echo "fault_region $fault_region"
 echo "drop_probability $drop_probability"
-delay_in_ms=100
-echo "delay_in_ms $delay_in_ms"
 
 sleep $wait_for_fault_to_start_in_sec
 
@@ -77,40 +75,13 @@ if [ -z "$drop_probability" ]; then
   drop_probability=1
 fi
 
-interfaces=()
-
-for iface in $(ifconfig -a | grep -v "SLAVE" | awk '/^[a-z]/ {print $1}' | tr ':' '\n' | awk NF); do
-  if [[ $iface != lo* ]]; then
-    interfaces+=("$iface")
-  fi
-done
-
-for element in "${interfaces[@]}"; do
-  echo "this $element"
-done
-
 gateway_endpoint_host_port=($(fetch_host_port $endpoint))
-sudo iptables -I OUTPUT -d ${gateway_endpoint_host_port[0]} -p tcp --dport ${gateway_endpoint_host_port[1]} -m statistic --mode random --probability $drop_probability -j DROP
-# if drop probability is not mentioned then drop all packets
-if [ $delay_in_ms -gt 0 ]; then
-  for device in "${interfaces[@]}"; do
-    echo "sudo tc qdisc add dev $device root handle 1: prio"
-    echo "sudo tc qdisc add dev $device parent 1:1 handle 2: netem delay ${delay_in_ms}ms"
-    echo "sudo tc filter add dev $device protocol ip parent 1:0 prio 1 u32 match ip dst ${gateway_endpoint_host_port[0]} match ip dport ${gateway_endpoint_host_port[1]} 0xffff flowid 2:1"
-  done
-fi
+sudo iptables -I OUTPUT -d ${gateway_endpoint_host_port[0]} -p tcp --dport ${gateway_endpoint_host_port[1]} -m statistic  --mode random --probability $drop_probability -j DROP
 
 uniq_backend_url=($(for url in "${backend_url[@]}"; do echo "${url}"; done | sort -u))
 for i in "${uniq_backend_url[@]}"; do
   result=($(fetch_host_port $i))
-  sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic --mode random --probability $drop_probability -j DROP
-  if [ $delay_in_ms -gt 0 ]; then
-    for device in "${interfaces[@]}"; do
-      echo "sudo tc qdisc add dev $device root handle 1: prio"
-      echo "sudo tc qdisc add dev $device parent 1:1 handle 2: netem delay ${delay_in_ms}ms"
-      echo "sudo tc filter add dev $device protocol ip parent 1:0 prio 1 u32 match ip dst ${result[0]} match ip dport  ${result[1]} 0xffff flowid 2:1"
-    done
-  fi
+  sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic  --mode random --probability $drop_probability -j DROP
 done
 
 sudo iptables -L --line-numbers
