@@ -35,6 +35,10 @@ if ! command -v pwsh &>/dev/null; then
   install_powershell
 fi
 
+if ! command -v ifconfig &> /dev/null; then
+    sudo apt install net-tools
+fi
+
 echo "endpoint $endpoint"
 echo "databaseid $databaseid"
 echo "containerid $containerid"
