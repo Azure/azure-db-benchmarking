@@ -100,7 +100,7 @@ done <<<"$backend_addresses"
 
 # if drop probability is not mentioned then drop all packets
 if [ -z "$drop_probability" ]; then
-  drop_probability=1
+  drop_probability=0
 fi
 
 interfaces=()
@@ -124,8 +124,9 @@ if [ ${#interfaces[@]} -ne 0 ]; then
 fi
 
 gateway_endpoint_host_port=($(fetch_host_port $endpoint))
-sudo iptables -I OUTPUT -d ${gateway_endpoint_host_port[0]} -p tcp --dport ${gateway_endpoint_host_port[1]} -m statistic --mode random --probability $drop_probability -j DROP
-
+if [ $drop_probability -gt 0 ]; then
+  sudo iptables -I OUTPUT -d ${gateway_endpoint_host_port[0]} -p tcp --dport ${gateway_endpoint_host_port[1]} -m statistic --mode random --probability $drop_probability -j DROP
+fi
 # if drop probability is not mentioned then drop all packets
 if [ $delay_in_ms -gt 0 ]; then
   for device in "${interfaces[@]}"; do
@@ -138,7 +139,10 @@ fi
 uniq_backend_url=($(for url in "${backend_url[@]}"; do echo "${url}"; done | sort -u))
 for i in "${uniq_backend_url[@]}"; do
   result=($(fetch_host_port $i))
-  sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic --mode random --probability $drop_probability -j DROP
+  if [ $drop_probability -gt 0 ]; then
+    sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic --mode random --probability $drop_probability -j DROP
+  fi
+
   if [ $delay_in_ms -gt 0 ]; then
     for device in "${interfaces[@]}"; do
       ip_address=$(getent hosts ${result[0]} | awk '{ print $1 }')
@@ -157,6 +161,6 @@ echo "Deleted all iptable rules"
 sudo iptables -L --line-numbers
 
 for device in "${interfaces[@]}"; do
-  sudo tc qdisc del dev @device root
-  echo "Deleted prio qdisc on @device"
+  sudo tc qdisc del dev $device root
+  echo "Deleted prio qdisc on $device"
 done
