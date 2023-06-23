@@ -116,6 +116,8 @@ for element in "${interfaces[@]}"; do
 done
 if [ ${#interfaces[@]} -ne 0 ]; then
   for device in "${interfaces[@]}"; do
+    echo "sudo tc qdisc add dev $device root handle 1: prio"
+    echo "sudo tc qdisc add dev $device parent 1:1 handle 2: netem delay ${delay_in_ms}ms"
     sudo tc qdisc add dev $device root handle 1: prio
     sudo tc qdisc add dev $device parent 1:1 handle 2: netem delay ${delay_in_ms}ms
   done
@@ -127,7 +129,9 @@ sudo iptables -I OUTPUT -d ${gateway_endpoint_host_port[0]} -p tcp --dport ${gat
 # if drop probability is not mentioned then drop all packets
 if [ $delay_in_ms -gt 0 ]; then
   for device in "${interfaces[@]}"; do
-    sudo tc filter add dev $device protocol ip parent 1:0 prio 1 u32 match ip dst ${gateway_endpoint_host_port[0]} match ip dport ${gateway_endpoint_host_port[1]} 0xffff flowid 2:1
+    ip_address=$(getent hosts ${gateway_endpoint_host_port[0]} | awk '{ print $1 }')
+    echo "sudo tc filter add dev $device protocol ip parent 1:0 prio 1 u32 match ip dst $ip_address match ip dport ${gateway_endpoint_host_port[1]} 0xffff flowid 2:1"
+    sudo tc filter add dev $device protocol ip parent 1:0 prio 1 u32 match ip dst $ip_address match ip dport ${gateway_endpoint_host_port[1]} 0xffff flowid 2:1
   done
 fi
 
@@ -137,7 +141,9 @@ for i in "${uniq_backend_url[@]}"; do
   sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic --mode random --probability $drop_probability -j DROP
   if [ $delay_in_ms -gt 0 ]; then
     for device in "${interfaces[@]}"; do
-      sudo tc filter add dev $device protocol ip parent 1:0 prio 1 u32 match ip dst ${result[0]} match ip dport  ${result[1]} 0xffff flowid 2:1
+      ip_address=$(getent hosts ${result[0]} | awk '{ print $1 }')
+      echo "sudo tc filter add dev $device protocol ip parent 1:0 prio 1 u32 match ip dst $ip_address match ip dport  ${result[1]} 0xffff flowid 2:1"
+      sudo tc filter add dev $device protocol ip parent 1:0 prio 1 u32 match ip dst $ip_address match ip dport ${result[1]} 0xffff flowid 2:1
     done
   fi
 done
@@ -147,4 +153,10 @@ sudo iptables -L --line-numbers
 sleep $duration_of_fault_in_sec
 
 sudo iptables -F OUTPUT
+echo "Deleted all iptable rules"
 sudo iptables -L --line-numbers
+
+for device in "${interfaces[@]}"; do
+  sudo tc qdisc del dev @device root
+  echo "Deleted prio qdisc on @device"
+done
