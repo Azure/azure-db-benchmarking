@@ -124,7 +124,7 @@ if [ ${#interfaces[@]} -ne 0 ]; then
 fi
 
 gateway_endpoint_host_port=($(fetch_host_port $endpoint))
-if [ $drop_probability -gt 0 ]; then
+if [ $(echo "$drop_probability > 0" | bc) -eq 1 ]; then
   sudo iptables -I OUTPUT -d ${gateway_endpoint_host_port[0]} -p tcp --dport ${gateway_endpoint_host_port[1]} -m statistic --mode random --probability $drop_probability -j DROP
 fi
 # if drop probability is not mentioned then drop all packets
@@ -139,7 +139,7 @@ fi
 uniq_backend_url=($(for url in "${backend_url[@]}"; do echo "${url}"; done | sort -u))
 for i in "${uniq_backend_url[@]}"; do
   result=($(fetch_host_port $i))
-  if [ $drop_probability -gt 0 ]; then
+  if [ $(echo "$drop_probability > 0" | bc) -eq 1 ]; then
     sudo iptables -I OUTPUT -d ${result[0]} -p tcp --dport ${result[1]} -m statistic --mode random --probability $drop_probability -j DROP
   fi
 
