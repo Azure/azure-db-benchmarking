@@ -46,7 +46,7 @@ $utcDate = $date.ToUniversalTime()
 $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
 $addressesResourceType = "docs"
 $addressesResourceId = "dbs/"+$DatabaseID+"/colls/"+$ContainerId
-$addressesResourceLink = "addresses/?"+"$"+"resolveFor=dbs/"+$DatabaseID+"/colls/"+$ContainerId + "/docs&$filter=protocol eq rntbd&"+"$"+"partitionKeyRangeIds="+$PartitionKeyIds
+$addressesResourceLink = "addresses/?"+"$"+"resolveFor=dbs%2f"+$DatabaseID+"%2fcolls%2f"+$ContainerId + "%2fdocs&"+"$"+"filter=protocol eq rntbd&"+"$"+"partitionKeyRangeIds="+$PartitionKeyIds
 $verbMethod = "GET"
 $requestUri = "$Endpoint$addressesResourceLink"
 
