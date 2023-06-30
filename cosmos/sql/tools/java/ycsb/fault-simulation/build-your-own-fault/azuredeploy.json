@@ -212,7 +212,7 @@
         },
         "fieldcount": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "10",
             "metadata": {
                 "description": "Specifies field count in the item"
             }
@@ -243,13 +243,6 @@
                 "description": "Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking."
             }
         },
-        "faultRegion": {
-            "type": "string",
-            "defaultValue": "",
-		    "metadata": {
-                "description": "Specifies the region in which fault will be introduced, example West US. If nothing is specified, the Primary region will be picked."
-            }
-        },
         "dropProbability": {
             "type": "string",
 		    "metadata": {
@@ -260,6 +253,13 @@
             "type": "int",
 		    "metadata": {
                 "description": "Specifies amount of delay in ms to the network during the fault."
+            }
+        },
+        "faultRegion": {
+            "type": "string",
+            "defaultValue": "",
+		    "metadata": {
+                "description": "Specifies the region in which fault will be introduced, example West US. If nothing is specified, the Primary region will be picked."
             }
         }
     },
