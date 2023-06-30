@@ -46,7 +46,7 @@ Below parameters will be used during deployment which will control the faults.
 The job status and results will be available in the following locations in the storage account provided
 | Type | Location |
 | --- | --- |
-| Status | ycsbbenchmarkingMetadata (Table) |
-| Results | ycsbbenchmarking-{Date} (Container) |
+| Status | ycsbwithfaultMetadata (Table) |
+| Results | ycsbwithfault-{Date} (Container) |
 
 [More details about job status and results](../../#monitoring)
