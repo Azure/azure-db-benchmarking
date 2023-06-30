@@ -20,6 +20,7 @@ echo "##########DURATION_OF_FAULT_IN_SEC###########: $DURATION_OF_FAULT_IN_SEC"
 echo "##########DROP_PROBABILITY###########: $DROP_PROBABILITY"
 echo "##########FAULT_REGION###########: $FAULT_REGION"
 echo "##########DELAY_IN_MS###########: $DELAY_IN_MS"
+echo "##########RESULT_STORAGE_CONNECTION_STRING###########: $RESULT_STORAGE_CONNECTION_STRING"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
