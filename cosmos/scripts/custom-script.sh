@@ -28,6 +28,10 @@ recordcount=$((YCSB_RECORD_COUNT * MACHINE_INDEX))
 # Record count for Run. Since we run read workload after load this is the total number of records loaded by all VMs/clients during load.
 totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
 benchmarkname=ycsbbenchmarking
+if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 0 ]; then
+  fault=true
+  benchmarkname=ycsbbenchmarking-with-fault
+fi
 
 #Cloning Test Bench Repo
 echo "########## Cloning Test Bench repository ##########"
@@ -177,7 +181,7 @@ if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; the
   recordcountForWriteOps=$((YCSB_OPERATION_COUNT * MACHINE_INDEX))
 
   # Starting chaos script if opt in
-  if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt -1 ] && [ $DURATION_OF_FAULT_IN_SEC -gt -1 ]; then
+  if [ "$fault" = true ]; then
     databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY fault_region=$FAULT_REGION delay_in_ms=$DELAY_IN_MS bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
   fi
 
@@ -211,7 +215,7 @@ else
   sudo rm -f /tmp/ycsb.log
 
   # Starting chaos script if opt in
-  if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt -1 ] && [ $DURATION_OF_FAULT_IN_SEC -gt -1 ]; then
+  if [ "$fault" = true ]; then
     databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY fault_region=$FAULT_REGION delay_in_ms=$DELAY_IN_MS bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
   fi
 
