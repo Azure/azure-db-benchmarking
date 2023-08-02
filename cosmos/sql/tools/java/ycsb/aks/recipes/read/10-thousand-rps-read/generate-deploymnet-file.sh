@@ -11,7 +11,7 @@ function prop {
 podcount=$(prop 'POD_COUNT')
 memorylimit=$(prop 'MEMORY_LIMIT')
 cpulimit=$(prop 'CPU_LIMIT')
-value=`cat ../benchmarking-deployment-template.yaml`
+value=`cat ../../../base/templates/benchmarking-deployment-template.yaml`
 
 for (( i=1; i <= $podcount; i++ ))
 do
