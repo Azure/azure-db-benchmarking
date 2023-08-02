@@ -7,6 +7,8 @@ param (
     [string] $ContainerId
 )
 
+Add-Type -AssemblyName System.Web
+
 Function Generate-MasterKeyAuthorizationSignature{
 
     [CmdletBinding()]
@@ -72,7 +74,7 @@ $header = @{
 try {
     $result = Invoke-RestMethod -Uri $requestUri -Headers $header -Method $verbMethod -ContentType "application/json"
     $jsonResult = ConvertTo-Json -InputObject $result  -Depth 10
-    Write-Host $jsonResult;
+    Write-Output $jsonResult;
 }
 catch {
     # Dig into the exception to get the Response details.

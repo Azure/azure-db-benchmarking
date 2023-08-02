@@ -1,8 +1,9 @@
 param (
-
     [string] $Endpoint,
     [string] $MasterKey
 )
+
+Add-Type -AssemblyName System.Web
 
 Function Generate-MasterKeyAuthorizationSignature {
 
@@ -18,7 +19,6 @@ Function Generate-MasterKeyAuthorizationSignature {
         [String] $KeyType,
         [String] $TokenVersion
     )
-
     $keyBytes = [System.Convert]::FromBase64String($MasterKey)
 
     $sigCleartext = @($Verb.ToLower() + "`n" + $ResourceType.ToLower() + "`n" + $ResourceId + "`n" + $Date.ToString().ToLower() + "`n" + "" + "`n")
@@ -67,7 +67,7 @@ $header = @{
 try {
     $result = Invoke-RestMethod -Uri $requestUri -Headers $header -Method $verbMethod -ContentType "application/json"
     $jsonResult = ConvertTo-Json -InputObject $result  -Depth 10
-    Write-Host $jsonResult;
+    Write-Output $jsonResult;
 }
 catch {
     # Dig into the exception to get the Response details.
