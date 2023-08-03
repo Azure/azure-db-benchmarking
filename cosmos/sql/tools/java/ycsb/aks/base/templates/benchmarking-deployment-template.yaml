@@ -52,6 +52,12 @@ spec:
              secretKeyRef:
                name: benchmarking-secrets
                key: GUID   
+        - name: PREFERRED_REGION_LIST
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: PREFERRED_REGION_LIST
+               optional: true               
         - name: TARGET_OPERATIONS_PER_SECOND
           valueFrom:
              configMapKeyRef:
