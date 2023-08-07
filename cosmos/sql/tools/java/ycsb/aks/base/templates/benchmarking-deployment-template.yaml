@@ -81,6 +81,7 @@ spec:
              configMapKeyRef:
                name: benchmarking-recipe-config
                key: YCSB_RECORD_COUNT
+               optional: true 
         - name: USE_GATEWAY
           valueFrom:
              configMapKeyRef:
