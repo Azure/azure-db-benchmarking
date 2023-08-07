@@ -28,8 +28,6 @@ spec:
           value: "<podindex>"  
         - name: POD_COUNT
           value: "<podcount>"  
-        - name: WRITE_ONLY_OPERATION
-          value: "false"
         - name: WORKLOAD_TYPE
           value: "workloadc"
         - name: RESULT_STORAGE_CONNECTION_STRING
@@ -57,7 +55,12 @@ spec:
              configMapKeyRef:
                name: benchmarking-recipe-config
                key: PREFERRED_REGION_LIST
-               optional: true               
+               optional: true        
+        - name: WRITE_ONLY_OPERATION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: WRITE_ONLY_OPERATION               
         - name: TARGET_OPERATIONS_PER_SECOND
           valueFrom:
              configMapKeyRef:
@@ -113,6 +116,31 @@ spec:
              configMapKeyRef:
                name: benchmarking-recipe-config
                key: SKIP_LOAD_PHASE
+               optional: true 
+        - name: INSERT_PROPORTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: INSERT_PROPORTION
+               optional: true 
+        - name: UPDATE_PROPORTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: UPDATE_PROPORTION
+               optional: true 
+        - name: SCAN_PROPORTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: SCAN_PROPORTION
+               optional: true 
+        - name: READ_PROPORTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: READ_PROPORTION
+               optional: true 
         - name: BENCHMARKING_FRAMEWORK_REPO
           valueFrom:
              configMapKeyRef:
