@@ -8,7 +8,7 @@ echo "##########CUSTOM_SCRIPT_URL###########: $CUSTOM_SCRIPT_URL"
 
 if pgrep -xf "bash custom-script.sh"
 then
-    echo Exiting deployment as a workload is already executing.
+    echo Failing the deployment as a workload is already executing.Please try after 10 minutes.
     exit 1
 else
     echo Starting the worklaod.
