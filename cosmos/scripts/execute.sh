@@ -9,7 +9,9 @@ echo "##########CUSTOM_SCRIPT_URL###########: $CUSTOM_SCRIPT_URL"
 # check to enforce only once instance of the workload is running. 
 if pgrep -xf "bash custom-script.sh"
 then
-    echo Failing the deployment as a workload is already executing. Please try after the completion of the current workload or after 10 minutes
+    echo Failing the deployment as a workload is already executing. Please wait for current workload to finish on all clients, status can be checked in Azure storage workload metadata table.
+
+
     exit 1
 else
     echo Starting the worklaod.
