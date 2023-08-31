@@ -22,7 +22,8 @@ param (
     [string] $dropPercentage,
 
     [string] $delayInMs,
-
+    
+    [parameter(Mandatory = $true)]
     [string] $faultRegion,
 
     [string] $waitForFaultToStartInSec
