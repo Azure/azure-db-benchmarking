@@ -308,10 +308,10 @@
                         "value": "[parameters('preferredRegionList')]"
                     },
                     "waitForFaultToStartInSec": {
-                        "value": "300"
+                        "value": 300
                     },
                     "durationOfFaultInSec": {
-                        "value": "300"
+                        "value": 300
                     },
                     "faultRegion": {
                         "value": "[parameters('faultRegion')]"
