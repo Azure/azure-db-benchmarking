@@ -183,9 +183,7 @@
             "metadata": {
                 "description": "Specifies field count in the item"
             }
-        }
-
-        ,
+        },
 		"preferredRegionList": {
             "type": "string",
             "defaultValue": "East US,West US",
@@ -209,12 +207,6 @@
             "type": "string",
 		    "metadata": {
                 "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
-            }
-        },
-        "delayInMs": {
-            "type": "int",
-		    "metadata": {
-                "description": "Specifies amount of delay in ms to the network during the fault."
             }
         },
         "faultRegion": {
@@ -338,9 +330,6 @@
                     },
                     "dropProbability": {
                         "value": "[parameters('dropProbability')]"
-                    },
-                    "delayInMs": {
-                        "value": "[parameters('delayInMs')]"
                     }
                 }
             }
