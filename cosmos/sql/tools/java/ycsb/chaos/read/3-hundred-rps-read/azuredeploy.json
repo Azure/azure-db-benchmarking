@@ -184,6 +184,46 @@
                 "description": "Specifies field count in the item"
             }
         }
+
+        ,
+		"preferredRegionList": {
+            "type": "string",
+            "defaultValue": "East US,West US",
+            "metadata": {
+                "description": "Specifies a comma separated preferred region list."
+            }
+        },
+        "waitForFaultToStartInSec": {
+            "type": "int",
+		    "metadata": {
+                "description": "Specifies amount of time in sec after workload start when fault introduce. -1 will disable the fault and runs regular benchmarking."
+            }
+        },
+        "durationOfFaultInSec": {
+            "type": "int",
+		    "metadata": {
+                "description": "Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking."
+            }
+        },
+        "dropProbability": {
+            "type": "string",
+		    "metadata": {
+                "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
+            }
+        },
+        "delayInMs": {
+            "type": "int",
+		    "metadata": {
+                "description": "Specifies amount of delay in ms to the network during the fault."
+            }
+        },
+        "faultRegion": {
+            "type": "string",
+            "defaultValue": "",
+		    "metadata": {
+                "description": "Specifies the region in which fault will be introduced, example West US. If nothing is specified, the Primary region will be picked."
+            }
+        }
     },
     "variables": {
         "templateURL": "[concat('https://raw.githubusercontent.com/',parameters('benchmarkingToolsRepoName'),'/',parameters('benchmarkingToolsBranchName'),'/cosmos/infra/azuredeploy.json')]"       
@@ -283,6 +323,24 @@
                     },
                     "fieldcount": {
                         "value": "[parameters('fieldcount')]"
+                    },
+                    "preferredRegionList": {
+                        "value": "[parameters('preferredRegionList')]"
+                    },
+                    "waitForFaultToStartInSec": {
+                        "value": "[parameters('waitForFaultToStartInSec')]"
+                    },
+                    "durationOfFaultInSec": {
+                        "value": "[parameters('durationOfFaultInSec')]"
+                    },
+                    "faultRegion": {
+                        "value": "[parameters('faultRegion')]"
+                    },
+                    "dropProbability": {
+                        "value": "[parameters('dropProbability')]"
+                    },
+                    "delayInMs": {
+                        "value": "[parameters('delayInMs')]"
                     }
                 }
             }
