@@ -69,8 +69,8 @@ cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
 
 # Adding chaos scripts
-cp ./*.sh ./$ycsb_folder_name
-cp ./*.ps1 ./$ycsb_folder_name
+cp ./chaos/*.sh ./$ycsb_folder_name
+cp ./chaos/*.ps1 ./$ycsb_folder_name
 
 cd ./$ycsb_folder_name
 
