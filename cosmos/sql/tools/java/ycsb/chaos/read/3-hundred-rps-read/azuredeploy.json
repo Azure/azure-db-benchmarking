@@ -109,7 +109,7 @@
         },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 180000,
+            "defaultValue": 270000,
             "metadata": {
                 "description": "Specifies the total number of operations each client perfoms"
             }
@@ -185,24 +185,11 @@
             }
         },
 		"preferredRegionList": {
-            "type": "string",
-            "defaultValue": "East US,West US",
+            "type": "string",           
             "metadata": {
                 "description": "Specifies a comma separated preferred region list."
             }
-        },
-        "waitForFaultToStartInSec": {
-            "type": "int",
-		    "metadata": {
-                "description": "Specifies amount of time in sec after workload start when fault introduce. -1 will disable the fault and runs regular benchmarking."
-            }
-        },
-        "durationOfFaultInSec": {
-            "type": "int",
-		    "metadata": {
-                "description": "Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking."
-            }
-        },
+        },        
         "dropProbability": {
             "type": "string",
 		    "metadata": {
@@ -320,10 +307,10 @@
                         "value": "[parameters('preferredRegionList')]"
                     },
                     "waitForFaultToStartInSec": {
-                        "value": "[parameters('waitForFaultToStartInSec')]"
+                        "value": "300"
                     },
                     "durationOfFaultInSec": {
-                        "value": "[parameters('durationOfFaultInSec')]"
+                        "value": "300"
                     },
                     "faultRegion": {
                         "value": "[parameters('faultRegion')]"
