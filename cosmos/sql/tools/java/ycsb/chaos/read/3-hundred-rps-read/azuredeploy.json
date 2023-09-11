@@ -189,9 +189,10 @@
             "metadata": {
                 "description": "Specifies a comma separated preferred region list."
             }
-        },        
+        }, 
         "dropProbability": {
             "type": "string",
+            "defaultValue": "1.0",
 		    "metadata": {
                 "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
             }
