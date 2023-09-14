@@ -290,10 +290,10 @@
                         "value": "[parameters('diagnosticsLatencyThresholdInMS')]"
                     },
                     "readproportion": {
-                        "value": "0.7"
+                        "value": "0.8"
                     },
                     "updateproportion": {
-                        "value": "0.3"
+                        "value": "0.2"
                     },
                     "scanproportion": {
                         "value": "0"
