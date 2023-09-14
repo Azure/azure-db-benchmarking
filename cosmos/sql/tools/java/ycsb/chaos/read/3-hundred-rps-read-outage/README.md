@@ -1,4 +1,4 @@
-# 300 mixed operations Per Second
+# 300 Reads Per Second
 
 This recipe encapsulates a read only workload with a maximum requests per second of 300. This "1-Click" recipe combines both the load and run phases of YCSB.
 
@@ -41,7 +41,7 @@ This recipe encapsulates a read only workload with a maximum requests per second
    
  [More details about the parameters](../../#basic-configuration)
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fusers%2Fnakumars%2FdrCapablity%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Fchaos%2Fmixed%2F3-hundred-rps-mixed%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fusers%2Fnakumars%2FdrCapablity%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Fchaos%2Fread%2F3-hundred-rps-read-outage%2Fazuredeploy.json)
 
 
 ## Output
