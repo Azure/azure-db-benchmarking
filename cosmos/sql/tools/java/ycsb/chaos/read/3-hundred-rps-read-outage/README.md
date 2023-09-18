@@ -1,6 +1,6 @@
 # 300 Reads Per Second
 
-This recipe encapsulates a read only workload with a maximum requests per second of 300. This "1-Click" recipe combines both the load and run phases of YCSB.
+This recipe encapsulates a read-only workload that executes for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the region. The client/SDK detects the outage, marks the region as unavailable and retries the requests on the next available region. Once the dropping of packets ends, approximately in 5 minutes, the requests get rerouted to the primary region.
 
 ## Recipe definition 
 
@@ -10,7 +10,10 @@ This recipe encapsulates a read only workload with a maximum requests per second
 | Benchmarking tool | YCSB |
 | Workload | Read |
 | Max RPS | 300 |
-| Duration | 10 minutes |
+| Duration | 20-25 minutes |
+| Fault Type | Drop Packets |
+| Fault Start | 5 Minutes after the workload starts |
+| Fault duration | 5 minutes |
 | Number of documents in DB | 30 |
 | Document Size | ≈1 KB(YCSB default) |
 
