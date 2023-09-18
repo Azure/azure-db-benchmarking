@@ -21,10 +21,8 @@ This recipe encapsulates a read and patch workload that lasts for 20-25 minutes.
 1. Create a [Cosmos DB SQL API account and container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
 
    |  Setting   |  value  | 
-   | --- | --- |
-   | Geo-Redundancy | enable |
-   | Multi-region Writes | enable |
-   | Multi-region Writes | 
+   | --- | --- | 
+   | Multi-region Writes | enable |  
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
