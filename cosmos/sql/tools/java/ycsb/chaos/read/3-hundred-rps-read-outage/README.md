@@ -18,10 +18,11 @@ This recipe encapsulates a read-only workload that executes for 20-25 minutes. A
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
-1. Create a [Cosmos DB SQL API container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
+1. Create a Geo-Redundancy [Cosmos DB SQL API account and container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
 
    |  Setting   |  value  | 
    | --- | --- |
+   | Geo-Redundancy | enable |
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
@@ -41,6 +42,8 @@ This recipe encapsulates a read-only workload that executes for 20-25 minutes. A
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
+   | Preferred Region List | Comma separated preferred regions list. ex: South Central US,East US |
+   | faultRegion | Primary region. ex: South Central US |
    
  [More details about the parameters](../../#basic-configuration)
 
