@@ -36,7 +36,7 @@ This recipe encapsulates a read workload that lasts for 20-25 minutes. Around 5 
    |  Parameter   |  Value  |
    | --- | --- |
    | Resource group | name of the resource group from step 3 |
-   | Region | Make sure the region is the same as the Cosmos DB account region |
+   | Region | Make sure the region is the same as the Cosmos DB account primary region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
