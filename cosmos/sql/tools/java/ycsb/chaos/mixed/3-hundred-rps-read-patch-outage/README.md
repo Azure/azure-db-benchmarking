@@ -8,7 +8,7 @@ This recipe encapsulates a read and patch workload that lasts for 20-25 minutes.
 | --- | --- |
 | Database | Cosmos SQL API |
 | Benchmarking tool | YCSB |
-| Workload | Read |
+| Workload | Read & Patch (80:20) |
 | Max RPS | 300 |
 | Duration | 20-25 minutes |
 | Fault Type | Packet Drop |
