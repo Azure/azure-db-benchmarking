@@ -41,8 +41,8 @@ This recipe encapsulates a read workload that lasts for 20-25 minutes. Around 5 
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
-   | Preferred Region List | Comma separated preferred regions list. EX: South Central US,East US |
-   | faultRegion | Primary region. EX: South Central US |
+   | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US |
+   | faultRegion | Primary region. Ex: South Central US |
    
  [More details about the parameters](../../#basic-configuration)
 
