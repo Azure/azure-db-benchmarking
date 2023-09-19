@@ -43,10 +43,9 @@ This recipe encapsulates a read workload that lasts for 20-25 minutes. Around 5 
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
-   | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US [^1]|
+   | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US.  [More about SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability)|
    | faultRegion | Primary region. Ex: South Central US |
 
-[^1]: Best pratices about availability of Azure Cosmos DB SDKs in multiregional environments [Cosmos DB SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability)
 
  [More details about the parameters](../../#basic-configuration)
 
