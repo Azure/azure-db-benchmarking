@@ -46,7 +46,7 @@ This recipe encapsulates a read workload (Direct Mode) that lasts for 20-25 minu
    | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US [^1]|
    | faultRegion | Primary region. Ex: South Central US |
 
-[^1]: More details about availability of Azure Cosmos DB SDKs in multiregional environments [Cosmos DB SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability)
+[^1]: Best pratices about availability of Azure Cosmos DB SDKs in multiregional environments [Cosmos DB SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability)
 
  [More details about the parameters](../../#basic-configuration)
 
