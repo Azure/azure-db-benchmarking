@@ -1,6 +1,6 @@
 # Read workload with network outage
 
-This recipe encapsulates a read workload (Direct Mode) that lasts for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK detects the outage, marks the region as unavailable for reads and retries the requests on the next available region. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
+This recipe encapsulates a read workload that lasts for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK detects the outage, marks the region as unavailable for reads and retries the requests on the next available region. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
 
 ## Recipe definition 
 
@@ -54,7 +54,7 @@ This recipe encapsulates a read workload (Direct Mode) that lasts for 20-25 minu
 
 
 ## Output
-You can vizualize the total requets count by Region by creating a Azure Monitor for Azure Cosmos DB metrics chart. Following is a sample chart for a worklaod with "South Central US" as the primray region and "East US" as the secondary region.
+You can vizualize the total requets count by Region by creating a [Azure Monitor metrics chart](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started)  for Azure Cosmos DB. Following is a sample chart for a worklaod with "South Central US" as the primray region and "East US" as the secondary region.
 
 
 ![image](../../../../../../../../images/chaos/try-it-read-outage-graph.png)
