@@ -36,13 +36,13 @@ This recipe encapsulates a read and patch workload that lasts for 20-25 minutes.
    |  Parameter   |  Value  |
    | --- | --- |
    | Resource group | name of the resource group from step 3 |
-   | Region | Make sure the region is the same as the Cosmos DB account region |
+   | Region | Make sure the region is the same as the Cosmos DB account primary region |
    | Results Storage Connection String | connection string of the storage account from step 2 |
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
-   | Preferred Region List | Comma separated preferred regions list. ex: South Central US,East US |
-   | faultRegion | Primary region. ex: South Central US |
+   | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US |
+   | faultRegion | Primary region. Ex: South Central US |
    
  [More details about the parameters](../../#basic-configuration)
 
