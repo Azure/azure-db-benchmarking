@@ -53,7 +53,7 @@ This recipe encapsulates a read workload that lasts for 20-25 minutes. Around 5 
 
 
 ## Output
-You can vizualize the total requets count by Region by creating a [Azure Monitor metrics chart](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started)  for Azure Cosmos DB. Following is a sample chart for a worklaod with "South Central US" as the primray region and "East US" as the secondary region.
+You can vizualize the total requets count by Region by creating a [Azure Monitor metrics chart](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started)  for Azure Cosmos DB. Following is a sample chart for a worklaod with "South Central US" as the primray region and "East US" as the secondary region. Please note that the spike in RPS you see in "South Central US" after the network fault ends is due to the nature of the workload. The workload tries to make up for the drop in RPS during the fault, due to cross region calls.
 
 
 ![image](../../../../../../../../images/chaos/try-it-read-outage-graph.png)
