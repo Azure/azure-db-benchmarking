@@ -98,14 +98,14 @@
         },
         "targetOperationsPerSecond": {
             "type": "int",
-            "defaultValue": 15,
+            "defaultValue": 10,
             "metadata": {
                 "description": "Specifies the maximum number of operations each client pefroms per second"
             }
         },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 18000,
+            "defaultValue": 12000,
             "metadata": {
                 "description": "Specifies the total number of operations each client perfoms"
             }
