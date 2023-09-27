@@ -41,8 +41,10 @@ This recipe encapsulates a read and patch workload (Direct Mode) that lasts for 
    | Cosmos URI  | URI of the Cosmos DB account from step 1 |
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
-   | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US |
+   | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US. [More about SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability) |
    | faultRegion | Primary region. Ex: South Central US |
+   | waitForFaultToStartInSec | Time in seconds to wait before starting the fault |
+   | durationOfFaultInSec| Duration of the fault in seconds |
    
  [More details about the parameters](../../#basic-configuration)
 
