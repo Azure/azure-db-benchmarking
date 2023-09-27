@@ -45,6 +45,8 @@ This recipe encapsulates a read workload that lasts for 20-25 minutes. Around 5 
    | Admin Password | Admin account password for the VM |
    | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US.  [More about SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability)|
    | faultRegion | Primary region. Ex: South Central US |
+   | waitForFaultToStartInSec | Time in seconds to wait before starting the fault |
+   | durationOfFaultInSec| Duration of the fault in seconds |
 
 
  [More details about the parameters](../../#basic-configuration)
