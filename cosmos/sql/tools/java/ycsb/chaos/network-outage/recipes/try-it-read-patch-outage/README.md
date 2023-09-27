@@ -43,6 +43,8 @@ This recipe encapsulates a read and patch workload (Direct Mode) that lasts for 
    | Admin Password | Admin account password for the VM |
    | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US |
    | faultRegion | Primary region. Ex: South Central US |
+   | waitForFaultToStartInSec | Time in seconds to wait before starting the fault |
+   | durationOfFaultInSec| Duration of the fault in seconds |
    
  [More details about the parameters](../../#basic-configuration)
 
