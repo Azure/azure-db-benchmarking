@@ -9,8 +9,49 @@ To use the recies please proceed to the following pages.
  - [network-outage-recipes](./network-outage/recipes)
  - [build-your-own-recipe](./build-your-own-recipe)
 
-## Tool
-The tool can be used in both linix and windows OS. Downlaod the tool 
+## Download Tool
+The tool can be used in both Windos and Linux OS. The tool uses “iptables” in Linux and “clumsy 0.2” in windows to create network chaos. 
 
-- [tool](./chaos-tool.zip)
+- [Tool download](./chaos-tool.zip)
 
+## Linux
+Download the tool to the Linux machine where you would like to execute the faults. Unzip the tool to exact the scripts and execute the following command from the folder with the scripts:
+
+```
+databaseid="<>" containerid="<>" endpoint=<> masterkey=<> wait_for_fault_to_start_in_sec= duration_of_fault_in_sec= <> drop_probability=<>  fault_region="<>" delay_in_ms=<> bash chaos_script.sh
+```
+**Parameters:**
+   |  Parameter | Description | Mandatory |
+   | --- | --- | ---|
+   |databaseid | Id of the database | Yes|
+   | containerid | Id of the container  | Yes |
+   | endpoint |Account URI| Yes |
+   | masterkey | Master key of the account | Yes |
+   | wait_for_fault_to_start_in_se | Time in seconds to wait before starting the chaos | No |
+   | duration_of_fault_in_sec | Duration of the chaos in seconds  | Yes |
+   | drop_probability | Percentage of packets to drop  | No (both this and delayInMs cannot be null at the same time)|
+   | delay_in_ms | Network delay in milliseconds (0-3000) | No|
+   | fault_region | Region for the Fault | Yes|
+
+## Windows
+Download the tool to the Windows machine where you would like to execute the faults. Unzip the tool to exact the scripts and execute the following command from the folder with the scripts.
+
+ ```
+./chaos_script.ps1 -databaseId "" -containerId "" -endpoint "" -masterkey "" -waitForFaultToStartInSec "" -durationOfFaultInSec "" -dropPercentage "" -delayInMs "" -faultRegion ""
+ ```
+**Parameters:**
+   |  Parameter | Description | Mandatory |
+   | --- | --- | ---|
+   |databaseId | Id of the database | Yes|
+   | containerId | Id of the container  | Yes |
+   | endpoint |Account URI| Yes |
+   | masterkey | Master key of the account | Yes |
+   | waitForFaultToStartInSec | Time in seconds to wait before starting the chaos | No |
+   | durationOfFaultInSec | Duration of the chaos in seconds  | Yes |
+   | dropPercentage | Percentage of packets to drop  | No (both this and delayInMs cannot be null at the same time)|
+   | delayInMs | Network delay in milliseconds (0-3000) | No|
+   | faultRegion | Region for the Fault | Yes|
+
+   
+
+   
