@@ -51,6 +51,8 @@ This recipe encapsulates a create only workload (Direct Mode) that lasts for 20-
 
 
 ## Output
+You can visualize the total request count by region by creating a [Azure Monitor metrics chart](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started) for Azure Cosmos DB. You will initially see the requests going to the first region in the "Preferred Regions List" before the requests getting routed to the next available region in the "Preferred Regions List" assuming that the fault is active in the first region and the account is configured for multi-master.
+
 The job status and results will be available in the following locations in the storage account provided
 | Type | Location |
 | --- | --- |
