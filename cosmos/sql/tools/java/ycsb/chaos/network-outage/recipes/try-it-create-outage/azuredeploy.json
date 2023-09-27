@@ -194,12 +194,14 @@
         },
         "waitForFaultToStartInSec": {
             "type": "int",
+            "defaultValue": 300,
 		    "metadata": {
                 "description": "Specifies amount of time in sec after workload start when fault introduce. -1 will disable the fault and runs regular benchmarking."
             }
         },
         "durationOfFaultInSec": {
             "type": "int",
+            "defaultValue": 300,
 		    "metadata": {
                 "description": "Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking."
             }
