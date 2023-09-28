@@ -28,7 +28,7 @@ This will allow users to introduce network faults on the Cosmos DB nodes endpoin
 | Cosmos Key                        | Primary key of the Cosmos DB account from step 1                 |
 | Admin Password                    | Admin account password for the VM                                |
 | Preferred Region List             | Comma separated preferred regions list. Ex: South Central US,East US.  [More about SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability) |
-| faultRegion                       | Region which should experience the fault |
+| faultRegion                       | Region which should experience the fault. Ex: South Central US |
 | waitForFaultToStartInSec          | Time in seconds to wait before starting the fault |
 | durationOfFaultInSec              | Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking |
 | dropProbability                   | Percentage of packets to drop during fault. Range 0.00(no drop) to 1.0(drop all packets) |
