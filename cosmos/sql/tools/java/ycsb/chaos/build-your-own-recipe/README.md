@@ -40,6 +40,7 @@ This will allow users to introduce network faults on the Cosmos DB nodes endpoin
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fusers%2Fnakumars%2FdrCapablity%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Fchaos%2Fbuild-your-own-recipe%2Fazuredeploy.json)
 
 ## Output
+You can visualize the total request count by region by creating a [Azure Monitor metrics chart](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started) for Azure Cosmos DB.
 
 The job status and results will be available in the following locations in the storage account provided
 | Type | Location |
