@@ -16,62 +16,6 @@
                 "description": "Specifies the location for all resources."
             }
         },
-        "adminUsername": {
-            "type": "string",
-            "defaultValue": "benchmarking",
-            "metadata": {
-                "description": "Specifies a username for the Virtual Machine."
-            }
-        },
-        "adminPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Specifies a password for the Virtual Machine."
-            }
-        },
-        "vmSize": {
-            "type": "string",
-            "defaultValue": "Standard_D2s_v3",
-            "metadata": {
-                "description": "Specifies a Virtual Machine size"
-            }
-        },
-        "vmCount": {
-            "type": "int",
-            "defaultValue": 1,
-            "metadata": {
-                "description": "Specifies the number of Virtual Machines that will part of the test bench"
-            }
-        },
-        "vNetName": {
-            "type": "string",
-            "defaultValue": "[concat(parameters('projectName'), '-vnet')]",
-            "metadata": {
-                "description": "Specifies a Virtual Network name"
-            }
-        },
-        "vNetAddressPrefixes": {
-            "type": "string",
-            "defaultValue": "10.2.0.0/16",
-            "metadata": {
-                "description": "Specifies a Virtual Network Address Prefix"
-            }
-        },
-        "vNetSubnetName": {
-            "type": "string",
-            "defaultValue": "default",
-            "metadata": {
-                "description": "Specifies a Virtual Network Subnet name"
-            }
-        },
-        "vNetSubnetAddressPrefix": {
-            "type": "string",
-            "defaultValue": "10.2.0.0/24",
-            "metadata": {
-                "description": "Specifies a Virtual Network Subnet Address Prefix "
-            }
-        },
-
         "resultsStorageConnectionString": {
             "type": "securestring",
             "metadata": {
@@ -90,34 +34,92 @@
                 "description": "Specifies the key for the Cosmos DB account"
             }
         },
-        "workloadType": {
+        "vmSize": {
             "type": "string",
-            "defaultValue": "workloadc",
+            "defaultValue": "Standard_D2s_v3",
             "metadata": {
-                "description": "Specifies the workload"
+                "description": "Specifies a Virtual Machine size"
+            }
+        },
+        "vmCount": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Specifies the number of Virtual Machines/clients"
+            }
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "benchmarking",
+            "metadata": {
+                "description": "Specifies a username for the Virtual Machine."
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies a password for the Virtual Machine."
+            }
+        },
+        "vnetName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('projectName'), '-vnet')]",
+            "metadata": {
+                "description": "Specifies a Virtual Network name"
+            }
+        },
+        "vnetAddressPrefixes": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/16",
+            "metadata": {
+                "description": "Specifies a Virtual Network Address Prefix"
+            }
+        },
+        "vnetSubnetName": {
+            "type": "string",
+            "defaultValue": "default",
+            "metadata": {
+                "description": "Specifies a Virtual Network Subnet name"
+            }
+        },
+        "vnetSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/24",
+            "metadata": {
+                "description": "Specifies a Virtual Network Subnet Address Prefix "
             }
         },
         "threads": {
             "type": "int",
-            "defaultValue": 1,
+            "defaultValue": 2,
             "metadata": {
                 "description": "Specifies the threads per client"
             }
         },
-        "targetOperationsPerSecond": {
-            "type": "int",
-            "defaultValue": -1,
-            "metadata": {
-                "description": "Specifies the maximum number of operations per second"
-            }
-        },
         "ycsbRecordCount": {
             "type": "int",
-            "defaultValue": 1
+            "defaultValue": 30
+        },
+        "targetOperationsPerSecond": {
+            "type": "int",
+            "defaultValue": 50,
+            "metadata": {
+                "description": "Specifies the maximum number of operations each client pefroms per second"
+            }
         },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 1
+            "defaultValue": 60000,
+            "metadata": {
+                "description": "Specifies the total number of operations each client perfoms"
+            }
+        },
+        "skipLoadPhase": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies skipLoadPhase true or false, if set true load phase will not trigger before the transaction phase"
+            }
         },
         "ycsbGitHubRepoName": {
             "type": "string",
@@ -137,14 +139,14 @@
             "type": "string",
             "defaultValue": "Azure/azure-db-benchmarking",
             "metadata": {
-                "description": "Specifies the GitHub URL for benchmarking framework code repository"
+                "description": "Specifies the GitHub Url for YCSB source code repository"
             }
         },
         "benchmarkingToolsBranchName": {
             "type": "string",
-            "defaultValue": "users/nakumars/drCapablity",
+            "defaultValue": "main",
             "metadata": {
-                "description": "Specifies the GitHub branch for benchmarking framework code repository"
+                "description": "Specifies the GitHub branch for YCSB source code repository"
             }
         },
         "diagnosticsLatencyThresholdInMS": {
@@ -152,41 +154,6 @@
             "defaultValue": -1,
             "metadata": {
                 "description": "Specifies request latency threshold for logging clinet request diagnostics. There is no logging by default"
-            }
-        },
-        "readproportion": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Specifies read operation percentage from 0 to 1"
-            }
-        },
-        "updateproportion": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Specifies update operation percentage from 0 to 1"
-            }
-        },
-        "scanproportion": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Specifies scan operation percentage from 0 to 1"
-            }
-        },
-        "insertproportion": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Specifies insert operation percentage from 0 to 1"
-            }
-        },
-        "writeOnlyOperation": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Specifies writeOnlyOperation true or false, if true it will override the workload and run 100% write, transaction wont fail on single error unlike load phase"
             }
         },
         "requestdistribution": {
@@ -217,54 +184,42 @@
                 "description": "Specifies field count in the item"
             }
         },
-        "skipLoadPhase": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Specifies skipLoadPhase true or false, if set true load phase will not trigger before the transaction phase"
-            }
-        },
 		"preferredRegionList": {
-            "type": "string",
-            "defaultValue": "",
+            "type": "string",           
             "metadata": {
                 "description": "Specifies a comma separated preferred region list."
+            }
+        }, 
+        "dropProbability": {
+            "type": "string",
+            "defaultValue": "1.0",
+		    "metadata": {
+                "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
+            }
+        },
+        "faultRegion": {
+            "type": "string",          
+		    "metadata": {
+                "description": "Specifies the region in which fault will be introduced, example West US."
             }
         },
         "waitForFaultToStartInSec": {
             "type": "int",
+            "defaultValue": 300,
 		    "metadata": {
                 "description": "Specifies amount of time in sec after workload start when fault introduce. -1 will disable the fault and runs regular benchmarking."
             }
         },
         "durationOfFaultInSec": {
             "type": "int",
+            "defaultValue": 300,
 		    "metadata": {
                 "description": "Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking."
-            }
-        },
-        "dropProbability": {
-            "type": "string",
-		    "metadata": {
-                "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
-            }
-        },
-        "delayInMs": {
-            "type": "int",
-		    "metadata": {
-                "description": "Specifies amount of delay in ms to the network during the fault."
-            }
-        },
-        "faultRegion": {
-            "type": "string",
-            "defaultValue": "",
-		    "metadata": {
-                "description": "Specifies the region in which fault will be introduced, example West US. If nothing is specified, the Primary region will be picked."
             }
         }
     },
     "variables": {
-        "templateURL": "[concat('https://raw.githubusercontent.com/',parameters('benchmarkingToolsRepoName'),'/',parameters('benchmarkingToolsBranchName'),'/cosmos/infra/azuredeploy.json')]"
+        "templateURL": "[concat('https://raw.githubusercontent.com/',parameters('benchmarkingToolsRepoName'),'/',parameters('benchmarkingToolsBranchName'),'/cosmos/infra/azuredeploy.json')]"       
     },
     "resources": [
         {
@@ -284,17 +239,26 @@
                     "location": {
                         "value": "[parameters('location')]"
                     },
-                    "adminUsername": {
-                        "value": "[parameters('adminUsername')]"
+                    "resultsStorageConnectionString": {
+                        "value": "[parameters('resultsStorageConnectionString')]"
                     },
-                    "adminPassword": {
-                        "value": "[parameters('adminPassword')]"
+                    "cosmosURI": {
+                        "value": "[parameters('cosmosURI')]"
+                    },
+                    "cosmosKey": {
+                        "value": "[parameters('cosmosKey')]"
                     },
                     "vmSize": {
                         "value": "[parameters('vmSize')]"
                     },
                     "vmCount": {
                         "value": "[parameters('vmCount')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
                     },
                     "vNetName": {
                         "value": "[parameters('vNetName')]"
@@ -308,29 +272,20 @@
                     "vNetSubnetAddressPrefix": {
                         "value": "[parameters('vNetSubnetAddressPrefix')]"
                     },
-                    "resultsStorageConnectionString": {
-                        "value": "[parameters('resultsStorageConnectionString')]"
-                    },
-                    "cosmosURI": {
-                        "value": "[parameters('cosmosURI')]"
-                    },
-                    "cosmosKey": {
-                        "value": "[parameters('cosmosKey')]"
-                    },
-                    "workloadType": {
-                        "value": "[parameters('workloadType')]"
-                    },
                     "threads": {
                         "value": "[parameters('threads')]"
-                    },
-                    "targetOperationsPerSecond": {
-                        "value": "[parameters('targetOperationsPerSecond')]"
                     },
                     "ycsbRecordCount": {
                         "value": "[parameters('ycsbRecordCount')]"
                     },
+                    "targetOperationsPerSecond": {
+                        "value": "[parameters('targetOperationsPerSecond')]"
+                    },
                     "ycsbOperationCount": {
                         "value": "[parameters('ycsbOperationCount')]"
+                    },
+                    "skipLoadPhase": {
+                        "value": "[parameters('skipLoadPhase')]"
                     },
                     "ycsbGitHubRepoName": {
                         "value": "[parameters('ycsbGitHubRepoName')]"
@@ -348,19 +303,19 @@
                         "value": "[parameters('diagnosticsLatencyThresholdInMS')]"
                     },
                     "readproportion": {
-                        "value": "[parameters('readproportion')]"
+                        "value": "0.8"
                     },
                     "updateproportion": {
-                        "value": "[parameters('updateproportion')]"
+                        "value": "0.2"
                     },
                     "scanproportion": {
-                        "value": "[parameters('scanproportion')]"
+                        "value": "0"
                     },
                     "insertproportion": {
-                        "value": "[parameters('insertproportion')]"
+                        "value": "0"
                     },
                     "writeOnlyOperation": {
-                        "value": "[parameters('writeOnlyOperation')]"
+                        "value": false
                     },
                     "requestdistribution": {
                         "value": "[parameters('requestdistribution')]"
@@ -374,9 +329,6 @@
                     "fieldcount": {
                         "value": "[parameters('fieldcount')]"
                     },
-                    "skipLoadPhase": {
-                        "value": "[parameters('skipLoadPhase')]"
-                    },
                     "preferredRegionList": {
                         "value": "[parameters('preferredRegionList')]"
                     },
@@ -384,16 +336,13 @@
                         "value": "[parameters('waitForFaultToStartInSec')]"
                     },
                     "durationOfFaultInSec": {
-                        "value": "[parameters('durationOfFaultInSec')]"
+                       "value": "[parameters('durationOfFaultInSec')]"
                     },
                     "faultRegion": {
                         "value": "[parameters('faultRegion')]"
                     },
                     "dropProbability": {
                         "value": "[parameters('dropProbability')]"
-                    },
-                    "delayInMs": {
-                        "value": "[parameters('delayInMs')]"
                     }
                 }
             }
