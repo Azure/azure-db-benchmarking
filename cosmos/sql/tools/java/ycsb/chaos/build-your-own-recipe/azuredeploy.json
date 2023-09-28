@@ -225,8 +225,7 @@
             }
         },
 		"preferredRegionList": {
-            "type": "string",
-            "defaultValue": "East US,West US",
+            "type": "string",           
             "metadata": {
                 "description": "Specifies a comma separated preferred region list."
             }
@@ -256,8 +255,7 @@
             }
         },
         "faultRegion": {
-            "type": "string",
-            "defaultValue": "",
+            "type": "string",            
 		    "metadata": {
                 "description": "Specifies the region in which fault will be introduced, example West US. If nothing is specified, the Primary region will be picked."
             }
