@@ -6,7 +6,7 @@ You can also download and execute the chaos tool within your own environment to 
 
 ## Recipes
 To use the recies please proceed to the following pages.
- - [network-outage-recipes](./network-outage/recipes)
+ - [network-fault-recipes](./network-faults/)
  - [build-your-own-recipe](./build-your-own-recipe)
 
 ## Download Tool
