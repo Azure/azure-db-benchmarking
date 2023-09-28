@@ -1,6 +1,6 @@
 # Build you own fault
 
-With this recipe advance users can create their own workload and fault configuration.
+With this recipe advanced users can create their own workload and fault configuration.
 
 ## Execute
 
