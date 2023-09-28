@@ -142,7 +142,7 @@
         },
         "benchmarkingToolsBranchName": {
             "type": "string",
-            "defaultValue": "users/nakumars/drCapablity",
+            "defaultValue": "main",
             "metadata": {
                 "description": "Specifies the GitHub branch for benchmarking framework code repository"
             }
