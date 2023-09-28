@@ -1,6 +1,6 @@
 # Build you own fault
 
-This will allow users to introduce network faults on the Cosmos DB nodes endpoint simulating real world disturbance as per their need. On the Multi region account once the underlying SDK detected a complete outage it failed over to the next region in the list. Read more about [Cosmo Global Data Distribution](https://learn.microsoft.com/en-us/azure/cosmos-db/distribute-data-globally) and [SDK behavior in multiregional environment](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability).
+With this recipe advance users can create their own workload and fault configuration.
 
 ## Execute
 
