@@ -190,11 +190,11 @@
                 "description": "Specifies a comma separated preferred region list."
             }
         }, 
-        "dropProbability": {
+        "delayInMs": {
             "type": "string",
-            "defaultValue": "1.0",
+            "defaultValue": "10",
 		    "metadata": {
-                "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
+                "description": "Specifies amount of time in ms for adding delay to the network during the fault."
             }
         },
         "faultRegion": {
@@ -341,8 +341,8 @@
                     "faultRegion": {
                         "value": "[parameters('faultRegion')]"
                     },
-                    "dropProbability": {
-                        "value": "[parameters('dropProbability')]"
+                    "delayInMs": {
+                        "value": "[parameters('delayInMs')]"
                     }
                 }
             }
