@@ -49,7 +49,7 @@ Download the tool to the Windows machine where you would like to execute the fau
    | waitForFaultToStartInSec | Time in seconds to wait before starting the chaos | No |
    | durationOfFaultInSec | Duration of the chaos in seconds  | Yes |
    | dropPercentage | Percentage of packets to drop  | No (both this and delayInMs cannot be null at the same time)|
-   | delayInMs | Network delay in milliseconds (0-3000) | No|
+   | delayInMs | Network delay in milliseconds | No|
    | faultRegion | Region for the Fault | Yes|
 
    
