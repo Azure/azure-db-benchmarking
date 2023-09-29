@@ -1,8 +1,7 @@
 # SQL(Core) API Chaos:
-The provided recipes encapsulate the workloads and chaos faults to provide a one-click experience to observe the resiliency of applications using Cosmos DB SDK. Every recipe has a detailed description of the workload, fault, and the expected result. Provided is also a build your own recipe for scenarios not covered in the one-click recipes.The faults simulate network outages and network delays on the clisent side. The former will result in complete or partial outage while the latter will degrade performance.
+The provided recipes encapsulate the workloads and chaos faults to provide a one-click experience to observe the resiliency of applications using Cosmos DB SDK. Every recipe has a detailed description of the workload, fault, and the expected result. Provided is also a build your own recipe for scenarios not covered in the one-click recipes. The faults simulate network outages and network delays on the client side. The former will result in complete or partial outage while the latter will degrade performance.
 
 You can also download and execute the chaos tool within your own environment to validate the resiliency of your workloads.
-
 
 ## Recipes
 To use the recies please proceed to the following pages.
@@ -10,12 +9,12 @@ To use the recies please proceed to the following pages.
  - [build-your-own-recipe](./build-your-own-recipe)
 
 ## Download Tool
-The tool can be used in both Windos and Linux OS. The tool uses “iptables” in Linux and “clumsy 0.2” in windows to create network chaos. 
+The tool can be used in both Windows and Linux OS. The tool uses “iptables” and Traffic control (tc) in Linux and “clumsy 0.2” in windows to create network chaos.
 
 - [Tool download](./chaos-tool.zip)
 
 ## Linux
-Download the tool to the Linux machine where you would like to execute the faults. Unzip the tool to exact the scripts and execute the following command from the folder with the scripts:
+Download the tool on the Linux machine where you would like to execute the faults. Unzip the tool to extract the scripts and execute the following command from the folder with the scripts:
 
 ```
 databaseid="<>" containerid="<>" endpoint=<> masterkey=<> wait_for_fault_to_start_in_sec= duration_of_fault_in_sec= <> drop_probability=<>  fault_region="<>" delay_in_ms=<> bash chaos_script.sh
@@ -34,11 +33,12 @@ databaseid="<>" containerid="<>" endpoint=<> masterkey=<> wait_for_fault_to_star
    | fault_region | Region for the Fault | Yes|
 
 ## Windows
-Download the tool to the Windows machine where you would like to execute the faults. Unzip the tool to exact the scripts and execute the following command from the folder with the scripts.
+Download the tool on the Windows machine where you would like to execute the faults. Unzip the tool to extract the scripts and execute the following command from the folder with the scripts.
 
  ```
 ./chaos_script.ps1 -databaseId "" -containerId "" -endpoint "" -masterkey "" -waitForFaultToStartInSec "" -durationOfFaultInSec "" -dropPercentage "" -delayInMs "" -faultRegion ""
  ```
+
 **Parameters:**
    |  Parameter | Description | Mandatory |
    | --- | --- | ---|
