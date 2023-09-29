@@ -9,9 +9,8 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
 | Database | Cosmos SQL API |
 | Benchmarking tool | YCSB |
 | Workload | Read & Patch (80:20) |
-| Max RPS | 50 |
 | Duration | 20-25 minutes |
-| Fault Type | Packet Drop |
+| Fault Type | Nertwork Delay |
 | Fault Start | 5 Minutes after the workload starts |
 | Fault duration | 5 minutes |
 | Number of documents in DB | 30 |
@@ -27,7 +26,7 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
    | Container Name | usertable | 
    | Partition Key  | /id |
    | Container Throughput Type | Manual |  
-   | Container throughput | 400 RU/s[^1] |
+   | Container throughput | 400 RU/s |
 
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) 
 4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
@@ -42,6 +41,7 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
    | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US. [More about SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability) |
+   | delayInMs | Network delay in milliseconds |
    | faultRegion | Region which should experience the fault. Ex: South Central US |
    | waitForFaultToStartInSec | Time in seconds to wait before starting the fault |
    | durationOfFaultInSec| Duration of the fault in seconds |
