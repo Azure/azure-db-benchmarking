@@ -40,6 +40,7 @@ This recipe encapsulates a create only workload that executes for 20-25 minutes.
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
    | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US. [More about SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability) |
+   | dropProbability | Percentage of packets to drop (0-1) |
    | faultRegion | Region which should experience the fault. Ex: South Central US |
    | waitForFaultToStartInSec | Time in seconds to wait before starting the fault |
    | durationOfFaultInSec| Duration of the fault in seconds |
