@@ -17,7 +17,7 @@ This recipe encapsulates a read workload that executes for 20-25 minutes. Around
 | Document Size | ≈1 KB(YCSB default) |
 
 ## Execute
-1. Create a Geo-Redundancy [Cosmos DB SQL API account and container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
+1. Create [Cosmos DB SQL API account and container](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/quickstart-portal)
 
    |  Setting   |  value  | 
    | --- | --- |
