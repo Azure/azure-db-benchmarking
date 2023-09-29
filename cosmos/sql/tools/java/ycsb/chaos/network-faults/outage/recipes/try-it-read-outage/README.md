@@ -9,7 +9,6 @@ This recipe encapsulates a read workload that executes for 20-25 minutes. Around
 | Database | Cosmos SQL API |
 | Benchmarking tool | YCSB |
 | Workload | Read |
-| Max RPS | 300 |
 | Duration | 20-25 minutes |
 | Fault Type | Packet Drop |
 | Fault Start | 5 Minutes after the workload starts |
