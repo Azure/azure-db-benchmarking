@@ -1,4 +1,4 @@
-# Mixed(Read & Patch) workload with network outage
+# Mixed(Read & Patch) workload with network Delay
 
 This recipe encapsulates a read and patch workload that executes for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK detects the outage, marks the region as unavailable for reads and retries the read requests on the next available region. The client/SDK also marks the region as unavailable for writes and retries the patch operations on the next available region if "Multi-region Writes" is enabled for the account. For accounts with "Multi-region Writes" is disabled the patch operations fail. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
 
@@ -48,7 +48,7 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
    
  [More details about the parameters](../../#basic-configuration)
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fusers%2Fnakumars%2FdrCapablity%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Fchaos%2Fnetwork-outage%2Frecipes%2Ftry-it-read-patch-outage%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fusers%2Fnakumars%2FdrCapablity%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Fchaos%2Fdelay%2Frecipes%2Ftry-it-read-patch-delay%2Fazuredeploy.json)
 
 
 ## Output
