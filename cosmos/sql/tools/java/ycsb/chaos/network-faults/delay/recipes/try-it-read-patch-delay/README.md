@@ -52,7 +52,8 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
 
 
 ## Output
-You can visualize the total request count by region by creating a Azure Monitor metrics chart for Azure Cosmos DB. You will initially see the requests going to the first region in the "Preferred Regions List" before the requests getting routed to the next available region in the "Preferred Regions List" assuming that the fault is active in the first region and the account is configured for multi-master.
+You can visualize the total request count by region by creating an Azure Monitor metrics chart, for Azure Cosmos DB. You will see the total request count drop during the fault. If the specified delay is large, all the requests will be routed to the next available region in the "Preferred Regions List" assuming that the fault is active in the first region and the account is configured for multi-master. 
+
 
 | Type | Location |
 | --- | --- |
