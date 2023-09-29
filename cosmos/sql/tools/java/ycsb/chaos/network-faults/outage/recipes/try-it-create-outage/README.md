@@ -9,7 +9,6 @@ This recipe encapsulates a create only workload that executes for 20-25 minutes.
 | Database | Cosmos SQL API |
 | Benchmarking tool | YCSB |
 | Workload | Create |
-| Max RPS | 15 |
 | Duration | 20-25 minutes |
 | Fault Type | Packet Drop |
 | Fault Start | 5 Minutes after the workload starts |
