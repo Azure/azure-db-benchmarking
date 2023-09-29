@@ -1,6 +1,6 @@
 # Mixed(Read & Patch) workload with network Delay
 
-This recipe encapsulates a read and patch workload that executes for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK detects the outage, marks the region as unavailable for reads and retries the read requests on the next available region. The client/SDK also marks the region as unavailable for writes and retries the patch operations on the next available region if "Multi-region Writes" is enabled for the account. For accounts with "Multi-region Writes" is disabled the patch operations fail. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
+This recipe encapsulates a read and patch workload that executes for 20-25 minutes. Around 5 minutes into the execution a network latency is simulated by introducing the specified network delay on all the packets bound to the specified fault region. 
 
 ## Recipe definition 
 
@@ -9,9 +9,8 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
 | Database | Cosmos SQL API |
 | Benchmarking tool | YCSB |
 | Workload | Read & Patch (80:20) |
-| Max RPS | 50 |
 | Duration | 20-25 minutes |
-| Fault Type | Packet Drop |
+| Fault Type | Nertwork Delay |
 | Fault Start | 5 Minutes after the workload starts |
 | Fault duration | 5 minutes |
 | Number of documents in DB | 30 |
@@ -27,7 +26,7 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
    | Container Name | usertable | 
    | Partition Key  | /id |
    | Container Throughput Type | Manual |  
-   | Container throughput | 400 RU/s[^1] |
+   | Container throughput | 400 RU/s |
 
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) 
 4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
@@ -42,6 +41,7 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
    | Cosmos Key  | Primary key of the Cosmos DB account from step 1 |
    | Admin Password | Admin account password for the VM |
    | Preferred Region List | Comma separated preferred regions list. Ex: South Central US,East US. [More about SDKs Failover configuration](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability) |
+   | delayInMs | Network delay in milliseconds |
    | faultRegion | Region which should experience the fault. Ex: South Central US |
    | waitForFaultToStartInSec | Time in seconds to wait before starting the fault |
    | durationOfFaultInSec| Duration of the fault in seconds |
@@ -52,7 +52,8 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
 
 
 ## Output
-You can visualize the total request count by region by creating a Azure Monitor metrics chart for Azure Cosmos DB. You will initially see the requests going to the first region in the "Preferred Regions List" before the requests getting routed to the next available region in the "Preferred Regions List" assuming that the fault is active in the first region and the account is configured for multi-master.
+You can visualize the total request count by region by creating an Azure Monitor metrics chart, for Azure Cosmos DB. You will see the total request count drop during the fault. If the specified delay is large, all the requests will be routed to the next available region in the "Preferred Regions List" assuming that the fault is active in the first region and the account is configured for multi-master. 
+
 
 | Type | Location |
 | --- | --- |
