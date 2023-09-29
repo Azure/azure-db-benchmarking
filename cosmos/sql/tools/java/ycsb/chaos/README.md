@@ -30,7 +30,7 @@ databaseid="<>" containerid="<>" endpoint=<> masterkey=<> wait_for_fault_to_star
    | wait_for_fault_to_start_in_se | Time in seconds to wait before starting the chaos | No |
    | duration_of_fault_in_sec | Duration of the chaos in seconds  | Yes |
    | drop_probability | Percentage of packets to drop  | No (both this and delayInMs cannot be null at the same time)|
-   | delay_in_ms | Network delay in milliseconds (0-3000) | No|
+   | delay_in_ms | Network delay in milliseconds | No|
    | fault_region | Region for the Fault | Yes|
 
 ## Windows
