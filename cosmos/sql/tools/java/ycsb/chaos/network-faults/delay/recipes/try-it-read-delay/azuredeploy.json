@@ -91,23 +91,34 @@
         },
         "threads": {
             "type": "int",
-            "defaultValue": 1,
+            "defaultValue": 4,
             "metadata": {
                 "description": "Specifies the threads per client"
             }
         },
+        "ycsbRecordCount": {
+            "type": "int",
+            "defaultValue": 30
+        },
         "targetOperationsPerSecond": {
             "type": "int",
-            "defaultValue": 10,
+            "defaultValue": 300,
             "metadata": {
                 "description": "Specifies the maximum number of operations each client pefroms per second"
             }
         },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 12000,
+            "defaultValue": 360000,
             "metadata": {
                 "description": "Specifies the total number of operations each client perfoms"
+            }
+        },
+        "skipLoadPhase": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies skipLoadPhase true or false, if set true load phase will not trigger before the transaction phase"
             }
         },
         "ycsbGitHubRepoName": {
@@ -179,11 +190,10 @@
                 "description": "Specifies a comma separated preferred region list."
             }
         }, 
-        "dropProbability": {
-            "type": "string",
-            "defaultValue": "1.0",
+       "delayInMs": {
+            "type": "int",          
 		    "metadata": {
-                "description": "Specifies the percentage from 0.00 to 1.0 for packets drop during fault."
+                "description": "Specifies amount of time in ms for adding delay to the network during the fault."
             }
         },
         "faultRegion": {
@@ -264,11 +274,17 @@
                     "threads": {
                         "value": "[parameters('threads')]"
                     },
+                    "ycsbRecordCount": {
+                        "value": "[parameters('ycsbRecordCount')]"
+                    },
                     "targetOperationsPerSecond": {
                         "value": "[parameters('targetOperationsPerSecond')]"
                     },
                     "ycsbOperationCount": {
                         "value": "[parameters('ycsbOperationCount')]"
+                    },
+                    "skipLoadPhase": {
+                        "value": "[parameters('skipLoadPhase')]"
                     },
                     "ycsbGitHubRepoName": {
                         "value": "[parameters('ycsbGitHubRepoName')]"
@@ -286,7 +302,7 @@
                         "value": "[parameters('diagnosticsLatencyThresholdInMS')]"
                     },
                     "writeOnlyOperation": {
-                        "value": true
+                        "value": false
                     },
                     "requestdistribution": {
                         "value": "[parameters('requestdistribution')]"
@@ -303,7 +319,7 @@
                     "preferredRegionList": {
                         "value": "[parameters('preferredRegionList')]"
                     },
-                     "waitForFaultToStartInSec": {
+                    "waitForFaultToStartInSec": {
                         "value": "[parameters('waitForFaultToStartInSec')]"
                     },
                     "durationOfFaultInSec": {
@@ -312,8 +328,8 @@
                     "faultRegion": {
                         "value": "[parameters('faultRegion')]"
                     },
-                    "dropProbability": {
-                        "value": "[parameters('dropProbability')]"
+                    "delayInMs": {
+                        "value": "[parameters('delayInMs')]"
                     }
                 }
             }
