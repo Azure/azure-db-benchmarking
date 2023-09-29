@@ -191,8 +191,7 @@
             }
         }, 
         "delayInMs": {
-            "type": "string",
-            "defaultValue": "10",
+            "type": "int",          
 		    "metadata": {
                 "description": "Specifies amount of time in ms for adding delay to the network during the fault."
             }
