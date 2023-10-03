@@ -305,13 +305,13 @@
                         "value": "0.8"
                     },
                     "updateproportion": {
-                        "value": "0.2"
+                        "value": "0"
                     },
                     "scanproportion": {
                         "value": "0"
                     },
                     "insertproportion": {
-                        "value": "0"
+                        "value": "0.2"
                     },
                     "writeOnlyOperation": {
                         "value": false
