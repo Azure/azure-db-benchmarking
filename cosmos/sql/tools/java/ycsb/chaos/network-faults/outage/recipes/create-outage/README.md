@@ -1,4 +1,4 @@
-# Create workload with network outage
+# Create workload with network outage with Multi-Master
 
 This recipe encapsulates a create only workload that executes for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK marks the region as unavailable for writes and retries the create operations on the next available region if "Multi-region Writes" is enabled for the account. For accounts with "Multi-region Writes" disabled the create operations fail. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
 
