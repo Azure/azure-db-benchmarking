@@ -1,6 +1,6 @@
-# Mixed(Read & Patch) workload with network outage
+# Mixed(Read & Patch) workload with network outage with Multi-Master
 
-This recipe encapsulates a read and patch workload that executes for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK detects the outage, marks the region as unavailable for reads and retries the read requests on the next available region. The client/SDK also marks the region as unavailable for writes and retries the patch operations on the next available region if "Multi-region Writes" is enabled for the account. For accounts with "Multi-region Writes" is disabled the patch operations fail. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
+This recipe encapsulates a mixed workload consisting of both read and patch operations that execute for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK detects the outage, marks the region as unavailable for reads and writes, and routes both the read and write requests to the next available region. 
 
 ## Recipe definition 
 
