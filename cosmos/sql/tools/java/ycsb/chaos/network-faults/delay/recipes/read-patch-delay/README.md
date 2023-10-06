@@ -1,4 +1,4 @@
-# Mixed(Read & Patch) workload with network Latency
+# Simulate network delay for a mixed(read & patch) workload
 
 This recipe encapsulates a read and patch workload that executes for 20-25 minutes. Around 5 minutes into the execution a network latency is simulated by introducing the specified network delay on all the packets bound to the specified fault region. 
 

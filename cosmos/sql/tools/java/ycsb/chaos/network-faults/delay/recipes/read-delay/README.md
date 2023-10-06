@@ -1,4 +1,4 @@
-# Read workload with network Latency
+# Simulate network delay for a read workload
 
 This recipe encapsulates a read workload that executes for 20-25 minutes. Around 5 minutes into the execution a network latency is simulated by introducing the specified network delay on all the packets bound to the specified fault region. 
 
