@@ -1,4 +1,4 @@
-# Mixed(Read & Patch) workload with network outage with Multi-Master
+# Simulate network outage for a mixed(read & patch) workload with multi-master account
 
 This recipe encapsulates a mixed workload consisting of both read and patch operations that execute for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK detects the outage, marks the region as unavailable for reads and writes, and routes both the read and write requests to the next available region. 
 
