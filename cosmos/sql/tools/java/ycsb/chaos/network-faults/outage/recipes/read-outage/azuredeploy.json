@@ -34,6 +34,39 @@
                 "description": "Specifies the key for the Cosmos DB account"
             }
         },
+        "preferredRegionList": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies a comma separated preferred region list."
+            }
+        },
+        "dropProbability": {
+            "type": "string",
+            "defaultValue": "1.0",
+            "metadata": {
+                "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
+            }
+        },
+        "faultRegion": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the region in which fault will be introduced, example West US."
+            }
+        },
+        "waitForFaultToStartInSec": {
+            "type": "int",
+            "defaultValue": 300,
+            "metadata": {
+                "description": "Specifies amount of time in sec after workload start when fault introduce. -1 will disable the fault and runs regular benchmarking."
+            }
+        },
+        "durationOfFaultInSec": {
+            "type": "int",
+            "defaultValue": 300,
+            "metadata": {
+                "description": "Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking."
+            }
+        },
         "vmSize": {
             "type": "string",
             "defaultValue": "Standard_D2s_v3",
@@ -183,43 +216,10 @@
             "metadata": {
                 "description": "Specifies field count in the item"
             }
-        },
-		"preferredRegionList": {
-            "type": "string",           
-            "metadata": {
-                "description": "Specifies a comma separated preferred region list."
-            }
-        }, 
-        "dropProbability": {
-            "type": "string",
-            "defaultValue": "1.0",
-		    "metadata": {
-                "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
-            }
-        },
-        "faultRegion": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the region in which fault will be introduced, example West US"
-            }
-        },
-        "waitForFaultToStartInSec": {
-            "type": "int",
-            "defaultValue": 300,
-		    "metadata": {
-                "description": "Specifies amount of time in sec after workload start when fault introduce. -1 will disable the fault and runs regular benchmarking."
-            }
-        },
-        "durationOfFaultInSec": {
-            "type": "int",
-            "defaultValue": 300,
-		    "metadata": {
-                "description": "Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking."
-            }
         }
     },
     "variables": {
-        "templateURL": "[concat('https://raw.githubusercontent.com/',parameters('benchmarkingToolsRepoName'),'/',parameters('benchmarkingToolsBranchName'),'/cosmos/infra/azuredeploy.json')]"       
+        "templateURL": "[concat('https://raw.githubusercontent.com/',parameters('benchmarkingToolsRepoName'),'/',parameters('benchmarkingToolsBranchName'),'/cosmos/infra/azuredeploy.json')]"
     },
     "resources": [
         {
