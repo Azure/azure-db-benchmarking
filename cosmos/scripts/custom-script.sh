@@ -15,6 +15,11 @@ echo "##########BENCHMARKING_TOOLS_BRANCH_NAME###########: $BENCHMARKING_TOOLS_B
 echo "##########BENCHMARKING_TOOLS_URL###########: $BENCHMARKING_TOOLS_URL"
 echo "##########YCSB_GIT_BRANCH_NAME###########: $YCSB_GIT_BRANCH_NAME"
 echo "##########YCSB_GIT_REPO_URL###########: $YCSB_GIT_REPO_URL"
+echo "##########WAIT_FOR_FAULT_TO_START_IN_SEC###########: $WAIT_FOR_FAULT_TO_START_IN_SEC"
+echo "##########DURATION_OF_FAULT_IN_SEC###########: $DURATION_OF_FAULT_IN_SEC"
+echo "##########DROP_PROBABILITY###########: $DROP_PROBABILITY"
+echo "##########FAULT_REGION###########: $FAULT_REGION"
+echo "##########DELAY_IN_MS###########: $DELAY_IN_MS"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
@@ -23,6 +28,10 @@ recordcount=$((YCSB_RECORD_COUNT * MACHINE_INDEX))
 # Record count for Run. Since we run read workload after load this is the total number of records loaded by all VMs/clients during load.
 totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
 benchmarkname=ycsbbenchmarking
+if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 0 ]; then
+  fault=true
+  benchmarkname=ycsbwithfault
+fi
 
 #Cloning Test Bench Repo
 echo "########## Cloning Test Bench repository ##########"
@@ -58,6 +67,11 @@ cp ./$DB_BINDING_NAME-run.sh ./$ycsb_folder_name
 cp ./*.properties ./$ycsb_folder_name
 cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
+
+# Adding chaos scripts
+cp ./chaos/*.sh ./$ycsb_folder_name
+cp ./chaos/*.ps1 ./$ycsb_folder_name
+
 cd ./$ycsb_folder_name
 
 if [[ $DB_BINDING_NAME == "azurecosmos" ]]; then
@@ -165,6 +179,12 @@ if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; the
   fi
   ## Records count for write only ops which start with items count created by previous(machine_index -1) client machine
   recordcountForWriteOps=$((YCSB_OPERATION_COUNT * MACHINE_INDEX))
+
+  # Starting chaos script if opt in
+  if [ "$fault" = true ]; then
+    databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY fault_region=$FAULT_REGION delay_in_ms=$DELAY_IN_MS bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
+  fi
+
   ## Execute run phase for YCSB tests with write only workload
   echo "########## Run operation with write only workload for YCSB tests ###########"
   uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR preferredRegionList=$PREFERRED_REGION_LIST bash $DB_BINDING_NAME-run.sh
@@ -172,12 +192,12 @@ else
   if [ "$SKIP_LOAD_PHASE" = False ] || [ "$SKIP_LOAD_PHASE" = false ]; then
     ## Execute load operation for YCSB tests
     echo "########## Load operation for YCSB tests ###########"
-    ## Reducing the load phase RPS by decreasing the number of YCSB threads to eliminate throttling. The Throughput used for transaction phase is generally lesser than that is required for load phase resulting in throttling. 
+    ## Reducing the load phase RPS by decreasing the number of YCSB threads to eliminate throttling. The Throughput used for transaction phase is generally lesser than that is required for load phase resulting in throttling.
     loadthreadcount=$((THREAD_COUNT / 5))
-    if [ $loadthreadcount -eq 0 ];then 
+    if [ $loadthreadcount -eq 0 ]; then
       loadthreadcount=1
     fi
-    echo "##########loadthreadcount###########: $loadthreadcount"   
+    echo "##########loadthreadcount###########: $loadthreadcount"
     uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="load" recordcount=$recordcount insertstart=$insertstart insertcount=$YCSB_RECORD_COUNT threads=$loadthreadcount target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR core_workload_insertion_retry_limit=5 preferredRegionList=$PREFERRED_REGION_LIST bash $DB_BINDING_NAME-run.sh
   fi
   now=$(date +"%s")
@@ -193,6 +213,11 @@ else
   sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.log" "$result_storage_url"
   # Clearing log file from above load operation
   sudo rm -f /tmp/ycsb.log
+
+  # Starting chaos script if opt in
+  if [ "$fault" = true ]; then
+    databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY fault_region=$FAULT_REGION delay_in_ms=$DELAY_IN_MS bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
+  fi
 
   ## Execute run phase for YCSB tests
   echo "########## Run operation for YCSB tests ###########"
@@ -210,6 +235,11 @@ sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
 sudo mkdir "/tmp/$VM_NAME-system-diagnostics"
 sudo mv /tmp/cosmos_client_logs "/tmp/$VM_NAME-system-diagnostics"
 sudo cp "$user_home/agent.out" "$user_home/agent.err" "/tmp/$VM_NAME-system-diagnostics"
+
+if [ -f "$user_home/chaos.out" ] || [ -f "$user_home/chaos.err" ]; then
+  sudo cp "$user_home/chaos.out" "$user_home/chaos.err" "/tmp/$VM_NAME-system-diagnostics"
+fi
+
 sudo azcopy copy "/tmp/$VM_NAME-system-diagnostics" "$result_storage_url" --recursive=true
 
 if [ $MACHINE_INDEX -eq 1 ]; then

@@ -252,6 +252,41 @@
             "metadata": {
                 "description": "Specifies a comma separated preferred region list."
             }
+        },
+        "waitForFaultToStartInSec": {
+            "type": "int",
+            "defaultValue": -1,
+		    "metadata": {
+                "description": "Specifies amount of time in sec after workload start when fault introduce. -1 will disable the fault and runs regular benchmarking."
+            }
+        },
+        "durationOfFaultInSec": {
+            "type": "int",
+            "defaultValue": -1,
+		    "metadata": {
+                "description": "Specifies amount of time in sec for the duration of fault. -1 will disable the fault and runs regular benchmarking."
+            }
+        },
+        "faultRegion": {
+            "type": "string",
+            "defaultValue": "",
+		    "metadata": {
+                "description": "Specifies the region in which fault will be introduced, example West US. If nothing is specified, the Primary region will be picked."
+            }
+        },
+        "dropProbability": {
+            "type": "string",
+            "defaultValue": "0",
+		    "metadata": {
+                "description": "Specifies the percentate from 0.00 to 1.0 for packets drop during fault."
+            }
+        },
+        "delayInMs": {
+            "type": "int",
+            "defaultValue": -1,
+		    "metadata": {
+                "description": "Specifies amount of time in ms for adding delay to the network during the fault."
+            }
         }
     },
     "variables": {
@@ -458,7 +493,7 @@
                 "settings": {
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat('DB_BINDING_NAME=',parameters('ycsbDatabaseBindingName'),' ','ADMIN_USER_NAME=',parameters('adminUsername'),' ','BENCHMARKING_TOOLS_URL=',variables('benchmarkingToolsURL'),' ','BENCHMARKING_TOOLS_BRANCH_NAME=',parameters('benchmarkingToolsBranchName'),' ','YCSB_GIT_REPO_URL=',variables('ycsbGitHubRepoUrl'),' ','GUID=',parameters('guidValue'),' ','YCSB_GIT_BRANCH_NAME=',parameters('ycsbGitHubBranchName'),' ','TARGET_OPERATIONS_PER_SECOND=',parameters('targetOperationsPerSecond'),' ','THREAD_COUNT=',parameters('threads'),' ','YCSB_OPERATION_COUNT=',parameters('ycsbOperationCount'), ' ','WORKLOAD_TYPE=',parameters('workloadType'),' ','VM_NAME=',variables('vmName'),copyIndex(1), ' ','RESULT_STORAGE_CONNECTION_STRING=','\"',parameters('resultsStorageConnectionString'),'\"',' ','COSMOS_URI=','\"',parameters('cosmosURI'),'\"', ' ','COSMOS_KEY=',parameters('cosmosKey'), ' ','VM_COUNT=',parameters('vmCount'), ' ','USE_GATEWAY=',parameters('useGateway'), ' ','DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS=',parameters('diagnosticsLatencyThresholdInMS'), ' ','YCSB_RECORD_COUNT=',parameters('ycsbRecordCount'), ' ','WRITE_ONLY_OPERATION=',parameters('writeOnlyOperation'), ' ','READ_PROPORTION=',parameters('readproportion'), ' ','SCAN_PROPORTION=',parameters('scanproportion'), ' ','UPDATE_PROPORTION=',parameters('updateproportion'), ' ','INSERT_PROPORTION=',parameters('insertproportion'), ' ','REQUEST_DISTRIBUTION=',parameters('requestdistribution'), ' ','INSERT_ORDER=',parameters('insertorder'), ' ','CUSTOM_SCRIPT_URL=',variables('customScriptUrl'), ' ','MACHINE_INDEX=',copyIndex(1), ' ','INCLUDE_EXCEPTION_STACK=',parameters('includeExceptionStackInLog'), ' ','FIELD_COUNT=',parameters('fieldcount'), ' ','SKIP_LOAD_PHASE=',parameters('skipLoadPhase'), ' ','PREFERRED_REGION_LIST=','\"',parameters('preferredRegionList'),'\"',' ','APP_INSIGHT_CONN_STR=','\"',parameters('appInsightConnectionString'),'\"',' ', 'bash ',variables('vmScriptExtensionScriptName'))]",
+                    "commandToExecute": "[concat('DB_BINDING_NAME=',parameters('ycsbDatabaseBindingName'),' ','ADMIN_USER_NAME=',parameters('adminUsername'),' ','BENCHMARKING_TOOLS_URL=',variables('benchmarkingToolsURL'),' ','BENCHMARKING_TOOLS_BRANCH_NAME=',parameters('benchmarkingToolsBranchName'),' ','YCSB_GIT_REPO_URL=',variables('ycsbGitHubRepoUrl'),' ','GUID=',parameters('guidValue'),' ','YCSB_GIT_BRANCH_NAME=',parameters('ycsbGitHubBranchName'),' ','TARGET_OPERATIONS_PER_SECOND=',parameters('targetOperationsPerSecond'),' ','THREAD_COUNT=',parameters('threads'),' ','YCSB_OPERATION_COUNT=',parameters('ycsbOperationCount'), ' ','WORKLOAD_TYPE=',parameters('workloadType'),' ','VM_NAME=',variables('vmName'),copyIndex(1), ' ','RESULT_STORAGE_CONNECTION_STRING=','\"',parameters('resultsStorageConnectionString'),'\"',' ','COSMOS_URI=','\"',parameters('cosmosURI'),'\"', ' ','COSMOS_KEY=',parameters('cosmosKey'), ' ','VM_COUNT=',parameters('vmCount'), ' ','USE_GATEWAY=',parameters('useGateway'), ' ','DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS=',parameters('diagnosticsLatencyThresholdInMS'), ' ','YCSB_RECORD_COUNT=',parameters('ycsbRecordCount'), ' ','WRITE_ONLY_OPERATION=',parameters('writeOnlyOperation'), ' ','READ_PROPORTION=',parameters('readproportion'), ' ','SCAN_PROPORTION=',parameters('scanproportion'), ' ','UPDATE_PROPORTION=',parameters('updateproportion'), ' ','INSERT_PROPORTION=',parameters('insertproportion'), ' ','REQUEST_DISTRIBUTION=',parameters('requestdistribution'), ' ','INSERT_ORDER=',parameters('insertorder'), ' ','CUSTOM_SCRIPT_URL=',variables('customScriptUrl'), ' ','MACHINE_INDEX=',copyIndex(1), ' ','INCLUDE_EXCEPTION_STACK=',parameters('includeExceptionStackInLog'), ' ','FIELD_COUNT=',parameters('fieldcount'), ' ','SKIP_LOAD_PHASE=',parameters('skipLoadPhase'), ' ','WAIT_FOR_FAULT_TO_START_IN_SEC=',parameters('waitForFaultToStartInSec'), ' ','DURATION_OF_FAULT_IN_SEC=',parameters('durationOfFaultInSec'), ' ','DROP_PROBABILITY=',parameters('dropProbability'), ' ','FAULT_REGION=','\"',parameters('faultRegion'),'\"',' ','DELAY_IN_MS=',parameters('delayInMs'), ' ','PREFERRED_REGION_LIST=','\"',parameters('preferredRegionList'),'\"',' ','APP_INSIGHT_CONN_STR=','\"',parameters('appInsightConnectionString'),'\"',' ', 'bash ',variables('vmScriptExtensionScriptName'))]",
                     "fileUris": [ "[concat(variables('vmScriptExtensionScriptURL'))]" ]
                 }
             },

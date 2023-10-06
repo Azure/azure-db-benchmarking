@@ -10,3 +10,11 @@ runcmd:
   - wget https://aka.ms/downloadazcopy-v10-linux
   - tar -xvf downloadazcopy-v10-linux
   - sudo cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
+  - sudo apt-get update
+  - sudo apt-get install -y wget apt-transport-https software-properties-common
+  - wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
+  - sudo dpkg -i packages-microsoft-prod.deb
+  - rm packages-microsoft-prod.deb
+  - sudo apt-get update
+  - sudo apt-get install -y powershell
+  - sudo apt install net-tools
