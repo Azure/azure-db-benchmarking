@@ -1,4 +1,4 @@
-# Read workload with network outage
+# Simulate network outage for a read workload with multi-region account
 
 This recipe encapsulates a read workload that executes 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK detects the outage, marks the region as unavailable for reads and retries the requests on the next available region. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
 
