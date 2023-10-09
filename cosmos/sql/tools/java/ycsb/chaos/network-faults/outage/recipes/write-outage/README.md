@@ -1,4 +1,4 @@
-# Simulate network outage for a write workload with multi-master account
+# Simulate network outage for a write workload with multi-region account
 
 This recipe encapsulates a create only workload that executes for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK marks the region as unavailable for writes and retries the create operations on the next available region. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
 
@@ -25,7 +25,7 @@ This recipe encapsulates a create only workload that executes for 20-25 minutes.
    | Container Name | usertable | 
    | Partition Key  | /id |
    | Container Throughput Type | Manual |  
-   | Container throughput | 400 RU/s |
+   | Container throughput | 2000 RU/s |
 
 2. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) 
 3. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
