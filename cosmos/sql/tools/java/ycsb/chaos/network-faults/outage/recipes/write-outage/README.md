@@ -24,7 +24,6 @@ This recipe encapsulates a create only workload that executes for 20-25 minutes.
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
-   | Container Throughput Type | Manual |  
    | Container throughput | 2000 RU/s |
 
 2. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) 

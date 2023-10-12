@@ -25,8 +25,7 @@ This recipe encapsulates a read workload that executes 20-25 minutes. Around 5 m
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
-   | Container Throughput Type | Manual |  
-   | Container throughput | 400 RU/s |
+   | Container throughput | 2000 RU/s |
    
 
 

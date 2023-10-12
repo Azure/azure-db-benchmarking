@@ -26,8 +26,7 @@ This recipe encapsulates a mixed workload consisting of both read and patch oper
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
-   | Container Throughput Type | Manual |  
-   | Container throughput | 400 RU/s |
+   | Container throughput | 2000 RU/s |
 
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) 
 4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
