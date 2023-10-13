@@ -133,13 +133,6 @@
             "type": "int",
             "defaultValue": 30
         },
-        "targetOperationsPerSecond": {
-            "type": "int",
-            "defaultValue": 300,
-            "metadata": {
-                "description": "Specifies the maximum number of operations each client pefroms per second"
-            }
-        },
         "ycsbOperationCount": {
             "type": "int",
             "defaultValue": 360000,
@@ -277,10 +270,7 @@
                     },
                     "ycsbRecordCount": {
                         "value": "[parameters('ycsbRecordCount')]"
-                    },
-                    "targetOperationsPerSecond": {
-                        "value": "[parameters('targetOperationsPerSecond')]"
-                    },
+                    },           
                     "ycsbOperationCount": {
                         "value": "[parameters('ycsbOperationCount')]"
                     },
