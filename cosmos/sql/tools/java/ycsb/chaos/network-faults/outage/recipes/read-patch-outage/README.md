@@ -9,7 +9,6 @@ This recipe encapsulates a mixed workload consisting of both read and patch oper
 | Database | Cosmos SQL API |
 | Benchmarking tool | YCSB |
 | Workload | Read & Patch (80:20) |
-| Max RPS | 50 |
 | Duration | 20-25 minutes |
 | Fault Type | Packet Drop |
 | Fault Start | 5 Minutes after the workload starts |
