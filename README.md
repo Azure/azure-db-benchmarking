@@ -42,7 +42,8 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
      - [/cosmos/scripts](/cosmos/scripts)  Scripts for framework agent and result aggregation
      - [/cosmos/infra](/cosmos/infra)  Common resource creation templates  
      - [/cosmos/sql/tools/java/ycsb/recipes](/cosmos/sql/tools/java/ycsb/recipes) SQL API YCSB Recipes 
-     - [/cosmos/mongoapi/tools/java/ycsb/recipes](/cosmos/mongoapi/tools/java/ycsb/recipes) Mongo API YCSB Recipes 
+     - [/cosmos/mongoapi/tools/java/ycsb/recipes](/cosmos/mongoapi/tools/java/ycsb/recipes) Mongo API YCSB Recipes
+     - [/cosmos/sql/tools/java/ycsb/chaos/network-faults](/cosmos/mongoapi/tools/java/ycsb/chaos/network-faults) SQL API Chaos Recipes 
 
 
 ## Getting Started
@@ -51,7 +52,7 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
    | :--:  | :--:  | :--:  |
    | Cosmos SQL API | YCSB | [Getting Started ](/cosmos/sql/tools/java/ycsb/recipes)
    | Cosmos Mongo API | YCSB | [Getting Started ](/cosmos/mongoapi/tools/java/ycsb/recipes)
-   | Cosmos SQL API(Chaos) | YCSB | [Getting Started](cosmos/sql/tools/java/ycsb/chaos)
+   | Cosmos SQL API(Chaos) | YCSB | [Getting Started](cosmos/sql/tools/java/ycsb/chaos/network-faults)
 
 
 ## Contributing
