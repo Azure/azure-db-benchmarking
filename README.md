@@ -43,7 +43,7 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
      - [/cosmos/infra](/cosmos/infra)  Common resource creation templates  
      - [/cosmos/sql/tools/java/ycsb/recipes](/cosmos/sql/tools/java/ycsb/recipes) SQL API YCSB Recipes 
      - [/cosmos/mongoapi/tools/java/ycsb/recipes](/cosmos/mongoapi/tools/java/ycsb/recipes) Mongo API YCSB Recipes
-     - [/cosmos/sql/tools/java/ycsb/chaos/network-faults](/cosmos/mongoapi/tools/java/ycsb/chaos/network-faults) SQL API Chaos Recipes 
+     - [/cosmos/sql/tools/java/ycsb/chaos/network-faults](/cosmos/sql/tools/java/ycsb/chaos/network-faults) SQL API Chaos Recipes 
 
 
 ## Getting Started
