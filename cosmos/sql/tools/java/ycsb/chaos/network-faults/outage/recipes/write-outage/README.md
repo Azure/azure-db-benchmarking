@@ -1,4 +1,4 @@
-# Simulate network outage for a write workload with multi-region account
+# Simulate network outage for a write workload with multi-master account
 
 This recipe encapsulates a create only workload that executes for 20-25 minutes. Around 5 minutes into the execution a regional outage is simulated by dropping all the packets bound to the specified region. The client/SDK marks the region as unavailable for writes and retries the create operations on the next available region. Once the packet drops end, approximately in 5 minutes, all the requests get routed to the primary region.
 
