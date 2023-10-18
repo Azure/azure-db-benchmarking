@@ -25,7 +25,7 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
-   | Container throughput | 2000 RU/s |
+   | Container throughput | 3000 RU/s |
 
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) 
 4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
