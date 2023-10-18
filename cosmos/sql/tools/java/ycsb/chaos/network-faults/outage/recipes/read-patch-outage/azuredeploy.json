@@ -124,7 +124,7 @@
         },
         "threads": {
             "type": "int",
-            "defaultValue": 4,
+            "defaultValue": 1,
             "metadata": {
                 "description": "Specifies the threads per client"
             }
@@ -133,16 +133,9 @@
             "type": "int",
             "defaultValue": 30
         },
-        "targetOperationsPerSecond": {
-            "type": "int",
-            "defaultValue": 50,
-            "metadata": {
-                "description": "Specifies the maximum number of operations each client pefroms per second"
-            }
-        },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 60000,
+            "defaultValue": 390000,
             "metadata": {
                 "description": "Specifies the total number of operations each client perfoms"
             }
@@ -277,9 +270,6 @@
                     },
                     "ycsbRecordCount": {
                         "value": "[parameters('ycsbRecordCount')]"
-                    },
-                    "targetOperationsPerSecond": {
-                        "value": "[parameters('targetOperationsPerSecond')]"
                     },
                     "ycsbOperationCount": {
                         "value": "[parameters('ycsbOperationCount')]"

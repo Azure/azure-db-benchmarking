@@ -128,16 +128,9 @@
                 "description": "Specifies the threads per client"
             }
         },
-        "targetOperationsPerSecond": {
-            "type": "int",
-            "defaultValue": -1,
-            "metadata": {
-                "description": "Specifies the maximum number of operations each client pefroms per second"
-            }
-        },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 206400,
+            "defaultValue": 206000,
             "metadata": {
                 "description": "Specifies the total number of operations each client perfoms"
             }
@@ -262,10 +255,7 @@
                     },
                     "threads": {
                         "value": "[parameters('threads')]"
-                    },
-                    "targetOperationsPerSecond": {
-                        "value": "[parameters('targetOperationsPerSecond')]"
-                    },
+                    },  
                     "ycsbOperationCount": {
                         "value": "[parameters('ycsbOperationCount')]"
                     },

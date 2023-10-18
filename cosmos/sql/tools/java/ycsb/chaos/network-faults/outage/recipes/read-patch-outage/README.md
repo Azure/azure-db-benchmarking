@@ -9,7 +9,6 @@ This recipe encapsulates a mixed workload consisting of both read and patch oper
 | Database | Cosmos SQL API |
 | Benchmarking tool | YCSB |
 | Workload | Read & Patch (80:20) |
-| Max RPS | 50 |
 | Duration | 20-25 minutes |
 | Fault Type | Packet Drop |
 | Fault Start | 5 Minutes after the workload starts |
@@ -26,8 +25,7 @@ This recipe encapsulates a mixed workload consisting of both read and patch oper
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
-   | Container Throughput Type | Manual |  
-   | Container throughput | 400 RU/s |
+   | Container throughput | 3000 RU/s |
 
 3. Create a [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal) 
 4. Create a [resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal) in the same region as the Cosmos DB account 
@@ -54,6 +52,12 @@ This recipe encapsulates a mixed workload consisting of both read and patch oper
 
 ## Output
 You can visualize the total request count by region by creating a [Azure Monitor metrics chart](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started). You will initially see the requests going to the first region in the "Preferred Regions List" before the requests getting routed to the next available region in the "Preferred Regions List" assuming that the fault is active in the first region and the account is configured for multi-master.
+
+### Patch
+![image](../../../../../../../../../../images/chaos/mixed-patch-network-outage.png)
+
+### Read
+ ![image](../../../../../../../../../../images/chaos/mixed-read-network-outage.png)
 
 | Type | Location |
 | --- | --- |

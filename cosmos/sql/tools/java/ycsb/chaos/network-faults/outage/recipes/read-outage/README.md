@@ -25,8 +25,7 @@ This recipe encapsulates a read workload that executes 20-25 minutes. Around 5 m
    | Database Name | ycsb | 
    | Container Name | usertable | 
    | Partition Key  | /id |
-   | Container Throughput Type | Manual |  
-   | Container throughput | 400 RU/s |
+   | Container throughput | 2000 RU/s |
    
 
 
@@ -56,6 +55,8 @@ This recipe encapsulates a read workload that executes 20-25 minutes. Around 5 m
 
 ## Output
 You can visualize the total request count by region by creating a [Azure Monitor metrics chart](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started) for Azure Cosmos DB. You will initially see the requests going to the first region in the "Preferred Regions List" before the requests getting routed to the next available region in the "Preferred Regions List" assuming that the fault is active in the first region.
+
+  ![image](../../../../../../../../../../images/chaos/read-network-outage.png)
 
 The job status and results will be available in the following locations in the storage account provided
 | Type | Location |
