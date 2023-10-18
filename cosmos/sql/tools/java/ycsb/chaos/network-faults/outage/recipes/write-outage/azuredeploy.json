@@ -130,7 +130,7 @@
         },
         "ycsbOperationCount": {
             "type": "int",
-            "defaultValue": 206400,
+            "defaultValue": 206000,
             "metadata": {
                 "description": "Specifies the total number of operations each client perfoms"
             }
