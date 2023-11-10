@@ -29,6 +29,28 @@ param (
     [string] $waitForFaultToStartInSec
 )
 
+function Show-Help {
+    Write-Host "This script introduces network faults into a Cosmos DB environment for testing purposes."
+    Write-Host "Parameters:"
+    Write-Host "  -endpoint: The Cosmos DB endpoint."
+    Write-Host "  -masterKey: The master key for the Cosmos DB account."
+    Write-Host "  -databaseId: The ID of the database."
+    Write-Host "  -containerId: The ID of the container."
+    Write-Host "  -durationOfFaultInSec: The duration of the fault in seconds."
+    Write-Host "  -dropPercentage: The percentage of packets to drop (optional)."
+    Write-Host "  -delayInMs: The delay to introduce in milliseconds (optional)."
+    Write-Host "  -faultRegion: The region where the fault should be introduced."
+    Write-Host "  -waitForFaultToStartInSec: The time to wait before starting the fault in seconds (optional)."
+    Write-Host "Note: Both dropPercentage and delayInMs cannot be null together."
+    Write-Host "Usage:"
+    Write-Host "  .\chaos_script.ps1 -endpoint <endpoint> -masterKey <masterKey> -databaseId <databaseId> -containerId <containerId> -durationOfFaultInSec <durationOfFaultInSec> -faultRegion <faultRegion> [-dropPercentage <dropPercentage>] [-delayInMs <delayInMs>] [-waitForFaultToStartInSec <waitForFaultToStartInSec>]"
+}
+
+if (!$endpoint -or !$masterKey -or !$databaseId -or !$containerId -or !$durationOfFaultInSec -or !$faultRegion) {
+    Show-Help
+    return
+}
+
 if (!$dropPercentage -and !$delayInMs)
 {
     throw "Both dropPercentage and delayInMs cannot be null together"

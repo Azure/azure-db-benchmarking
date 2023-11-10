@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$fault_region" ]; then
+  echo "Error: fault_region parameter cannot be null. Please provide a value for this parameter."
+  exit 1
+fi
+
 fetch_host_port() {
   url=$1
   # extract the host and port
@@ -30,6 +35,25 @@ install_powershell() {
   # Start PowerShell
   pwsh
 }
+if [ "$1" == "-h" | "$1" == "--help" ]; then
+  echo "Usage: ./chaos_script.sh [OPTIONS]"
+  echo "Simulates network faults by dropping packets and adding latency."
+  echo
+  echo "Options:"
+  echo "  --endpoint ENDPOINT               The endpoint to target."
+  echo "  --databaseid DATABASEID           The ID of the database."
+  echo "  --containerid CONTAINERID         The ID of the container."
+  echo "  --wait_for_fault_to_start_in_sec  The time to wait before starting the fault, in seconds."
+  echo "  --duration_of_fault_in_sec        The duration of the fault, in seconds."
+  echo "  --fault_region FAULT_REGION       The region where the fault should occur."
+  echo "  --drop_probability DROP_PROB      The probability of dropping a packet (0-1)."
+  echo "  --delay_in_ms DELAY               The delay to add to packets, in milliseconds."
+  echo "  --help                            Display this help message."
+  echo
+  echo "Example:"
+  echo "  ./chaos_script.sh --endpoint http://example.com --databaseid mydatabase --containerid mycontainer --wait_for_fault_to_start_in_sec 10 --duration_of_fault_in_sec 60 --fault_region uswest --drop_probability 0.1 --delay_in_ms 100"
+  exit 0
+fi
 
 if ! command -v pwsh &>/dev/null; then
   install_powershell
