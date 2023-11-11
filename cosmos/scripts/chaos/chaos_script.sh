@@ -62,6 +62,12 @@ while getopts ":h" option; do
    esac
 done
 
+if [ -z "$fault_region" ]; then
+  echo "Error: The fault_region environment variable is not set."
+  echo "Please set the fault_region environment variable and try again."
+  exit 1
+fi
+
 if ! command -v pwsh &>/dev/null; then
   install_powershell
 fi
