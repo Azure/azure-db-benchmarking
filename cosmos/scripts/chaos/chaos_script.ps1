@@ -170,3 +170,6 @@ if ($durationOfFaultInSec)
 
 # Clearing the fault
 Stop-Process -Name clumsy
+
+# Uninstall Clumsy
+choco uninstall clumsy -y
