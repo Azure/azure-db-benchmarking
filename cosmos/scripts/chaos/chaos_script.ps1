@@ -1,3 +1,31 @@
+<#
+.SYNOPSIS
+This script introduces network faults into a Cosmos DB environment for testing purposes.
+.DESCRIPTION
+The script takes several parameters to configure the fault injection, including the endpoint, master key, database ID, container ID, duration of fault, drop percentage, delay in milliseconds, fault region, and wait time for fault to start. It then uses these parameters to introduce network faults using the Clumsy utility.
+.PARAMETER endpoint
+The endpoint for the Cosmos DB instance.
+.PARAMETER masterKey
+The master key for the Cosmos DB instance.
+.PARAMETER databaseId
+The ID of the database in the Cosmos DB instance.
+.PARAMETER containerId
+The ID of the container in the database.
+.PARAMETER durationOfFaultInSec
+The duration of the network fault in seconds.
+.PARAMETER dropPercentage
+The percentage of packets to drop (optional).
+.PARAMETER delayInMs
+The delay to introduce in milliseconds (optional).
+.PARAMETER faultRegion
+The region where the fault should be introduced.
+.PARAMETER waitForFaultToStartInSec
+The time to wait before starting the fault in seconds (optional).
+.EXAMPLE
+.\chaos_script.ps1 -endpoint "https://my-cosmos-db.documents.azure.com:443/" -masterKey "my-master-key" -databaseId "my-database" -containerId "my-container" -durationOfFaultInSec 60 -dropPercentage 50 -delayInMs 200 -faultRegion "West US" -waitForFaultToStartInSec 10
+This example introduces a network fault that drops 50% of packets and introduces a 200ms delay for 60 seconds in the "West US" region of the specified Cosmos DB instance. It waits 10 seconds before starting the fault.
+#>
+
 param (
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
@@ -28,28 +56,6 @@ param (
 
     [string] $waitForFaultToStartInSec
 )
-
-function Show-Help {
-    Write-Host "This script introduces network faults into a Cosmos DB environment for testing purposes."
-    Write-Host "Parameters:"
-    Write-Host "  -endpoint: The Cosmos DB endpoint."
-    Write-Host "  -masterKey: The master key for the Cosmos DB account."
-    Write-Host "  -databaseId: The ID of the database."
-    Write-Host "  -containerId: The ID of the container."
-    Write-Host "  -durationOfFaultInSec: The duration of the fault in seconds."
-    Write-Host "  -dropPercentage: The percentage of packets to drop (optional)."
-    Write-Host "  -delayInMs: The delay to introduce in milliseconds (optional)."
-    Write-Host "  -faultRegion: The region where the fault should be introduced."
-    Write-Host "  -waitForFaultToStartInSec: The time to wait before starting the fault in seconds (optional)."
-    Write-Host "Note: Both dropPercentage and delayInMs cannot be null together."
-    Write-Host "Usage:"
-    Write-Host "  .\chaos_script.ps1 -endpoint <endpoint> -masterKey <masterKey> -databaseId <databaseId> -containerId <containerId> -durationOfFaultInSec <durationOfFaultInSec> -faultRegion <faultRegion> [-dropPercentage <dropPercentage>] [-delayInMs <delayInMs>] [-waitForFaultToStartInSec <waitForFaultToStartInSec>]"
-}
-
-if (!$endpoint -or !$masterKey -or !$databaseId -or !$containerId -or !$durationOfFaultInSec -or !$faultRegion) {
-    Show-Help
-    return
-}
 
 if (!$dropPercentage -and !$delayInMs)
 {
