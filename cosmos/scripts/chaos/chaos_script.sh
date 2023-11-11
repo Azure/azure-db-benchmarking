@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$fault_region" ]; then
+  echo "Error: fault_region parameter cannot be null. Please provide a value for this parameter."
+  exit 1
+fi
+
 fetch_host_port() {
   url=$1
   # extract the host and port
@@ -30,37 +35,25 @@ install_powershell() {
   # Start PowerShell
   pwsh
 }
-
-print_help() {
-  echo "This script is a network fault injection system that introduces network faults such as packet loss and delay to specific endpoints for testing purposes."
-  echo "Parameters: The script uses several environment variables as parameters. These include endpoint, databaseid, containerid, wait_for_fault_to_start_in_sec, duration_of_fault_in_sec, fault_region, drop_probability, and delay_in_ms. These parameters need to be set in the environment before running the script."
+if [ "$1" == "-h" | "$1" == "--help" ]; then
+  echo "Usage: ./chaos_script.sh [OPTIONS]"
+  echo "Simulates network faults by dropping packets and adding latency."
   echo
-  echo "Example: To execute the script, you would typically do the following in a bash shell:
-        
-        # Set the environment variables
-        export endpoint="your_endpoint"
-        export databaseid="your_databaseid"
-        export containerid="your_containerid"
-        export wait_for_fault_to_start_in_sec="your_wait_time"
-        export duration_of_fault_in_sec="your_duration"
-        export fault_region="your_fault_region"
-        export drop_probability="your_drop_probability"
-        export delay_in_ms="your_delay"
-
-        # Make the script executable
-        chmod +x chaos_script.sh
-
-        # Run the script
-        sudo ./chaos_script.sh"
-}
-
-while getopts ":h" option; do
-   case $option in
-      h) # display Help
-         print_help
-         exit;;
-   esac
-done
+  echo "Options:"
+  echo "  --endpoint ENDPOINT               The endpoint to target."
+  echo "  --databaseid DATABASEID           The ID of the database."
+  echo "  --containerid CONTAINERID         The ID of the container."
+  echo "  --wait_for_fault_to_start_in_sec  The time to wait before starting the fault, in seconds."
+  echo "  --duration_of_fault_in_sec        The duration of the fault, in seconds."
+  echo "  --fault_region FAULT_REGION       The region where the fault should occur."
+  echo "  --drop_probability DROP_PROB      The probability of dropping a packet (0-1)."
+  echo "  --delay_in_ms DELAY               The delay to add to packets, in milliseconds."
+  echo "  --help                            Display this help message."
+  echo
+  echo "Example:"
+  echo "  ./chaos_script.sh --endpoint http://example.com --databaseid mydatabase --containerid mycontainer --wait_for_fault_to_start_in_sec 10 --duration_of_fault_in_sec 60 --fault_region uswest --drop_probability 0.1 --delay_in_ms 100"
+  exit 0
+fi
 
 if ! command -v pwsh &>/dev/null; then
   install_powershell
