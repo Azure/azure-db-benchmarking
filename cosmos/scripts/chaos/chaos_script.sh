@@ -31,36 +31,54 @@ install_powershell() {
   pwsh
 }
 
-print_help() {
-  echo "This script is a network fault injection system that introduces network faults such as packet loss and delay to specific endpoints for testing purposes."
-  echo "Parameters: The script uses several environment variables as parameters. These include endpoint, databaseid, containerid, wait_for_fault_to_start_in_sec, duration_of_fault_in_sec, fault_region, drop_probability, and delay_in_ms. These parameters need to be set in the environment before running the script."
-  echo
-  echo "Example: To execute the script, you would typically do the following in a bash shell:
-        
-        # Set the environment variables
-        export endpoint="your_endpoint"
-        export databaseid="your_databaseid"
-        export containerid="your_containerid"
-        export wait_for_fault_to_start_in_sec="your_wait_time"
-        export duration_of_fault_in_sec="your_duration"
-        export fault_region="your_fault_region"
-        export drop_probability="your_drop_probability"
-        export delay_in_ms="your_delay"
+while getopts "e:m:d:c:w:t:r:p:l:" opt;
+do
+    case "$opt" in
+    e)  endpoint=$OPTARG;;
+    m)  masterkey=$OPTARG;;
+    d)  databaseid=$OPTARG;;
+    c)  containerid=$OPTARG;;
+    w)  wait_for_fault_to_start_in_sec=$OPTARG;;
+    t)  duration_of_fault_in_sec=$OPTARG;;
+    r)  fault_region=$OPTARG;;
+    p)  drop_probability=$OPTARG;;
+    l)  delay_in_ms=$OPTARG;;
+    esac
+done
 
-        # Make the script executable
-        chmod +x chaos_script.sh
-
-        # Run the script
-        sudo ./chaos_script.sh"
+usage(){
+  echo "Usage: ./chaos_script.sh -e <endpoint> -d <databaseid> -c <containerid> -w <wait_for_fault_to_start_in_sec> -t <duration_of_fault_in_sec> -r <fault_region> -p <drop_probability> -l <delay_in_ms>"
 }
 
-while getopts ":h" option; do
-   case $option in
-      h) # display Help
-         print_help
-         exit;;
-   esac
-done
+if [ -z "$endpoint" ]; then
+  echo "The endpoint for the Cosmos DB instance is not set. Please pass it with -e option."
+  usage
+  exit 1
+fi
+
+if [ -z "$masterkey" ]; then
+  echo "The masterkey for the Cosmos DB instance is not set. Please pass it with -m option."
+  usage
+  exit 1
+fi
+
+if [ -z "$databaseid" ]; then
+  echo "The databaseid for the Cosmos DB instance is not set. Please pass it with -d option."
+  usage
+  exit 1
+fi
+
+if [ -z "$containerid" ]; then
+  echo "The containerid for the Cosmos DB instance is not set. Please pass it with -c option."
+  usage
+  exit 1
+fi
+
+if [ -z "$duration_of_fault_in_sec" ]; then
+  echo "The duration_of_fault_in_sec is not set. Please pass it with -t option."
+  usage
+  exit 1
+fi
 
 if [ -z "$fault_region" ]; then
   echo "Error: The fault_region environment variable is not set."
