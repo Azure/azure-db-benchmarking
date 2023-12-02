@@ -78,19 +78,19 @@ def parse_line_for_formatting(line, writer):
         elif 'Count=' in metrics:
             count = metrics.replace('Count=', '')
         elif 'Max=' in metrics:
-            max_in_milli_sec = metrics.replace('Max=', '')/1000
+            max_in_milli_sec = str(float(metrics.replace('Max=', '')) / 1000, '.4f')
         elif 'Min=' in metrics:
-            min_in_milli_sec = metrics.replace('Min=', '')/1000
+            min_in_milli_sec = str(float(metrics.replace('Min=', '')) / 1000, '.4f')
         elif 'Avg=' in metrics:
-            avg_in_milli_sec = metrics.replace('Avg=', '')/1000
+            avg_in_milli_sec = str(float(metrics.replace('Avg=', '')) / 1000, '.4f')
         elif '99.99=' in metrics:
-            p9999_in_milli_sec = metrics.replace('99.99=', '')/1000
+            p9999_in_milli_sec = str(float(metrics.replace('99.99=', '')) / 1000, '.4f')
         elif '99.9=' in metrics:
-            p999_in_milli_sec = metrics.replace('99.9=', '')/1000
+            p999_in_milli_sec = str(float(metrics.replace('99.9=', '')) / 1000, '.4f')
         elif '99=' in metrics:
-            p99_in_milli_sec = metrics.replace('99=', '')/1000
+            p99_in_milli_sec = str(float(metrics.replace('99=', '')) / 1000, '.4f')
         elif '90=' in metrics:
-            p90_in_milli_sec = metrics.replace('90=', '')/1000
+            p90_in_milli_sec = str(float(metrics.replace('90=', '')) / 1000, '.4f')
 
     row_in_csv = [date, time, operation, rps, count, max_in_milli_sec, min_in_milli_sec, avg_in_milli_sec,
                   p90_in_milli_sec, p99_in_milli_sec, p999_in_milli_sec, p9999_in_milli_sec]
