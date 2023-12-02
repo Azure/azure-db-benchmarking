@@ -1,6 +1,22 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
+"""
+This script aggregates results from multiple log files. It takes a directory containing log files as input and outputs a CSV file containing aggregated metrics from the log files.
+
+Usage:
+    python aggregate_multiple_files_result.py <FilesDirectory>
+
+Arguments:
+    FilesDirectory: The directory containing the log files to aggregate.
+
+Raises:
+    Exception: If the FilesDirectory argument is not provided.
+
+Outputs:
+    A CSV file named 'aggregation.csv' containing aggregated metrics from the log files.
+"""
+
 import csv
 import glob
 import os
@@ -12,6 +28,7 @@ def main():
         raise Exception("Input log files directory not provided. Syntax = 'python aggregate_multiple_files_result.py "
                         "<FilesDirectory>'")
     path = sys.argv[1]
+    # Initialize count and throughput variables
     total_read_count = 0
     total_read_failed_count = 0
     total_update_count = 0
@@ -22,10 +39,14 @@ def main():
     total_scan_failed_count = 0
     total_throughput = 0
 
+    # Loop over all log files in the provided directory
     for filename in glob.glob(os.path.join(path, '*.log')):
         with open(os.path.join(os.getcwd(), filename), 'r') as f:  # open in readonly mode
             current_file = open(filename, 'r')
             lines = current_file.readlines()
+            # For each line in the current log file, check if it contains certain keywords
+            # that indicate the type of operation and whether the operation was successful or failed
+            # Then increment the corresponding count variable by the number of operations indicated in the line
             for line in lines:
                 if '[READ], Operations,' in line:
                     total_read_count += int(line.replace('[READ], Operations, ', ''))
@@ -46,6 +67,7 @@ def main():
                 elif '[OVERALL], Throughput(ops/sec), ' in line:
                     total_throughput += float(line.replace('[OVERALL], Throughput(ops/sec), ', ''))
 
+    # Initialize latency variables
     total_read_avg = 0
     total_read_p95 = 0
     total_read_p99 = 0
@@ -94,6 +116,7 @@ def main():
     total_scan_failed_min = sys.maxsize
     total_scan_failed_max = 0
 
+    # Loop over all log files in the provided directory again
     for filename in glob.glob(os.path.join(path, '*.log')):
         with open(os.path.join(os.getcwd(), filename), 'r') as f:  # open in readonly mode
             current_file = open(filename, 'r')
@@ -107,6 +130,10 @@ def main():
             current_scan_operation = 0
             current_scan_failed_operation = 0
 
+            # For each line in the current log file, check if it contains certain keywords
+            # that indicate the type of operation and whether the operation was successful or failed
+            # Then calculate the weighted average, 95th percentile, and 99th percentile latencies for the current
+            # operation and update the minimum and maximum latencies if necessary.
             for line in lines:
                 if '[READ], ' in line and total_read_count == 0:
                     continue
@@ -324,52 +351,108 @@ def main():
                     if total_scan_failed_max < weighted_current_max:
                         total_scan_failed_max = weighted_current_max
 
-    # create the csv writer
+    # Convert read times to milliseconds
+    total_read_avg_ms = total_read_avg / 1000
+    total_read_p95_ms = total_read_p95 / 1000
+    total_read_p99_ms = total_read_p99 / 1000
+    total_read_min_ms = total_read_min / 1000
+    total_read_max_ms = total_read_max / 1000
+
+    # Convert read failed times to milliseconds
+    total_read_failed_avg_ms = total_read_failed_avg / 1000
+    total_read_failed_p95_ms = total_read_failed_p95 / 1000
+    total_read_failed_p99_ms = total_read_failed_p99 / 1000
+    total_read_failed_min_ms = total_read_failed_min / 1000
+    total_read_failed_max_ms = total_read_failed_max / 1000
+
+    # Convert update times to milliseconds
+    total_update_avg_ms = total_update_avg / 1000
+    total_update_p95_ms = total_update_p95 / 1000
+    total_update_p99_ms = total_update_p99 / 1000
+    total_update_min_ms = total_update_min / 1000
+    total_update_max_ms = total_update_max / 1000
+
+    # Convert update failed times to milliseconds
+    total_update_failed_avg_ms = total_update_failed_avg / 1000
+    total_update_failed_p95_ms = total_update_failed_p95 / 1000
+    total_update_failed_p99_ms = total_update_failed_p99 / 1000
+    total_update_failed_min_ms = total_update_failed_min / 1000
+    total_update_failed_max_ms = total_update_failed_max / 1000
+
+    # Convert write times to milliseconds
+    total_write_avg_ms = total_write_avg / 1000
+    total_write_p95_ms = total_write_p95 / 1000
+    total_write_p99_ms = total_write_p99 / 1000
+    total_write_min_ms = total_write_min / 1000
+    total_write_max_ms = total_write_max / 1000
+
+    # Convert write failed times to milliseconds
+    total_write_failed_avg_ms = total_write_failed_avg / 1000
+    total_write_failed_p95_ms = total_write_failed_p95 / 1000
+    total_write_failed_p99_ms = total_write_failed_p99 / 1000
+    total_write_failed_min_ms = total_write_failed_min / 1000
+    total_write_failed_max_ms = total_write_failed_max / 1000
+
+    # Convert scan times to milliseconds
+    total_scan_avg_ms = total_scan_avg / 1000
+    total_scan_p95_ms = total_scan_p95 / 1000
+    total_scan_p99_ms = total_scan_p99 / 1000
+    total_scan_min_ms = total_scan_min / 1000
+    total_scan_max_ms = total_scan_max / 1000
+
+    # Convert scan failed times to milliseconds
+    total_scan_failed_avg_ms = total_scan_failed_avg / 1000
+    total_scan_failed_p95_ms = total_scan_failed_p95 / 1000
+    total_scan_failed_p99_ms = total_scan_failed_p99 / 1000
+    total_scan_failed_min_ms = total_scan_failed_min / 1000
+    total_scan_failed_max_ms = total_scan_failed_max / 1000
+
+# create the csv writer
     output_csv = open("aggregation" + ".csv", 'w', newline='')
     writer = csv.writer(output_csv)
-    header = ['Operation', 'Count', 'Throughput', 'Min(microsecond)', 'Max(microsecond)', 'Avg(microsecond)',
-              'P95(microsecond)', 'P99(microsecond)']
+    header = ['Operation', 'Count', 'Throughput', 'Min(millisecond)', 'Max(millisecond)', 'Avg(millisecond)',
+              'P95(millisecond)', 'P99(millisecond)']
     writer.writerow(header)
     if total_read_count > 0:
-        row_in_csv = ['READ', total_read_count, int(total_throughput), total_read_min, total_read_max,
-                      int(total_read_avg), int(total_read_p95),
-                      int(total_read_p99)]
+        row_in_csv = ['READ', total_read_count, int(total_throughput), total_read_min_ms, total_read_max_ms,
+                      int(total_read_avg_ms), int(total_read_p95_ms),
+                      int(total_read_p99_ms)]
         writer.writerow(row_in_csv)
     if total_read_failed_count > 0:
-        row_in_csv = ['READ-FAILED', total_read_failed_count, int(total_throughput), total_read_failed_min,
-                      total_read_failed_max,
-                      int(total_read_failed_avg),
-                      int(total_read_failed_p95), int(total_read_failed_p99)]
+        row_in_csv = ['READ-FAILED', total_read_failed_count, int(total_throughput), total_read_failed_min_ms,
+                      total_read_failed_max_ms,
+                      int(total_read_failed_avg_ms),
+                      int(total_read_failed_p95_ms), int(total_read_failed_p99_ms)]
         writer.writerow(row_in_csv)
     if total_update_count > 0:
-        row_in_csv = ['UPDATE', total_update_count, int(total_throughput), total_update_min, total_update_max,
-                      int(total_update_avg), int(total_update_p95),
-                      int(total_update_p99)]
+        row_in_csv = ['UPDATE', total_update_count, int(total_throughput), total_update_min_ms, total_update_max_ms,
+                      int(total_update_avg_ms), int(total_update_p95_ms),
+                      int(total_update_p99_ms)]
         writer.writerow(row_in_csv)
     if total_update_failed_count > 0:
-        row_in_csv = ['UPDATE-FAILED', total_update_failed_count, int(total_throughput), total_update_failed_min,
-                      total_update_failed_max, int(total_update_failed_avg),
-                      int(total_update_failed_p95), int(total_update_failed_p99)]
+        row_in_csv = ['UPDATE-FAILED', total_update_failed_count, int(total_throughput), total_update_failed_min_ms,
+                      total_update_failed_max_ms, int(total_update_failed_avg_ms),
+                      int(total_update_failed_p95_ms), int(total_update_failed_p99_ms)]
         writer.writerow(row_in_csv)
     if total_write_count > 0:
-        row_in_csv = ['WRITE', total_write_count, int(total_throughput), total_write_min, total_write_max,
-                      int(total_write_avg), int(total_write_p95),
-                      int(total_write_p99)]
+        row_in_csv = ['WRITE', total_write_count, int(total_throughput), total_write_min_ms, total_write_max_ms,
+                      int(total_write_avg_ms), int(total_write_p95_ms),
+                      int(total_write_p99_ms)]
         writer.writerow(row_in_csv)
     if total_write_failed_count > 0:
-        row_in_csv = ['WRITE-FAILED', total_write_failed_count, int(total_throughput), total_write_failed_min,
-                      total_write_failed_max, int(total_write_failed_avg),
-                      int(total_write_failed_p95), int(total_write_failed_p99)]
+        row_in_csv = ['WRITE-FAILED', total_write_failed_count, int(total_throughput), total_write_failed_min_ms,
+                      total_write_failed_max_ms, int(total_write_failed_avg_ms),
+                      int(total_write_failed_p95_ms), int(total_write_failed_p99_ms)]
         writer.writerow(row_in_csv)
     if total_scan_count > 0:
-        row_in_csv = ['SCAN', total_scan_count, int(total_throughput), total_scan_min, total_scan_max,
-                      int(total_scan_avg), int(total_scan_p95),
-                      int(total_scan_p99)]
+        row_in_csv = ['SCAN', total_scan_count, int(total_throughput), total_scan_min_ms, total_scan_max_ms,
+                      int(total_scan_avg_ms), int(total_scan_p95_ms),
+                      int(total_scan_p99_ms)]
         writer.writerow(row_in_csv)
     if total_scan_failed_count > 0:
-        row_in_csv = ['SCAN-FAILED', total_scan_failed_count, int(total_throughput), total_scan_failed_min,
-                      total_scan_failed_max, int(total_scan_failed_avg),
-                      int(total_scan_failed_p95), int(total_scan_failed_p99)]
+        row_in_csv = ['SCAN-FAILED', total_scan_failed_count, int(total_throughput), total_scan_failed_min_ms,
+                      total_scan_failed_max_ms, int(total_scan_failed_avg_ms),
+                      int(total_scan_failed_p95_ms), int(total_scan_failed_p99_ms)]
         writer.writerow(row_in_csv)
 
     output_csv.close()

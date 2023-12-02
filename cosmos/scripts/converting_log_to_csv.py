@@ -18,8 +18,8 @@ def main():
     # create the csv writer
     output_csv = open(filename_withoutextention + ".csv", 'w', newline='')
     writer = csv.writer(output_csv)
-    header = ['Date', 'Time', 'Operation', 'RPS', 'Count', 'MAX(microsecond)', 'MIN(microsecond)', 'AVG(microsecond)',
-              'P90(microsecond)', 'P99(microsecond)', 'P999(microsecond)', 'P9999(microsecond)']
+    header = ['Date', 'Time', 'Operation', 'RPS', 'Count', 'MAX(millisecond)', 'MIN(millisecond)', 'AVG(millisecond)',
+              'P90(millisecond)', 'P99(millisecond)', 'P999(millisecond)', 'P9999(millisecond)']
     writer.writerow(header)
 
     # Strips the newline character
@@ -61,13 +61,13 @@ def parse_line_for_formatting(line, writer):
         return
     operation = ''
     count = ''
-    max_in_micro_sec = ''
-    min_in_micro_sec = ''
-    avg_in_micro_sec = ''
-    p9999_in_micro_sec = ''
-    p999_in_micro_sec = ''
-    p99_in_micro_sec = ''
-    p90_in_micro_sec = ''
+    max_in_milli_sec = ''
+    min_in_milli_sec = ''
+    avg_in_milli_sec = ''
+    p9999_in_milli_sec = ''
+    p999_in_milli_sec = ''
+    p99_in_milli_sec = ''
+    p90_in_milli_sec = ''
     for metrics in third_part.split(' '):
         metrics = metrics.strip()
         metrics = metrics.replace(']', '')
@@ -78,22 +78,22 @@ def parse_line_for_formatting(line, writer):
         elif 'Count=' in metrics:
             count = metrics.replace('Count=', '')
         elif 'Max=' in metrics:
-            max_in_micro_sec = metrics.replace('Max=', '')
+            max_in_milli_sec = metrics.replace('Max=', '')/1000
         elif 'Min=' in metrics:
-            min_in_micro_sec = metrics.replace('Min=', '')
+            min_in_milli_sec = metrics.replace('Min=', '')/1000
         elif 'Avg=' in metrics:
-            avg_in_micro_sec = metrics.replace('Avg=', '')
+            avg_in_milli_sec = metrics.replace('Avg=', '')/1000
         elif '99.99=' in metrics:
-            p9999_in_micro_sec = metrics.replace('99.99=', '')
+            p9999_in_milli_sec = metrics.replace('99.99=', '')/1000
         elif '99.9=' in metrics:
-            p999_in_micro_sec = metrics.replace('99.9=', '')
+            p999_in_milli_sec = metrics.replace('99.9=', '')/1000
         elif '99=' in metrics:
-            p99_in_micro_sec = metrics.replace('99=', '')
+            p99_in_milli_sec = metrics.replace('99=', '')/1000
         elif '90=' in metrics:
-            p90_in_micro_sec = metrics.replace('90=', '')
+            p90_in_milli_sec = metrics.replace('90=', '')/1000
 
-    row_in_csv = [date, time, operation, rps, count, max_in_micro_sec, min_in_micro_sec, avg_in_micro_sec,
-                  p90_in_micro_sec, p99_in_micro_sec, p999_in_micro_sec, p9999_in_micro_sec]
+    row_in_csv = [date, time, operation, rps, count, max_in_milli_sec, min_in_milli_sec, avg_in_milli_sec,
+                  p90_in_milli_sec, p99_in_milli_sec, p999_in_milli_sec, p9999_in_milli_sec]
     writer.writerow(row_in_csv)
 
 
