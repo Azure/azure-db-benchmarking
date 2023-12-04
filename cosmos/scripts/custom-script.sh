@@ -3,6 +3,32 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
+# This script is used to run a YCSB (Yahoo! Cloud Serving Benchmark) test on a Cosmos DB instance.
+# It takes several environment variables as input, which are used to configure the test.
+# The script supports both load and run operations, and can optionally introduce faults during the test.
+
+# The PROJECT_NAME environment variable is used to name the benchmark.
+# The DB_BINDING_NAME environment variable specifies the YCSB binding to use.
+# The VM_NAME environment variable is used to name the virtual machine that runs the test.
+# The YCSB_RECORD_COUNT environment variable specifies the number of records for the test.
+# The MACHINE_INDEX environment variable is used to calculate the start index for insert operations.
+# The YCSB_OPERATION_COUNT environment variable specifies the number of operations for the test.
+# The VM_COUNT environment variable is used to calculate the total number of records for read operations.
+# The WRITE_ONLY_OPERATION environment variable determines whether to run a write-only workload.
+# The BENCHMARKING_TOOLS_BRANCH_NAME and BENCHMARKING_TOOLS_URL environment variables are used to clone the benchmarking tools repository.
+# The YCSB_GIT_BRANCH_NAME and YCSB_GIT_REPO_URL environment variables are used to clone the YCSB repository.
+# The WAIT_FOR_FAULT_TO_START_IN_SEC, DURATION_OF_FAULT_IN_SEC, DROP_PROBABILITY, FAULT_REGION, and DELAY_IN_MS environment variables are used to configure fault injection.
+
+# The script starts by printing the values of all the environment variables.
+# It then clones the benchmarking tools and YCSB repositories, and builds YCSB from source.
+# The script then checks whether to run a load operation, and if so, it executes the load operation.
+# After the load operation, the script checks whether to introduce faults, and if so, it starts a chaos script.
+# Finally, the script executes the run operation, and copies the results to a storage account.
+
+# This script assumes that the Azure CLI and azcopy are installed and that the user is logged in to the Azure CLI.
+# This script should be run on a virtual machine that has network access to the Cosmos DB instance.
+
+echo "##########PROJECT_NAME###########: $PROJECT_NAME"
 echo "##########VM NAME###########: $DB_BINDING_NAME"
 echo "##########VM NAME###########: $VM_NAME"
 echo "##########YCSB_RECORD_COUNT###########: $YCSB_RECORD_COUNT"
@@ -27,10 +53,10 @@ insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
 recordcount=$((YCSB_RECORD_COUNT * MACHINE_INDEX))
 # Record count for Run. Since we run read workload after load this is the total number of records loaded by all VMs/clients during load.
 totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
-benchmarkname=ycsbbenchmarking
+benchmarkname=$PROJECT_NAME
 if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 0 ]; then
   fault=true
-  benchmarkname=ycsbwithfault
+  benchmarkname="{$PROJECT_NAME}withfault"
 fi
 
 #Cloning Test Bench Repo
@@ -91,6 +117,8 @@ if [ $MACHINE_INDEX -eq 1 ]; then
   fi
 
   ## Creating SAS URL for result storage container
+  # The block also checks if the current machine is the first one to start the job. If it is, it inserts a new entity into the metadata table in Azure Storage.
+  # If the current machine is not the first one, it waits until the first machine has inserted the entity, and then retrieves the job start time and SAS URL from the entity.
   echo "########## Creating SAS URL for result storage container ###########"
   end=$(date -u -d "30 days" '+%Y-%m-%dT%H:%MZ')
   current_time="$(date '+%Y-%m-%d-%Hh%Mm%Ss')"
@@ -125,7 +153,7 @@ else
   for i in $(seq 1 10); do
     latest_table_entry=$(az storage entity show --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --partition-key "${tool_api}" --row-key "${GUID}")
     if [ -z "$latest_table_entry" ]; then
-      echo "sleeping for 1 min, table row not availble yet"
+      echo "sleeping for 1 min, table row not available yet"
       sleep 1m
       continue
     fi
@@ -284,7 +312,7 @@ if [ $MACHINE_INDEX -eq 1 ]; then
   finish_time="$(date '+%Y-%m-%dT%H:%M:%SZ')"
   echo "Updating latest table entry with incremented NoOfClientsCompleted"
   az storage entity merge --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --entity PartitionKey="${tool_api}" RowKey="${GUID}" JobFinishTime=$finish_time JobStatus="Finished" NoOfClientsCompleted=$no_of_clients_completed --if-match=$etag
-  echo "Job finished sucessfully at $finish_time"
+  echo "Job finished successfully at $finish_time"
 else
   for j in $(seq 1 60); do
     echo "Reading latest table entry for updating NoOfClientsCompleted"
@@ -301,7 +329,7 @@ else
       echo "Hit race condition on table entry for updating no_of_clients_completed"
       sleep 1s
     else
-      echo "Task finished sucessfully"
+      echo "Task finished successfully"
       break
     fi
   done
