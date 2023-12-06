@@ -68,9 +68,9 @@ if ($waitForFaultToStartInSec)
 }
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-choco install chocolatey-compatibility.extension
-choco install clumsy  -y
-#choco uninstall clumsy
+choco install chocolatey-compatibility.extension -y --force
+choco install clumsy -y --force
+Write-Host "To remove WinDivertXX.sys, please remove/uninstall all WinDivert client application(s) and reboot." -ForegroundColor Cyan
 
 $databaseAccountResponseJson = & .\GetDatabaseAccount.ps1 -Endpoint $endpoint -MasterKey $masterKey
 $databaseAccountResponseObject = $databaseAccountResponseJson | ConvertFrom-Json
@@ -173,3 +173,4 @@ Stop-Process -Name clumsy
 
 # Uninstall Clumsy
 choco uninstall clumsy -y
+Write-Host "To remove WinDivertXX.sys, please remove/uninstall all WinDivert client application(s) and reboot." -ForegroundColor Cyan
