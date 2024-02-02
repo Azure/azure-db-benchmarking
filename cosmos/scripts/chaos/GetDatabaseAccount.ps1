@@ -1,71 +1,44 @@
 param (
+    [parameter(Mandatory = $true)]
+    [ValidateNotNull()]
     [string] $Endpoint,
+    [string] $AccessToken,
     [string] $MasterKey
 )
 
-Add-Type -AssemblyName System.Web
+$TokenVersion = "1.0"
+$verbMethod = "GET"
+$authKey = ""
 
-Function Generate-MasterKeyAuthorizationSignature {
-
-    [CmdletBinding()]
-
-    param (
-
-        [string] $Verb,
-        [string] $ResourceId,
-        [string] $ResourceType,
-        [string] $Date,
-        [string] $MasterKey,
-        [String] $KeyType,
-        [String] $TokenVersion
-    )
-    $keyBytes = [System.Convert]::FromBase64String($MasterKey)
-
-    $sigCleartext = @($Verb.ToLower() + "`n" + $ResourceType.ToLower() + "`n" + $ResourceId + "`n" + $Date.ToString().ToLower() + "`n" + "" + "`n")
-
-    $bytesSigClear = [Text.Encoding]::UTF8.GetBytes($sigCleartext)
-
-    $hmacsha = new-object -TypeName System.Security.Cryptography.HMACSHA256 -ArgumentList (, $keyBytes)
-
-    $hash = $hmacsha.ComputeHash($bytesSigClear) 
-
-    $signature = [System.Convert]::ToBase64String($hash)
-
-    $key = [System.Web.HttpUtility]::UrlEncode('type=' + $KeyType + '&ver=' + $TokenVersion + '&sig=' + $signature)
-
-    return $key
+if (![string]::IsNullOrEmpty($MasterKey)) 
+{
+    $databaseAccountResourceId = ""
+    $databaseAccountResourceType = ""
+    $date = Get-Date
+    $utcDate = $date.ToUniversalTime()
+    $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
+    $MasterKeyType = "master"
+    $authKey = & .\GetCosmosDBAuthKey.ps1 -Verb $verbMethod -ResourceId $databaseAccountResourceId -ResourceType $databaseAccountResourceType -Date $xDate -MasterKey $MasterKey -KeyType $MasterKeyType -TokenVersion $TokenVersion
 }
 
-$KeyType = "master"
-$TokenVersion = "1.0"
-$date = Get-Date
-$utcDate = $date.ToUniversalTime()
-$xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
-$databaseAccountResourceId = ""
-$databaseAccountResourceType = ""
-$verbMethod = "GET"
-
-$requestUri = "$Endpoint"
-
-$authKey = Generate-MasterKeyAuthorizationSignature -Verb $verbMethod -ResourceId $databaseAccountResourceId -ResourceType $databaseAccountResourceType -Date $xDate -MasterKey $MasterKey -KeyType $KeyType -TokenVersion $TokenVersion
+if (![string]::IsNullOrEmpty($accessToken)) 
+{
+    $AadKeyType = "aad"
+    $authKey = & .\GetCosmosDBAuthKey.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken  
+}
 
 $header = @{
 
-    "authorization" = "$authKey";
-
+    "authorization" = $authKey;
     "x-ms-version"  = "2020-07-15";
-
     "Cache-Control" = "no-cache";
-
     "x-ms-date"     = "$xDate";
-
     "Accept"        = "application/json";
-
     "User-Agent"    = "PowerShell-RestApi-Samples"
 }
 
 try {
-    $result = Invoke-RestMethod -Uri $requestUri -Headers $header -Method $verbMethod -ContentType "application/json"
+    $result = Invoke-RestMethod -Uri $Endpoint -Headers $header -Method $verbMethod -ContentType "application/json"
     $jsonResult = ConvertTo-Json -InputObject $result  -Depth 10
     Write-Output $jsonResult;
 }

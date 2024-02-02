@@ -1,0 +1,52 @@
+{
+    "id":  "/subscriptions/bc233076-e0b6-49b0-a4f3-e491cda98e9c/resourceGroups/darshan-chaos-experiments/providers/Microsoft.Chaos/experiments/EastUS2_offline-online-cosmos-db-account-eastus2",
+    "identity":  {
+                     "type":  "SystemAssigned"
+                 },
+    "location":  "EastUS2",
+    "name":  "EastUS2_offline-online-cosmos-db-account-eastus2",
+    "properties":  {
+                       "selectors":  [
+                                         {
+                                             "id":  "be57b688-27b2-4965-8bd9-43da4c761988",
+                                             "targets":  [
+                                                             {
+                                                                 "id":  "/subscriptions/bc233076-e0b6-49b0-a4f3-e491cda98e9c/resourceGroups/darshan-network-disconnect-fault-test/providers/microsoft.compute/virtualmachines/CosmosDBSdkVm/providers/Microsoft.Chaos/targets/Microsoft-Agent",
+                                                                 "type":  "ChaosTarget"
+                                                             }
+                                                         ],
+                                             "type":  "List"
+                                         }
+                                     ],
+                       "steps":  [
+                                     {
+                                         "branches":  [
+                                                          {
+                                                              "actions":  [
+                                                                              {
+                                                                                  "duration":  "PT10M",
+                                                                                  "name":  "urn:csci:microsoft:agent:networkDisconnectViaFirewall/1.0",
+                                                                                  "parameters":  [
+                                                                                                     {
+                                                                                                         "key":  "destinationFilters",
+                                                                                                         "value":  "[{\"portHigh\":443,\"subnetMask\":\"255.255.255.255\",\"address\":\"20.15.13.186\",\"portLow\":443},{\"portHigh\":\"65535\",\"subnetMask\":\"255.255.255.255\",\"address\":\"20.15.13.186\",\"portLow\":\"0\"}]"
+                                                                                                     }
+                                                                                                 ],
+                                                                                  "selectorId":  "be57b688-27b2-4965-8bd9-43da4c761988",
+                                                                                  "type":  "continuous"
+                                                                              }
+                                                                          ],
+                                                              "name":  "Branch 1"
+                                                          }
+                                                      ],
+                                         "name":  "Step 1"
+                                     }
+                                 ]
+                   },
+    "systemData":  {
+                       "createdAt":  "2023-11-22T14:21:15.351-08:00",
+                       "createdByType":  "User",
+                       "lastModifiedAt":  "2023-12-14T14:40:40.609-08:00"
+                   },
+    "type":  "Microsoft.Chaos/experiments"
+}
