@@ -1,0 +1,57 @@
+{
+    "id": "/subscriptions/bc233076-e0b6-49b0-a4f3-e491cda98e9c/resourceGroups/darshan-chaos-experiments/providers/Microsoft.Chaos/experiments/network-latency-fault",
+    "name": "network-latency-fault",
+    "systemData": {
+        "createdAt": "2023-11-30T00:13:42.847+00:00",
+        "lastModifiedAt": "2023-11-30T00:13:42.847+00:00",
+        "createdByType": "User"
+    },
+    "identity": {
+        "type": "SystemAssigned",
+        "principalId": "588555fd-d8b4-4f1d-9633-de9f2b3d26ed",
+        "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+    },
+    "location": "eastus2",
+    "properties": {
+        "selectors": [
+            {
+                "type": "List",
+                "id": "2e00dd09-19af-4877-9174-ff7ca68cfaf0",
+                "targets": [
+                    {
+                        "id": "/subscriptions/bc233076-e0b6-49b0-a4f3-e491cda98e9c/resourceGroups/darshan-network-disconnect-fault-test/providers/microsoft.compute/virtualmachines/CosmosDBSdkVm/providers/Microsoft.Chaos/targets/Microsoft-Agent",
+                        "type": "ChaosTarget"
+                    }
+                ]
+            }
+        ],
+        "steps": [
+            {
+                "name": "Step 1",
+                "branches": [
+                    {
+                        "name": "Branch 1",
+                        "actions": [
+                            {
+                                "type": "continuous",
+                                "selectorId": "2e00dd09-19af-4877-9174-ff7ca68cfaf0",
+                                "duration": "PT10M",
+                                "parameters": [
+                                    {
+                                        "key": "destinationFilters",
+                                        "value": "[{\"portHigh\":443,\"subnetMask\":\"255.255.255.255\",\"address\":\"20.15.13.186\",\"portLow\":443},{\"portHigh\":\"65535\",\"subnetMask\":\"255.255.255.255\",\"address\":\"20.15.13.186\",\"portLow\":\"0\"}]"
+                                    },
+                                    {
+                                        "key": "latencyInMilliseconds",
+                                        "value": "100"
+                                    }
+                                ],
+                                "name": "urn:csci:microsoft:agent:networkLatency/1.1"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -13,7 +13,7 @@ param (
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
-    [string] $durationOfFaultInSec,
+    [string] $durationOfFaultInMinutes,
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
@@ -147,42 +147,15 @@ if ($filterString)
     $filterString += "]"
 }    
 
-$json = Get-Content -Path 'network-disconnect-fault.json' | ConvertFrom-Json
-
-# Modify the desired value in the PowerShell object
-$json.properties.steps[0].branches[0].actions[0].parameters[0].value = $filterString
-
-if ($durationOfFaultInMinutes)
-{
-    $json.properties.steps[0].branches[0].actions[0].duration = "PT" + $durationOfFaultInMinutes +"M"
-}
-
-if ($faultRegion)
-{
-    $faultRegion = $faultRegion -replace '\s', '' # Remove whitespace
-    $json.location = $faultRegion
-}
-
 $parts = $endpointHost.Split('.')
 $accountName = $parts[0]
 
-# $experimentName = $faultRegion + "_" + $accountName + "_" + $databaseId + "_" + $containerId + "_net_discnt"
-$experimentName = $faultRegion + "_" + $accountName
+$experimentName = $faultRegion + "_" + $accountName + "_" + $databaseId + "_" + $containerId
 
-if ($ResourceGroup -and $SubscriptionId)
-{
-    $json.id = "/subscriptions/" + $subscriptionId + "/resourceGroups/" + $resourceGroup + "/providers/Microsoft.Chaos/experiments/$experimentName"
-    $json.name = $experimentName
-}
+# Create the experiment json
+& .\create_experiment_json.ps1 -filterString $filterString -durationOfFaultInMinutes $durationOfFaultInMinutes -faultRegion $faultRegion -experimentName $experimentName -resourceGroup $resourceGroup -subscriptionId $subscriptionId
 
-# Convert the modified PowerShell object back to JSON
-$newJson = ConvertTo-Json -InputObject $json -Depth 20
-
-# Remove the escape characters
-$newJson = $newJson.Replace('\\\','\')
-
-# Write the new JSON back to the file
-$newJson | Set-Content -Path 'network-disconnect-fault.json'
+# REST API Calls
 
 # Update the Chaos experiment
 $updateExperimentUri = "https://management.azure.com/subscriptions/bc233076-e0b6-49b0-a4f3-e491cda98e9c/resourceGroups/darshan-chaos-experiments/providers/Microsoft.Chaos/experiments/$experimentName?api-version=2023-11-01"

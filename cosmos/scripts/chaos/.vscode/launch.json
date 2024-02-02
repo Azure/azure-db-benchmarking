@@ -19,7 +19,7 @@
                      "-vmssInstanceIdList","abc",
                      "-databaseId", "ToDoList",
                      "-containerId", "Items",
-                     "-durationOfFaultInSec", "10",
+                     "-durationOfFaultInMinutes", "10",
                      "-delayInMs", "0",
                      "-faultRegion", "'East US 2'",
                      "-waitForFaultToStartInSec", "0",
