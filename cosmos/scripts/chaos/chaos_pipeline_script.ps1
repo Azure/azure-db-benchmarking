@@ -21,11 +21,11 @@ param (
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
-    [string] $subscriptionId,
+    [string] $chaosStudioSubscriptionId,
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
-    [string] $resourceGroup,
+    [string] $chaosStudioResourceGroupName,
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
@@ -34,6 +34,18 @@ param (
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $chaosExperimentManagedIdentityClientId,
+
+    [parameter(Mandatory = $true)]
+    [ValidateNotNull()]
+    [string] $chaosExperimentName,
+
+    [parameter(Mandatory = $true)]
+    [ValidateNotNull()]
+    [string] $chaosExperimentManagedIdentityPrincipalId,
+
+    [parameter(Mandatory = $true)]
+    [ValidateNotNull()]
+    [string] $chaosExperimentManagedIdentityName,
 
     [string] $cosmosDBServicePrincipalClientSecret,
     [string] $cosmosDBServicePrincipalTenantId,
@@ -147,39 +159,30 @@ if ($filterString)
     $filterString += "]"
 }    
 
-$parts = $endpointHost.Split('.')
-$accountName = $parts[0]
-
-$experimentName = $faultRegion + "_" + $accountName + "_" + $databaseId + "_" + $containerId
-
 # Create the experiment json
-& .\create_experiment_json.ps1 -filterString $filterString -durationOfFaultInMinutes $durationOfFaultInMinutes -faultRegion $faultRegion -experimentName $experimentName -resourceGroup $resourceGroup -subscriptionId $subscriptionId
+& .\create_experiment_json.ps1 -filterString $filterString -durationOfFaultInMinutes $durationOfFaultInMinutes -faultRegion $faultRegion -experimentName $chaosExperimentName -resourceGroup $chaosStudioResourceGroupName -subscriptionId $chaosStudioSubscriptionId -delayInMs $delayInMs -chaosExperimentManagedIdentityClientId $chaosExperimentManagedIdentityClientId -targetVMSubRGNameList $targetVMSubRGNameList -targetVMSSSubRGName $targetVMSSSubRGName -vmssInstanceIdList $vmssInstanceIdList -chaosExperimentManagedIdentityPrincipalId $chaosExperimentManagedIdentityPrincipalId -chaosExperimentManagedIdentityName $chaosExperimentManagedIdentityName
 
 # REST API Calls
 
-# Update the Chaos experiment
-$updateExperimentUri = "https://management.azure.com/subscriptions/bc233076-e0b6-49b0-a4f3-e491cda98e9c/resourceGroups/darshan-chaos-experiments/providers/Microsoft.Chaos/experiments/$experimentName?api-version=2023-11-01"
+# Get the access token for control plane
+$controlPlaneAccessToken = & .\get_control_plane_aad_token.ps1 -clientId $clientid
+
+# Create or Update the Chaos experiment
+$createUpdateExperimentUri = "https://management.azure.com/subscriptions/" + $chaosStudioSubscriptionId + "/resourceGroups/" + $chaosStudioResourceGroupName + "/providers/Microsoft.Chaos/experiments/" + $chaosExperimentName + "?api-version=2023-11-01"
 
 # Read the content of network-disconnect-fault.json
 $requestBody = Get-Content -Path 'network-disconnect-fault.json' -Raw
 
-# Get the bearer token
-$clientid = "b590b1e0-c76a-4e4f-bc0b-01bf12f37df9"
-$resource = "https://management.azure.com/"
-$response = Invoke-WebRequest -Uri "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&client_id=$clientid&resource=$resource" -Method GET -Headers @{Metadata="true"}
-$content = $response.Content | ConvertFrom-Json
-$MgmtAccessToken = $content.access_token
-
 # Set the headers for the request
 $headers = @{
-    "Authorization" = "Bearer $MgmtAccessToken"
+    "Authorization" = "Bearer $controlPlaneAccessToken"
     "Content-Type" = "application/json"
     "Host" = "management.azure.com"
     "Content-Length" = $requestBody.Length
 }
 
 # Make the PUT request
-$updateResponse = Invoke-RestMethod -Uri $updateExperimentUri -Method PUT -Headers $headers -Body $requestBody
+$updateResponse = Invoke-RestMethod -Uri $createUpdateExperimentUri -Method PUT -Headers $headers -Body $requestBody
 
 # Display the response
 $updateResponse
@@ -188,11 +191,11 @@ Start-Sleep -Seconds 30
 
 # Start the Chaos experiment
 # Set the URI for the POST request
-$startExperimentUri = "https://management.azure.com/subscriptions/bc233076-e0b6-49b0-a4f3-e491cda98e9c/resourceGroups/darshan-chaos-experiments/providers/Microsoft.Chaos/experiments/network-disconnect-fault/start?api-version=2023-11-01"
+$startExperimentUri = "https://management.azure.com/subscriptions/$chaosStudioSubscriptionId/resourceGroups/$chaosStudioResourceGroupName/providers/Microsoft.Chaos/experiments/$chaosExperimentName/start?api-version=2023-11-01"
 
 # Set the headers for the request
 $headers = @{
-    "Authorization" = "Bearer $MgmtAccessToken"
+    "Authorization" = "Bearer $controlPlaneAccessToken"
     "Content-Type" = "application/json"
     "Host" = "management.azure.com"
 }

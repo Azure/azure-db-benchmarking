@@ -29,6 +29,14 @@ param (
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
+    [string] $chaosExperimentManagedIdentityPrincipalId,
+
+    [parameter(Mandatory = $true)]
+    [ValidateNotNull()]
+    [string] $chaosExperimentManagedIdentityName,
+
+    [parameter(Mandatory = $true)]
+    [ValidateNotNull()]
     [string] $experimentName,
 
     [string] $targetVMSubRGNameList,
@@ -37,15 +45,37 @@ param (
 
 )
 
+
+# Function to create the targetId for the experiment
+function create_targetId {
+    param (
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
+        [string] $inputString,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
+        [string] $computeType
+    )
+
+    $parts = $inputString -split '/'
+    $subscriptionId = $parts[0]
+    $resourceGroupName = $parts[1]
+    $vmName = $parts[2]
+
+    $targetId = "/subscriptions/" + $subscriptionId + "/resourceGroups/" + $resourceGroupName + "/providers/Microsoft.Compute/$computeType/" + $vmName + "/providers/Microsoft.Chaos/targets/Microsoft-Agent"
+    return $targetId
+}
+
 $json = ""
 $experimentIdPrefix = "/subscriptions/" + $subscriptionId + "/resourceGroups/" + $resourceGroup + "/providers/Microsoft.Chaos/experiments/"
 $jsonPath = ""
 
-if ($delayInMs)
+
+if ($delayInMs -and $delayInMs -gt 0)
 {
     $jsonPath = 'network-delay-fault.json'
     $json = Get-Content -Path $jsonPath | ConvertFrom-Json
-    $experimentName = $experimentName + "_network_delay"
     $json.name = $experimentName
     $json.id = $experimentIdPrefix + $experimentName
     if ($json.properties.steps[0].branches[0].actions[0].parameters)
@@ -61,16 +91,21 @@ if ($delayInMs)
 else {
     $jsonPath = 'network-disconnect-fault.json'
     $json = Get-Content -Path $jsonPath | ConvertFrom-Json
-    $experimentName = $experimentName + "_network_discon"
     $json.name = $experimentName
     $json.id = $experimentIdPrefix + $experimentName
 }
 
 #TO-DO
 # Set the identity for the experiment 
+
+# @{
+#     "clientId" = $chaosExperimentManagedIdentityClientId
+#     "principalId" = $chaosExperimentManagedIdentityPrincipalId
+# }
+
 $json.identity = @{
     "type" = "UserAssigned"
-    "clientId" = $chaosExperimentManagedIdentityClientId
+    "userAssignedIdentities" = "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$chaosExperimentManagedIdentityName"
 }
 
 # Set the location of the experiment
@@ -132,23 +167,4 @@ $newJson = $newJson.Replace('\\\','\')
 # Write the new JSON back to the file
 $newJson | Set-Content -Path $jsonPath
 
-# Function to create the targetId for the experiment
-function create_targetId {
-    param (
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNull()]
-        [string] $inputString,
 
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNull()]
-        [string] $computeType
-    )
-
-    $parts = $inputString -split '/'
-    $subscriptionId = $parts[0]
-    $resourceGroupName = $parts[1]
-    $vmName = $parts[2]
-
-    $targetId = "/subscriptions/" + $subscriptionId + "/resourceGroups/" + $resourceGroupName + "/providers/Microsoft.Compute/$computeType/" + $vmName + "/providers/Microsoft.Chaos/targets/Microsoft-Agent"
-    return $targetId
-}
