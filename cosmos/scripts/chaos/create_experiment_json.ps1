@@ -25,14 +25,6 @@ param (
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
-    [string] $chaosExperimentManagedIdentityClientId,
-
-    [parameter(Mandatory = $true)]
-    [ValidateNotNull()]
-    [string] $chaosExperimentManagedIdentityPrincipalId,
-
-    [parameter(Mandatory = $true)]
-    [ValidateNotNull()]
     [string] $chaosExperimentManagedIdentityName,
 
     [parameter(Mandatory = $true)]
@@ -44,7 +36,6 @@ param (
     [string] $vmssInstanceIdList
 
 )
-
 
 # Function to create the targetId for the experiment
 function create_targetId {
@@ -98,14 +89,11 @@ else {
 #TO-DO
 # Set the identity for the experiment 
 
-# @{
-#     "clientId" = $chaosExperimentManagedIdentityClientId
-#     "principalId" = $chaosExperimentManagedIdentityPrincipalId
-# }
-
 $json.identity = @{
     "type" = "UserAssigned"
-    "userAssignedIdentities" = "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$chaosExperimentManagedIdentityName"
+    "userAssignedIdentities"= @{
+        "/subscriptions/$subscriptionId/resourcegroups/$resourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$chaosExperimentManagedIdentityName"= @{}
+    }
 }
 
 # Set the location of the experiment
@@ -166,5 +154,9 @@ $newJson = $newJson.Replace('\\\','\')
 
 # Write the new JSON back to the file
 $newJson | Set-Content -Path $jsonPath
+
+# Return the updated experiment JSON
+return Get-Content -Path $jsonPath -Raw
+
 
 

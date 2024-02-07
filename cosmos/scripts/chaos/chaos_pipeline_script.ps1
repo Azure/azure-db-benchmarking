@@ -33,15 +33,7 @@ param (
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
-    [string] $chaosExperimentManagedIdentityClientId,
-
-    [parameter(Mandatory = $true)]
-    [ValidateNotNull()]
     [string] $chaosExperimentName,
-
-    [parameter(Mandatory = $true)]
-    [ValidateNotNull()]
-    [string] $chaosExperimentManagedIdentityPrincipalId,
 
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
@@ -50,7 +42,6 @@ param (
     [string] $cosmosDBServicePrincipalClientSecret,
     [string] $cosmosDBServicePrincipalTenantId,
     [string] $cosmosDBMasterKey,
-
     [string] $waitForFaultToStartInSec,
     [string] $delayInMs,
     [string] $cosmosDBManagedIdentityClientId,
@@ -126,6 +117,7 @@ $endpointPort = $endpointUri.Port
 $endpointHost = $endpointUri.Host
 $endpointIpAddress = (Resolve-DnsName $endpointHost).IPAddress
 $subnetMask = "255.255.255.255"
+
 # Adding gateway endpoint for filtering
 $filterString = "[{\`"portHigh\`":$endpointPort,\`"subnetMask\`":\`"$subnetMask\`",\`"address\`":\`"$endpointIpAddress\`",\`"portLow\`":$endpointPort}"
 
@@ -160,29 +152,25 @@ if ($filterString)
 }    
 
 # Create the experiment json
-& .\create_experiment_json.ps1 -filterString $filterString -durationOfFaultInMinutes $durationOfFaultInMinutes -faultRegion $faultRegion -experimentName $chaosExperimentName -resourceGroup $chaosStudioResourceGroupName -subscriptionId $chaosStudioSubscriptionId -delayInMs $delayInMs -chaosExperimentManagedIdentityClientId $chaosExperimentManagedIdentityClientId -targetVMSubRGNameList $targetVMSubRGNameList -targetVMSSSubRGName $targetVMSSSubRGName -vmssInstanceIdList $vmssInstanceIdList -chaosExperimentManagedIdentityPrincipalId $chaosExperimentManagedIdentityPrincipalId -chaosExperimentManagedIdentityName $chaosExperimentManagedIdentityName
-
-# REST API Calls
+$experimentJSON = & .\create_experiment_json.ps1 -filterString $filterString -durationOfFaultInMinutes $durationOfFaultInMinutes -faultRegion $faultRegion -experimentName $chaosExperimentName -resourceGroup $chaosStudioResourceGroupName -subscriptionId $chaosStudioSubscriptionId -delayInMs $delayInMs -targetVMSubRGNameList $targetVMSubRGNameList -targetVMSSSubRGName $targetVMSSSubRGName -vmssInstanceIdList $vmssInstanceIdList -chaosExperimentManagedIdentityName $chaosExperimentManagedIdentityName
 
 # Get the access token for control plane
-$controlPlaneAccessToken = & .\get_control_plane_aad_token.ps1 -clientId $clientid
+$controlPlaneAccessToken = & .\get_control_plane_aad_token.ps1 -clientId $chaosStudioManagedIdentityClientId
 
+# REST API Calls
 # Create or Update the Chaos experiment
 $createUpdateExperimentUri = "https://management.azure.com/subscriptions/" + $chaosStudioSubscriptionId + "/resourceGroups/" + $chaosStudioResourceGroupName + "/providers/Microsoft.Chaos/experiments/" + $chaosExperimentName + "?api-version=2023-11-01"
-
-# Read the content of network-disconnect-fault.json
-$requestBody = Get-Content -Path 'network-disconnect-fault.json' -Raw
 
 # Set the headers for the request
 $headers = @{
     "Authorization" = "Bearer $controlPlaneAccessToken"
     "Content-Type" = "application/json"
     "Host" = "management.azure.com"
-    "Content-Length" = $requestBody.Length
+    "Content-Length" = $experimentJSON.Length
 }
 
 # Make the PUT request
-$updateResponse = Invoke-RestMethod -Uri $createUpdateExperimentUri -Method PUT -Headers $headers -Body $requestBody
+$updateResponse = Invoke-RestMethod -Uri $createUpdateExperimentUri -Method PUT -Headers $headers -Body $experimentJSON
 
 # Display the response
 $updateResponse
