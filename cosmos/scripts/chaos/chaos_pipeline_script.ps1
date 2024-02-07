@@ -154,42 +154,44 @@ if ($filterString)
 # Create the experiment json
 $experimentJSON = & .\create_experiment_json.ps1 -filterString $filterString -durationOfFaultInMinutes $durationOfFaultInMinutes -faultRegion $faultRegion -experimentName $chaosExperimentName -resourceGroup $chaosStudioResourceGroupName -subscriptionId $chaosStudioSubscriptionId -delayInMs $delayInMs -targetVMSubRGNameList $targetVMSubRGNameList -targetVMSSSubRGName $targetVMSSSubRGName -vmssInstanceIdList $vmssInstanceIdList -chaosExperimentManagedIdentityName $chaosExperimentManagedIdentityName
 
-# Get the access token for control plane
-$controlPlaneAccessToken = & .\get_control_plane_aad_token.ps1 -clientId $chaosStudioManagedIdentityClientId
+& .\ExperimentOperations.ps1 -experimentSubscriptionId $chaosStudioSubscriptionId -experimentResourceGroup $chaosStudioResourceGroupName  -experimentName $chaosExperimentName -experimentJSON $experimentJSON -chaosStudioManagedIdentityClientId $chaosStudioManagedIdentityClientId
 
-# REST API Calls
-# Create or Update the Chaos experiment
-$createUpdateExperimentUri = "https://management.azure.com/subscriptions/" + $chaosStudioSubscriptionId + "/resourceGroups/" + $chaosStudioResourceGroupName + "/providers/Microsoft.Chaos/experiments/" + $chaosExperimentName + "?api-version=2023-11-01"
+# # Get the access token for control plane
+# $controlPlaneAccessToken = & .\get_control_plane_aad_token.ps1 -clientId $chaosStudioManagedIdentityClientId
 
-# Set the headers for the request
-$headers = @{
-    "Authorization" = "Bearer $controlPlaneAccessToken"
-    "Content-Type" = "application/json"
-    "Host" = "management.azure.com"
-    "Content-Length" = $experimentJSON.Length
-}
+# # REST API Calls
+# # Create or Update the Chaos experiment
+# $createUpdateExperimentUri = "https://management.azure.com/subscriptions/" + $chaosStudioSubscriptionId + "/resourceGroups/" + $chaosStudioResourceGroupName + "/providers/Microsoft.Chaos/experiments/" + $chaosExperimentName + "?api-version=2023-11-01"
 
-# Make the PUT request
-$updateResponse = Invoke-RestMethod -Uri $createUpdateExperimentUri -Method PUT -Headers $headers -Body $experimentJSON
+# # Set the headers for the request
+# $headers = @{
+#     "Authorization" = "Bearer $controlPlaneAccessToken"
+#     "Content-Type" = "application/json"
+#     "Host" = "management.azure.com"
+#     "Content-Length" = $experimentJSON.Length
+# }
 
-# Display the response
-$updateResponse
+# # Make the PUT request
+# $updateResponse = Invoke-RestMethod -Uri $createUpdateExperimentUri -Method PUT -Headers $headers -Body $experimentJSON
 
-Start-Sleep -Seconds 30
+# # Display the response
+# $updateResponse
 
-# Start the Chaos experiment
-# Set the URI for the POST request
-$startExperimentUri = "https://management.azure.com/subscriptions/$chaosStudioSubscriptionId/resourceGroups/$chaosStudioResourceGroupName/providers/Microsoft.Chaos/experiments/$chaosExperimentName/start?api-version=2023-11-01"
+# Start-Sleep -Seconds 30
 
-# Set the headers for the request
-$headers = @{
-    "Authorization" = "Bearer $controlPlaneAccessToken"
-    "Content-Type" = "application/json"
-    "Host" = "management.azure.com"
-}
+# # Start the Chaos experiment
+# # Set the URI for the POST request
+# $startExperimentUri = "https://management.azure.com/subscriptions/$chaosStudioSubscriptionId/resourceGroups/$chaosStudioResourceGroupName/providers/Microsoft.Chaos/experiments/$chaosExperimentName/start?api-version=2023-11-01"
 
-# Make the POST request
-$startResponse = Invoke-RestMethod -Uri $startExperimentUri -Method POST -Headers $headers
+# # Set the headers for the request
+# $headers = @{
+#     "Authorization" = "Bearer $controlPlaneAccessToken"
+#     "Content-Type" = "application/json"
+#     "Host" = "management.azure.com"
+# }
 
-# Display the response
-$startResponse
+# # Make the POST request
+# $startResponse = Invoke-RestMethod -Uri $startExperimentUri -Method POST -Headers $headers
+
+# # Display the response
+# $startResponse
