@@ -10,25 +10,33 @@
             "type": "PowerShell",
             "request": "launch",
             "script": "D:\\oldChaos\\chaos_pipeline_script.ps1",
-            "args": ["-endpoint", "https://offline-online-cosmos-db-account.documents.azure.com:443/",
-                     "-cosmosDBManagedIdentityClientId", "b590b1e0-c76a-4e4f-bc0b-01bf12f37df9",
-                     "-chaosStudioManagedIdentityClientId", "b590b1e0-c76a-4e4f-bc0b-01bf12f37df9",
-                     "-chaosExperimentManagedIdentityName","offline-online-chaos-UA",
-                     "-targetVMSubRGNameList", "bc233076-e0b6-49b0-a4f3-e491cda98e9c/darshan-network-disconnect-fault-test/CosmosDBSdkVm",
-                     "-targetVMSSSubRGName", "''",
-                     "-vmssInstanceIdList","''",
+            "args": [ 
+                     // Cosmos DB config
+                     "-cosmosDBEndpoint", "https://offline-online-cosmos-db-account.documents.azure.com:443/",
                      "-databaseId", "ToDoList",
                      "-containerId", "Items",
-                     "-durationOfFaultInMinutes", "10",
-                     "-delayInMs", "1000",
                      "-faultRegion", "'East US 2'",
-                     "-waitForFaultToStartInSec", "0",
-                     "-chaosStudioSubscriptionId", "bc233076-e0b6-49b0-a4f3-e491cda98e9c",
-                     "-chaosStudioResourceGroupName", "darshan-chaos-experiments",
+
+                     // Cosmos DB Auth 
+                     "-cosmosDBIdentityClientId", "b590b1e0-c76a-4e4f-bc0b-01bf12f37df9",
                      "-cosmosDBServicePrincipalClientSecret", "''",
                      "-cosmosDBServicePrincipalTenantId", "''",
                      "-cosmosDBMasterKey", "''",
-                     "-chaosExperimentName", "darshan-cosmosdb-network-EastUS2-delay_1000"]
+                     
+                     // Chaos Studio Auth & Config
+                     "-chaosStudioSubscriptionId", "bc233076-e0b6-49b0-a4f3-e491cda98e9c",
+                     "-chaosStudioResourceGroupName", "darshan-chaos-experiments",
+                     "-chaosStudioManagedIdentityClientId", "b590b1e0-c76a-4e4f-bc0b-01bf12f37df9",
+                                          
+                     // Chaos Experiment config
+                     "-chaosExperimentManagedIdentityName","offline-online-chaos-UA",
+                     "-chaosExperimentName", "darshan-cosmosdb-network-EastUS2-Outage",
+                     // Experiment parameters
+                     "-targetVMSubRGNameList", "bc233076-e0b6-49b0-a4f3-e491cda98e9c/darshan-network-disconnect-fault-test/CosmosDBSdkVm",
+                     "-targetVMSSSubRGName", "''",
+                     "-vmssInstanceIdList","''",
+                     "-durationOfFaultInMinutes", "10",
+                     "-delayInMs", "0"]
         }
     ]
 }

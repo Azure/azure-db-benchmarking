@@ -36,7 +36,7 @@ function Get-AccessToken {
         throw "Failed to retrieve Microsoft Entra ID token"
     }
 
-    Write-Notification "Retrieved access token from Microsoft Entra ID"
+    Write-Host "Retrieved access token from Microsoft Entra ID"
     return $token
 }
 
@@ -59,19 +59,13 @@ function Execute-RestMethod {
         [string] $body
     )
 
-    if (-not (Get-Module Azure))
-    {
-        throw "Azure module has not been imported"
-    }
-
     $httpHeader = @{
         "Authorization" = "Bearer $token"
         "Content-Type" = "application/json"
         "Host" = "management.azure.com"
-        "Content-Length" = $experimentJSON.Length
     }
 
-    Write-Notification "Calling ARM API '$uri' ."
+    Write-Host "Calling ARM API '$uri' ."
 
     if($method -eq "Get")
     {
@@ -187,15 +181,18 @@ $experimentCreation = Create-Experiment -SubscriptionId $experimentSubscriptionI
 
 Write-Host "Experiment Creation response: " $experimentCreation
 
+Start-Sleep -Seconds 30
+
 $experimentExecution = Execute-Experiment -SubscriptionId $experimentSubscriptionId -ResourceGroup $experimentResourceGroup -ExperimentName $experimentName -Token $token
 
-Write-Host "Experiment Execution " $experimentExecution
+Write-Host "Experiment Execution Started." $experimentExecution
 
-$executionDetails = Wait-ExperimentCompletion -StatusUrl $experimentExecution.statusUrl -Token $token
 
-$executionDetails | Format-List
+# $executionDetails = Wait-ExperimentCompletion -StatusUrl $experimentCreation.statusUrl -Token $token
 
-if ($status.properties.status -eq "Failed")
-{
-    throw $executionDetails;
-}
+# $executionDetails | Format-List
+
+# if ($status.properties.status -eq "Failed")
+# {
+#     throw $executionDetails;
+# }
