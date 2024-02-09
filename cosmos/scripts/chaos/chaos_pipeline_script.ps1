@@ -1,37 +1,20 @@
+
+
 <#
 .SYNOPSIS
     This script is used to configure and execute a chaos experiment on an Azure Cosmos DB container.
 
 .DESCRIPTION
-    The script accepts various parameters to specify the configuration of the chaos experiment. It requires the following parameters:
-    
-    - cosmosDBEndpoint: The endpoint URL of the Azure Cosmos DB account.
-    - databaseId: The ID of the Azure Cosmos DB database.
-    - containerId: The ID of the Azure Cosmos DB container.
-    - faultRegion: The region where the fault will be injected.
-    - chaosStudioSubscriptionId: The subscription ID of the Azure Chaos Studio.
-    - chaosStudioResourceGroupName: The resource group name of the Azure Chaos Studio.
-    - chaosStudioManagedIdentityClientId: The client ID of the managed identity used by the Azure Chaos Studio.
-    - chaosExperimentName: The name of the chaos experiment.
-    - chaosExperimentManagedIdentityName: The name of the managed identity used by the chaos experiment.
-    - durationOfFaultInMinutes: The duration of the fault injection in minutes.
-    - cosmosDBServicePrincipalClientSecret: (Optional) The client secret of the service principal used to authenticate with Azure Cosmos DB.
-    - cosmosDBServicePrincipalTenantId: (Optional) The tenant ID of the service principal used to authenticate with Azure Cosmos DB.
-    - cosmosDBMasterKey: (Optional) The master key of the Azure Cosmos DB account.
-    - delayInMs: (Optional) The delay in milliseconds between each chaos experiment iteration.
-    - cosmosDBIdentityClientId: (Optional) The client ID of the managed identity used to authenticate with Azure Cosmos DB.
-    - targetVMSubRGNameList: (Optional) A comma-separated list of target virtual machine sub-resource group names.
-    - targetVMSSSubRGName: (Optional) The sub-resource group name of the target virtual machine scale set.
-    - vmssInstanceIdList: (Optional) A comma-separated list of virtual machine scale set instance IDs.
+    The script accepts various parameters to specify the configuration of the chaos experiment.
 
 .PARAMETER cosmosDBEndpoint
     The endpoint URL of the Azure Cosmos DB account.
 
 .PARAMETER databaseId
-    The ID of the Azure Cosmos DB database.
+    The ID of the database within the Azure Cosmos DB account.
 
 .PARAMETER containerId
-    The ID of the Azure Cosmos DB container.
+    The ID of the container within the specified database.
 
 .PARAMETER faultRegion
     The region where the fault will be injected.
@@ -70,13 +53,18 @@
     (Optional) The client ID of the managed identity used to authenticate with Azure Cosmos DB.
 
 .PARAMETER targetVMSubRGNameList
-    (Optional) A comma-separated list of target virtual machine sub-resource group names.
+    (Optional) Specifies a comma-separated list of names for the target virtual machines in the format: "subscriptionId/resourceGroup/virtualMachineName".
 
 .PARAMETER targetVMSSSubRGName
-    (Optional) The sub-resource group name of the target virtual machine scale set.
+    (Optional) Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroup/virtualMachineScaleSetName". Only one virtual machine scale set can be specified.
 
 .PARAMETER vmssInstanceIdList
     (Optional) A comma-separated list of virtual machine scale set instance IDs.
+
+.NOTES
+    Author: Darshan Patnekar
+    Date: 02/08/2024
+    Version: 1.0
 #>
 
 param (
@@ -137,6 +125,8 @@ param (
     [string] $vmssInstanceIdList
 )
 
+# Conditional Validations for the input parameters
+
 if ($null -eq $cosmosDBMasterKey -and $null -eq $cosmosDBIdentityClientId) {
     throw "Both cosmosDBMasterKey and cosmosDBIdentityClientId cannot be null at the same time."
 }
@@ -151,6 +141,30 @@ if ($null -eq $targetVMSubRGNameList -and $null -eq $targetVMSSSubRGName) {
 
 if (![string]::IsNullOrEmpty($targetVMSSSubRGName) -and [string]::IsNullOrEmpty($VMSSInstanceIdList)) {
     throw "To target a VMSS for fault, VMSSInstanceIdList should specify which VM instances need to be targetted e.g. 0,1,2."
+}
+
+# Check if Python is installed, if not install it
+$pythonPath = Get-Command python -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
+
+if ($null -eq $pythonPath) {
+    # Install Python
+    $pythonInstallerUrl = "https://www.python.org/ftp/python/3.9.7/python-3.9.7-amd64.exe"
+    $pythonInstallerPath = "$env:TEMP\python-installer.exe"
+
+    Invoke-WebRequest -Uri $pythonInstallerUrl -OutFile $pythonInstallerPath
+    Start-Process -FilePath $pythonInstallerPath -ArgumentList "/quiet", "InstallAllUsers=1", "PrependPath=1" -Wait
+
+    # Verify installation
+    $pythonPath = Get-Command python -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
+    if ($null -eq $pythonPath) {
+        throw "Python installation failed."
+    }
+    else {
+        Write-Host "Python installed successfully."
+    }
+    
+    # Remove installer
+    Remove-Item -Path $pythonInstallerPath -Force
 }
 
 $dataPlaneAccessToken = $null

@@ -1,14 +1,51 @@
+<#
+.SYNOPSIS
+    Retrieves the partition key range for a given Cosmos DB container.
+
+.DESCRIPTION
+    This script retrieves the partition key range for a specified Cosmos DB container. It requires the following parameters:
+    - Endpoint: The URI endpoint of the Cosmos DB account.
+    - DatabaseID: The ID of the Cosmos DB database.
+    - ContainerId: The ID of the Cosmos DB container.
+    - AccessToken: (Optional) The access token for authentication.
+    - MasterKey: (Optional) The master key for authentication.
+
+.PARAMETER Endpoint
+    The URI endpoint of the Cosmos DB account.
+
+.PARAMETER DatabaseID
+    The ID of the Cosmos DB database.
+
+.PARAMETER ContainerId
+    The ID of the Cosmos DB container.
+
+.PARAMETER AccessToken
+    (Optional) The access token for authentication.
+
+.PARAMETER MasterKey
+    (Optional) The master key for authentication.
+
+.NOTES
+    Author: Darshan Patnekar
+    Date: 02/08/2024
+    Version: 1.0
+#>
+
 param (
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $Endpoint,
+    
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $DatabaseID,
+
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $ContainerId,
+
     [string] $AccessToken,
+
     [string] $MasterKey
 )
 
@@ -16,34 +53,36 @@ $TokenVersion = "1.0"
 $verbMethod = "GET"
 $authKey = ""
 
-if (![string]::IsNullOrEmpty($MasterKey)) {
-    $pkRangesResourceType = "pkranges"
-    $pkRangesResourceId = "dbs/" + $DatabaseID + "/colls/" + $ContainerId
-    $date = Get-Date
-    $utcDate = $date.ToUniversalTime()
-    $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
-    $MasterKeyType = "master"
-    $authKey = & .\GetCosmosDBAuthKey.ps1 -Verb $verbMethod -ResourceId $pkRangesResourceId -ResourceType $pkRangesResourceType -Date $xDate -MasterKey $MasterKey -KeyType $MasterKeyType -TokenVersion $TokenVersion
+if ([string]::IsNullOrEmpty($AccessToken) -and [string]::IsNullOrEmpty($MasterKey)) {
+    throw "Both AccessToken and MasterKey cannot be null simultaneously. Atleast one of them should be provided."
 }
 
-if (![string]::IsNullOrEmpty($accessToken))  
-{
-    $AadKeyType = "aad"
-    $authKey = & .\GetCosmosDBAuthKey.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken  
-}
+try {
+    if (![string]::IsNullOrEmpty($AccessToken)) {
+        $AadKeyType = "aad"
+        $authKey = & .\GetCosmosDBAuthKey.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken  
+    }
+    else
+    {
+        $pkRangesResourceType = "pkranges"
+        $pkRangesResourceId = "dbs/" + $DatabaseID + "/colls/" + $ContainerId
+        $date = Get-Date
+        $utcDate = $date.ToUniversalTime()
+        $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
+        $MasterKeyType = "master"
+        $authKey = & .\GetCosmosDBAuthKey.ps1 -Verb $verbMethod -ResourceId $pkRangesResourceId -ResourceType $pkRangesResourceType -Date $xDate -MasterKey $MasterKey -KeyType $MasterKeyType -TokenVersion $TokenVersion
+    }
 
-$header = @{
-    
-    "authorization" = "$authKey";
-    "x-ms-version" = "2020-07-15";
-    "Cache-Control" = "no-cache";
-    "x-ms-date" = "$xDate";
-    "Accept" = "application/json";
-    "User-Agent" = "PowerShell-RestApi-Samples"
-}
+    $header = @{
+        
+        "authorization" = "$authKey";
+        "x-ms-version" = "2020-07-15";
+        "Cache-Control" = "no-cache";
+        "x-ms-date" = "$xDate";
+        "Accept" = "application/json";
+        "User-Agent" = "PowerShell-RestApi-Samples"
+    }
 
-try
-{
     $pkRangesResourceLink = "dbs/" + $DatabaseID + "/colls/" + $ContainerId + "/pkranges"
     $requestUri = "$Endpoint$pkRangesResourceLink"
 
@@ -54,8 +93,6 @@ try
 }
 catch
 {
-    # Dig into the exception to get the Response details.
-    # Note that value__ is not a typo.
     Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__
     Write-Host "Exception Message:" $_.Exception.Message
 }

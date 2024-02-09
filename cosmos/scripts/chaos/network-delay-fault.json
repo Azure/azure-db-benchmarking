@@ -8,9 +8,7 @@
     },
     "identity":{
        "userAssignedIdentities":{
-          "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<identityName>":{
-             
-          }
+          "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<identityName>":{}
        },
        "type":"identityType"
     },
@@ -19,7 +17,7 @@
        "selectors":[
           {
              "type":"List",
-             "id":"2e00dd09-19af-4877-9174-ff7ca68cfaf0",
+             "id":"2e00dd09-19af-4877-0000-ff7ca68cfaf0",
              "targets":[
                 {
                    "id":"/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Compute/virtualMachines/<vmName>/providers/Microsoft.Chaos/targets/Microsoft-Agent",
@@ -37,7 +35,7 @@
                    "actions":[
                       {
                          "type":"continuous",
-                         "selectorId":"2e00dd09-19af-4877-9174-ff7ca68cfaf0",
+                         "selectorId":"2e00dd09-19af-0000-9174-ff7ca68cfaf0",
                          "duration":"PT10M",
                          "parameters":[
                             {

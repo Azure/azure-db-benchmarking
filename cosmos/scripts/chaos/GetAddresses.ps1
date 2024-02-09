@@ -1,17 +1,53 @@
+<#
+.SYNOPSIS
+    Retrieves addresses from a Cosmos DB container.
+
+.DESCRIPTION
+    This script retrieves addresses from a Cosmos DB container using the specified parameters.
+
+.PARAMETER Endpoint
+    The endpoint URL of the Cosmos DB account.
+
+.PARAMETER PartitionKeyIds
+    The comma-separated list of partition key IDs.
+
+.PARAMETER DatabaseID
+    The ID of the Cosmos DB database.
+
+.PARAMETER ContainerId
+    The ID of the Cosmos DB container.
+
+.PARAMETER AccessToken
+    (Optional) The access token for authentication.
+
+.PARAMETER MasterKey
+    (Optional) The master key for authentication.
+
+.NOTES
+    Author: Darshan Patnekar
+    Date: 02/08/2024
+    Version: 1.0
+#>
+
 param (
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $Endpoint,
+
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $PartitionKeyIds,
+
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $DatabaseID,
+
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $ContainerId,
+
     [string] $AccessToken,
+
     [string] $MasterKey
 )
 
@@ -19,23 +55,27 @@ $TokenVersion = "1.0"
 $verbMethod = "GET"
 $authKey = ""
 
-if (![string]::IsNullOrEmpty($MasterKey)) {
-    $addressesResourceType = "docs"
-    $addressesResourceId = "dbs/"+$DatabaseID+"/colls/"+$ContainerId
-    $date = Get-Date
-    $utcDate = $date.ToUniversalTime()
-    $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
-    $MasterKeyType = "master"
-    $authKey = & .\GetCosmosDBAuthKey.ps1 -Verb $verbMethod -ResourceId $addressesResourceId -ResourceType $addressesResourceType -Date $xDate -MasterKey $MasterKeyType -KeyType $KeyType -TokenVersion $TokenVersion
-}
-else 
-{
-    $AadKeyType = "aad"
-    $authKey = & .\GetCosmosDBAuthKey.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken  
+if ([string]::IsNullOrEmpty($AccessToken) -and [string]::IsNullOrEmpty($MasterKey)) {
+    throw "Both AccessToken and MasterKey cannot be null simultaneously. Atleast one of them should be provided."
 }
 
-$header = @{
+try {
+    if (![string]::IsNullOrEmpty($AccessToken)) {
+        $AadKeyType = "aad"
+        $authKey = & .\GetCosmosDBAuthKey.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken
+    }
+    else 
+    {
+        $addressesResourceType = "docs"
+        $addressesResourceId = "dbs/"+$DatabaseID+"/colls/"+$ContainerId
+        $date = Get-Date
+        $utcDate = $date.ToUniversalTime()
+        $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
+        $MasterKeyType = "master"
+        $authKey = & .\GetCosmosDBAuthKey.ps1 -Verb $verbMethod -ResourceId $addressesResourceId -ResourceType $addressesResourceType -Date $xDate -MasterKey $MasterKeyType -KeyType $KeyType -TokenVersion $TokenVersion
+    }
 
+    $header = @{
         "authorization"         = "$authKey";
         "x-ms-version"          = "2020-07-15";
         "Cache-Control"         = "no-cache";
@@ -44,7 +84,6 @@ $header = @{
         "User-Agent"            = "PowerShell-RestApi-Samples"
     }
 
-try {
     $addressesResourceLink = "addresses/?"+"$"+"resolveFor=dbs%2f"+$DatabaseID+"%2fcolls%2f"+$ContainerId + "%2fdocs&"+"$"+"filter=protocol eq rntbd&"+"$"+"partitionKeyRangeIds="+$PartitionKeyIds
     $requestUri = "$Endpoint$addressesResourceLink"
 
@@ -53,8 +92,6 @@ try {
     Write-Output $jsonResult;
 }
 catch {
-    # Dig into the exception to get the Response details.
-    # Note that value__ is not a typo.
     Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__
     Write-Host "Exception Message:" $_.Exception.Message
 }
