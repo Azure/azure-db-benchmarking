@@ -7,10 +7,10 @@ import argparse
 # Version: 1.0
 
 def get_aad_token(endpoint, client_id, client_secret, tenant_id):
-    """A:
+    """:
     This function returns a Microsoft Entra ID token for the given endpoint using the given 
-        1. client_id only when using a managed identity
-        2. client_id, client_secret and tenant_id combination when using a service principal
+        1. client_id, client_secret and tenant_id combination when using a service principal
+        2. client_id only when using a managed identity
 
     Args:
         endpoint (str): The endpoint for which to retrieve the Microsoft Entra ID token.
@@ -25,15 +25,17 @@ def get_aad_token(endpoint, client_id, client_secret, tenant_id):
         Exception: If the Microsoft Entra ID token cannot be retrieved.
     """
     try:
-        if not client_secret:
-            aad_credentials = DefaultAzureCredential(managed_identity_client_id=client_id)
-        else: 
+        if client_id and client_secret and tenant_id:
             aad_credentials = ClientSecretCredential(client_id, client_secret, tenant_id)
+        elif client_id and not client_secret and not tenant_id:
+            aad_credentials = DefaultAzureCredential(managed_identity_client_id=client_id)
+        else:
+            raise Exception("Either provide Client ID only to retrieve the Microsoft Entra ID token using Manged Identity or provide Client ID, Client Secret and Tenant ID to retrieve the Microsoft Entra ID token using Service Principal.")
         
         result = endpoint.split(':')
         scope = result[0] + ":" + result[1] + "/.default"
         token = aad_credentials.get_token(scope)
-        print(token.token)
+        return(token.token)
     except Exception as e:
         raise Exception("Failed to retrieve Microsoft Entra ID token: " + str(e))
 

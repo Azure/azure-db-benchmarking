@@ -53,16 +53,12 @@ $TokenVersion = "1.0"
 $verbMethod = "GET"
 $authKey = ""
 
-if ([string]::IsNullOrEmpty($AccessToken) -and [string]::IsNullOrEmpty($MasterKey)) {
-    throw "Both AccessToken and MasterKey cannot be null simultaneously. Atleast one of them should be provided."
-}
-
 try {
     if (![string]::IsNullOrEmpty($AccessToken)) {
         $AadKeyType = "aad"
         $authKey = & .\get_cosmosdb_auth_key.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken  
     }
-    else
+    elseif (![string]::IsNullOrEmpty($MasterKey))
     {
         $pkRangesResourceType = "pkranges"
         $pkRangesResourceId = "dbs/" + $DatabaseID + "/colls/" + $ContainerId
@@ -72,9 +68,11 @@ try {
         $MasterKeyType = "master"
         $authKey = & .\get_cosmosdb_auth_key.ps1 -Verb $verbMethod -ResourceId $pkRangesResourceId -ResourceType $pkRangesResourceType -Date $xDate -MasterKey $MasterKey -KeyType $MasterKeyType -TokenVersion $TokenVersion
     }
+    else {
+        throw "Both AccessToken and MasterKey cannot be null simultaneously. Atleast one of them should be provided."
+    }
 
     $header = @{
-        
         "authorization" = "$authKey";
         "x-ms-version" = "2020-07-15";
         "Cache-Control" = "no-cache";

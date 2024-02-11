@@ -32,24 +32,7 @@
     $experimentSubscriptionId = "12345678-1234-1234-1234-1234567890ab"
     $experimentResourceGroup = "myResourceGroup"
     $experimentName = "myExperiment"
-    $experimentJSON = '{
-        "properties": {
-            "target": {
-                "type": "collection",
-                "resourceId": "/subscriptions/12345678-1234-1234-1234-1234567890ab/resourceGroups/myResourceGroup/providers/Microsoft.DocumentDB/databaseAccounts/myCosmosDB/databases/myDatabase/collections/myCollection"
-            },
-            "actions": [
-                {
-                    "type": "Latency",
-                    "parameters": {
-                        "operation": "Read",
-                        "latency": "PT0S",
-                        "probability": 1
-                    }
-                }
-            ]
-        }
-    }'
+    $experimentJSON = '{...}'
     $chaosStudioManagedIdentityClientId = "12345678-1234-1234-1234-1234567890ab"
 
     Create-Experiment -experimentSubscriptionId $experimentSubscriptionId -experimentResourceGroup $experimentResourceGroup -experimentName $experimentName -experimentJson $experimentJSON -chaosStudioManagedIdentityClientId $chaosStudioManagedIdentityClientId

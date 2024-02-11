@@ -21,7 +21,7 @@
     Specifies the ID of the Azure subscription containing the target resources.
 
 .PARAMETER delayInMs
-    Specifies the delay in milliseconds between each fault injection.
+    Specifies the delay in milliseconds between each fault injection. For outage fault, this parameter will be set to 0.
 
 .PARAMETER chaosExperimentManagedIdentityName
     Specifies the name of the managed identity used to authenticate with Azure resources.
@@ -30,13 +30,13 @@
     Specifies the name of the chaos experiment.
 
 .PARAMETER targetVMSubRGNameList
-    Specifies a comma-separated list of names for the target virtual machines in the format: "subscriptionId/resourceGroup/virtualMachineName".
+    Specifies a comma-separated list of names for the target virtual machines in the format: "subscriptionId/resourceGroup/virtualMachineName". e.g. "12345678-1234-1234-1234-1234567890ab/rg1/vm1,12567841-4321-4321-1234-1234567890gh/rg2/vm2".
 
 .PARAMETER targetVMSSSubRGName
-    Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroup/virtualMachineScaleSetName". Only one virtual machine scale set can be specified.
+    Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroup/virtualMachineScaleSetName". Only one virtual machine scale set can be specified. e.g. "12345678-1234-1234-1234-1234567890ab/rg1/vmss".
 
 .PARAMETER vmssInstanceIdList
-    Specifies a comma-separated list of instance IDs for the target virtual machine scale set.
+    Specifies a comma-separated list of instance IDs for the target virtual machine scale set. e.g. "0,1,2".
 
 .EXAMPLE
     create_experiment_json.ps1 -filterString "<destinationFliterList>" -durationOfFaultInMinutes 60 -faultRegion "eastus" -resourceGroup "myResourceGroup" -subscriptionId "12345678-1234-1234-1234-1234567890ab" -delayInMs 1000 -chaosExperimentManagedIdentityName "myManagedIdentity" -experimentName "MyExperiment" -targetVMSubRGNameList "sub1/RG1/VM1,sub2/RG2/VM2" -targetVMSSSubRGName "sub1/RG1/VMSS" -vmssInstanceIdList "1,2,3"
@@ -85,6 +85,14 @@ param (
     [string] $vmssInstanceIdList
 
 )
+
+if ($null -eq $targetVMSubRGNameList -and $null -eq $targetVMSSSubRGName) {
+    throw "Both targetVMSubRGNameList (list of target VMs) and targetVMSSSubRGName (target VMSS) cannot be null at the same time. Atleast one target is needed."
+}
+
+if (![string]::IsNullOrEmpty($targetVMSSSubRGName) -and [string]::IsNullOrEmpty($VMSSInstanceIdList)) {
+    throw "To target a VMSS for fault, VMSSInstanceIdList should specify which VM instances need to be targetted e.g. 0,1,2."
+}
 
 # Function to create the targetId for the experiment
 function create_targetId {

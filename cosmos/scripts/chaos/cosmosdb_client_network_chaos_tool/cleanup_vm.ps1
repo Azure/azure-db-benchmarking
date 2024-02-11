@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-This script is used to clean up the environment by uninstalling the azure.identity python package, Python, and Chocolatey.
+This script is used to clean up the environment by uninstalling the azure.identity python package, Python3, and Chocolatey.
 
 .DESCRIPTION
 The script performs the following actions:
@@ -22,12 +22,27 @@ This command will execute the script and perform the cleanup actions.
 
 # Remove azure.identity python package
 Write-Output "Uninstalling azure.identity module for python...."
-& python -m pip uninstall azure.identity -y
+try {
+    & python -m pip uninstall azure.identity -y
+} 
+catch {
+    Write-Error "Failed to uninstall azure.identity module for python: $_"
+}
 
 # Uninstall Python using Chocolatey
 Write-Output "Uninstalling python3..."
-choco uninstall python3 -y
+try {
+    choco uninstall python3 -y
+} 
+catch {
+    Write-Error "Failed to uninstall python3: $_"
+}
 
 # Uninstall Chocolatey
 Write-Output "Uninstalling Chocolatey..."
-Remove-Item -Path $env:ChocolateyInstall -Recurse -Force
+try {
+    Remove-Item -Path $env:ChocolateyInstall -Recurse -Force
+} 
+catch {
+    Write-Error "Failed to uninstall Chocolatey: $_"
+}
