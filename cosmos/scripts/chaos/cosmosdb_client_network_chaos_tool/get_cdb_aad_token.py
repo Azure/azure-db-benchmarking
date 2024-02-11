@@ -42,15 +42,15 @@ def get_aad_token(endpoint, client_id, client_secret, tenant_id):
 parser = argparse.ArgumentParser()
 parser.add_argument('--Endpoint', required=True, type=str, help='Endpoint')
 parser.add_argument('--ClientId', required=True, type=str, help='ClientId')
-parser.add_argument('--ClientSecret', required=False, type=str, help='ClientSecret', default=None)
-parser.add_argument('--TenantId', required=False, type=str, help='TenantId', default=None)
+parser.add_argument('--ClientSecret', required=False, type=str, default=None, nargs='?', help='ClientSecret')
+parser.add_argument('--TenantId', required=False, type=str, default=None, nargs='?', help='TenantId')
 
 args = parser.parse_args()
 
 endpoint = args.Endpoint
 client_id = args.ClientId
-client_secret = args.ClientSecret
-tenant_id = args.TenantId
+client_secret = args.ClientSecret if args.ClientSecret else None
+tenant_id = args.TenantId if args.TenantId else None
 
 try:
     get_aad_token(endpoint, client_id, client_secret, tenant_id)
