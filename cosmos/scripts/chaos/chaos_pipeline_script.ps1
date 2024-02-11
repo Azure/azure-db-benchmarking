@@ -1,5 +1,3 @@
-
-
 <#
 .SYNOPSIS
     This script is used to configure and execute a chaos experiment on an Azure Cosmos DB container.
@@ -143,29 +141,8 @@ if (![string]::IsNullOrEmpty($targetVMSSSubRGName) -and [string]::IsNullOrEmpty(
     throw "To target a VMSS for fault, VMSSInstanceIdList should specify which VM instances need to be targetted e.g. 0,1,2."
 }
 
-# Check if Python is installed, if not install it
-$pythonPath = Get-Command python -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
-
-if ($null -eq $pythonPath) {
-    # Install Python
-    $pythonInstallerUrl = "https://www.python.org/ftp/python/3.9.7/python-3.9.7-amd64.exe"
-    $pythonInstallerPath = "$env:TEMP\python-installer.exe"
-
-    Invoke-WebRequest -Uri $pythonInstallerUrl -OutFile $pythonInstallerPath
-    Start-Process -FilePath $pythonInstallerPath -ArgumentList "/quiet", "InstallAllUsers=1", "PrependPath=1" -Wait
-
-    # Verify installation
-    $pythonPath = Get-Command python -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
-    if ($null -eq $pythonPath) {
-        throw "Python installation failed."
-    }
-    else {
-        Write-Host "Python installed successfully."
-    }
-    
-    # Remove installer
-    Remove-Item -Path $pythonInstallerPath -Force
-}
+# Check if Python is installed on the VM, if not install it
+&.\setup_vm.ps1
 
 $dataPlaneAccessToken = $null
 if (![string]::IsNullOrEmpty($cosmosDBIdentityClientId)) {
@@ -181,7 +158,7 @@ if (![string]::IsNullOrEmpty($cosmosDBIdentityClientId)) {
 }
 
 # Get the readable locations
-$databaseAccountResponseJson = & .\GetDatabaseAccount.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
+$databaseAccountResponseJson = & .\get_database_account.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
 $databaseAccountResponseObject = $databaseAccountResponseJson | ConvertFrom-Json
 $readableLocations = $databaseAccountResponseObject.readableLocations
 
@@ -194,7 +171,7 @@ foreach ($readableLocation in $readableLocations)
 }
 
 # Get the partition key ranges
-$pkRangeResponseJson = & .\GetPKRange.ps1 -Endpoint $cosmosDBEndpoint -DatabaseID $databaseId -ContainerId $containerId -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
+$pkRangeResponseJson = & .\get_pk_range.ps1 -Endpoint $cosmosDBEndpoint -DatabaseID $databaseId -ContainerId $containerId -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
 $pkRangeResponse = $pkRangeResponseJson | ConvertFrom-Json
 $partitionKeyRanges = $pkRangeResponse.PartitionKeyRanges
 $commaSeparatedPkid = ""
@@ -212,7 +189,7 @@ foreach ($partitionKeyRange in $partitionKeyRanges)
 }
 
 # Get IP addresses and ports of the gateway and backend nodes
-$addressesResponseJson = & .\GetAddresses.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey -PartitionKeyIds $commaSeparatedPkid -DatabaseID $databaseId -ContainerId $containerId
+$addressesResponseJson = & .\get_addresses.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey -PartitionKeyIds $commaSeparatedPkid -DatabaseID $databaseId -ContainerId $containerId
 $addressesResponse = $addressesResponseJson | ConvertFrom-Json
 $addresses = $addressesResponse.Addresss
 $backendUriList = New-Object System.Collections.Generic.List[uri]
@@ -265,4 +242,7 @@ if ($filterString)
 $experimentJSON = & .\create_experiment_json.ps1 -filterString $filterString -durationOfFaultInMinutes $durationOfFaultInMinutes -faultRegion $faultRegion -experimentName $chaosExperimentName -resourceGroup $chaosStudioResourceGroupName -subscriptionId $chaosStudioSubscriptionId -delayInMs $delayInMs -targetVMSubRGNameList $targetVMSubRGNameList -targetVMSSSubRGName $targetVMSSSubRGName -vmssInstanceIdList $vmssInstanceIdList -chaosExperimentManagedIdentityName $chaosExperimentManagedIdentityName
 
 # Create the experiment on Chaos Studio and Start the experiment
-& .\ExperimentOperations.ps1 -experimentSubscriptionId $chaosStudioSubscriptionId -experimentResourceGroup $chaosStudioResourceGroupName  -experimentName $chaosExperimentName -experimentJSON $experimentJSON -chaosStudioManagedIdentityClientId $chaosStudioManagedIdentityClientId
+& .\experiment_operations.ps1 -experimentSubscriptionId $chaosStudioSubscriptionId -experimentResourceGroup $chaosStudioResourceGroupName  -experimentName $chaosExperimentName -experimentJSON $experimentJSON -chaosStudioManagedIdentityClientId $chaosStudioManagedIdentityClientId
+
+# Cleanup the VM after the experiment
+& .\cleanup_vm.ps1

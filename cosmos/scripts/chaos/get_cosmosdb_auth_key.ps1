@@ -30,7 +30,7 @@
     This script retrieves the authorization key for Cosmos DB using the provided parameters.
 
 .EXAMPLE
-    GetCosmosDBAuthKey -Verb "GET" -ResourceId "mycosmosdb" -ResourceType "dbs" -Date "2022-01-01" -MasterKey "mykey" -KeyType "master" -TokenVersion "1.0" -AccessToken "mytoken"
+    get_cosmosdb_auth_key -Verb "GET" -ResourceId "mycosmosdb" -ResourceType "dbs" -Date "2022-01-01" -MasterKey "mykey" -KeyType "master" -TokenVersion "1.0" -AccessToken "mytoken"
 
 .NOTES
     Author: Darshan Patnekar

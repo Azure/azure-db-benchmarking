@@ -9,7 +9,7 @@
     Specifies the client ID used to authenticate and authorize the request.
 
 .EXAMPLE
-    PS> Get-ControlPlaneAADToken -clientId "12345678-1234-5678-1234-567812345678"
+    PS> get_control_plane_aad_token -clientId "12345678-1234-5678-1234-567812345678"
     
 .NOTES
     Author: Darshan Patnekar

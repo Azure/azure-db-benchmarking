@@ -15,7 +15,7 @@
     The master key for authentication.
 
 .EXAMPLE
-    Get-DatabaseAccount -Endpoint "https://mycosmosdb.documents.azure.com:443/" -AccessToken "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" -MasterKey "myMasterKey"
+    get_database_account -Endpoint "https://mycosmosdb.documents.azure.com:443/" -AccessToken "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" -MasterKey "myMasterKey"
 
 .NOTES
     Author: Darshan Patnekar
@@ -44,7 +44,7 @@ try {
     if (![string]::IsNullOrEmpty($AccessToken)) 
     {
         $AadKeyType = "aad"
-        $authKey = & .\GetCosmosDBAuthKey.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken
+        $authKey = & .\get_cosmosdb_auth_key.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken
     }
     else
     {
@@ -54,7 +54,7 @@ try {
         $utcDate = $date.ToUniversalTime()
         $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
         $MasterKeyType = "master"
-        $authKey = & .\GetCosmosDBAuthKey.ps1 -Verb $verbMethod -ResourceId $databaseAccountResourceId -ResourceType $databaseAccountResourceType -Date $xDate -MasterKey $MasterKey -KeyType $MasterKeyType -TokenVersion $TokenVersion
+        $authKey = & .\get_cosmosdb_auth_key.ps1 -Verb $verbMethod -ResourceId $databaseAccountResourceId -ResourceType $databaseAccountResourceType -Date $xDate -MasterKey $MasterKey -KeyType $MasterKeyType -TokenVersion $TokenVersion
     }
 
     $header = @{

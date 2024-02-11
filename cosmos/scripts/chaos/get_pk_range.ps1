@@ -1,15 +1,17 @@
 <#
 .SYNOPSIS
-    Retrieves addresses from a Cosmos DB container.
+    Retrieves the partition key range for a given Cosmos DB container.
 
 .DESCRIPTION
-    This script retrieves addresses from a Cosmos DB container using the specified parameters.
+    This script retrieves the partition key range for a specified Cosmos DB container. It requires the following parameters:
+    - Endpoint: The URI endpoint of the Cosmos DB account.
+    - DatabaseID: The ID of the Cosmos DB database.
+    - ContainerId: The ID of the Cosmos DB container.
+    - AccessToken: (Optional) The access token for authentication.
+    - MasterKey: (Optional) The master key for authentication.
 
 .PARAMETER Endpoint
-    The endpoint URL of the Cosmos DB account.
-
-.PARAMETER PartitionKeyIds
-    The comma-separated list of partition key IDs.
+    The URI endpoint of the Cosmos DB account.
 
 .PARAMETER DatabaseID
     The ID of the Cosmos DB database.
@@ -33,11 +35,7 @@ param (
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $Endpoint,
-
-    [parameter(Mandatory = $true)]
-    [ValidateNotNull()]
-    [string] $PartitionKeyIds,
-
+    
     [parameter(Mandatory = $true)]
     [ValidateNotNull()]
     [string] $DatabaseID,
@@ -62,36 +60,39 @@ if ([string]::IsNullOrEmpty($AccessToken) -and [string]::IsNullOrEmpty($MasterKe
 try {
     if (![string]::IsNullOrEmpty($AccessToken)) {
         $AadKeyType = "aad"
-        $authKey = & .\GetCosmosDBAuthKey.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken
+        $authKey = & .\get_cosmosdb_auth_key.ps1 -KeyType $AadKeyType -TokenVersion $TokenVersion -accessToken $AccessToken  
     }
-    else 
+    else
     {
-        $addressesResourceType = "docs"
-        $addressesResourceId = "dbs/"+$DatabaseID+"/colls/"+$ContainerId
+        $pkRangesResourceType = "pkranges"
+        $pkRangesResourceId = "dbs/" + $DatabaseID + "/colls/" + $ContainerId
         $date = Get-Date
         $utcDate = $date.ToUniversalTime()
         $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
         $MasterKeyType = "master"
-        $authKey = & .\GetCosmosDBAuthKey.ps1 -Verb $verbMethod -ResourceId $addressesResourceId -ResourceType $addressesResourceType -Date $xDate -MasterKey $MasterKeyType -KeyType $KeyType -TokenVersion $TokenVersion
+        $authKey = & .\get_cosmosdb_auth_key.ps1 -Verb $verbMethod -ResourceId $pkRangesResourceId -ResourceType $pkRangesResourceType -Date $xDate -MasterKey $MasterKey -KeyType $MasterKeyType -TokenVersion $TokenVersion
     }
 
     $header = @{
-        "authorization"         = "$authKey";
-        "x-ms-version"          = "2020-07-15";
-        "Cache-Control"         = "no-cache";
-        "x-ms-date"             = "$xDate";
-        "Accept"                = "application/json";
-        "User-Agent"            = "PowerShell-RestApi-Samples"
+        
+        "authorization" = "$authKey";
+        "x-ms-version" = "2020-07-15";
+        "Cache-Control" = "no-cache";
+        "x-ms-date" = "$xDate";
+        "Accept" = "application/json";
+        "User-Agent" = "PowerShell-RestApi-Samples"
     }
 
-    $addressesResourceLink = "addresses/?"+"$"+"resolveFor=dbs%2f"+$DatabaseID+"%2fcolls%2f"+$ContainerId + "%2fdocs&"+"$"+"filter=protocol eq rntbd&"+"$"+"partitionKeyRangeIds="+$PartitionKeyIds
-    $requestUri = "$Endpoint$addressesResourceLink"
+    $pkRangesResourceLink = "dbs/" + $DatabaseID + "/colls/" + $ContainerId + "/pkranges"
+    $requestUri = "$Endpoint$pkRangesResourceLink"
 
     $result = Invoke-RestMethod -Uri $requestUri -Headers $header -Method $verbMethod -ContentType "application/json"
-    $jsonResult = ConvertTo-Json -InputObject $result  -Depth 10
+    $jsonResult = ConvertTo-Json -InputObject $result -Depth 10
     Write-Output $jsonResult;
+
 }
-catch {
+catch
+{
     Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__
     Write-Host "Exception Message:" $_.Exception.Message
 }

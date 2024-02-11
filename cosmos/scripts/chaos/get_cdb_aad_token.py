@@ -7,7 +7,7 @@ import argparse
 # Version: 1.0
 
 def get_aad_token(endpoint, client_id, client_secret, tenant_id):
-    """
+    """A:
     This function returns a Microsoft Entra ID token for the given endpoint using the given 
         1. client_id only when using a managed identity
         2. client_id, client_secret and tenant_id combination when using a service principal
