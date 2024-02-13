@@ -11,7 +11,7 @@
    "properties":{
       "selectors":[
          {
-            "id":"be57b688-27b2-4965-0000-43da4c761988",
+            "id":"myResources",
             "targets":[
                {
                   "id":"/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Compute/virtualMachines/<vmName>/providers/Microsoft.Chaos/targets/Microsoft-Agent",
@@ -35,7 +35,7 @@
                               "value":"<destinationFilterList>"
                            }
                         ],
-                        "selectorId":"be57b688-27b2-4965-0000-43da4c761988",
+                        "selectorId":"myResources",
                         "type":"continuous"
                      }
                   ],

@@ -35,7 +35,7 @@ def get_aad_token(endpoint, client_id, client_secret, tenant_id):
         result = endpoint.split(':')
         scope = result[0] + ":" + result[1] + "/.default"
         token = aad_credentials.get_token(scope)
-        return(token.token)
+        print(token.token)
     except Exception as e:
         raise Exception("Failed to retrieve Microsoft Entra ID token: " + str(e))
 

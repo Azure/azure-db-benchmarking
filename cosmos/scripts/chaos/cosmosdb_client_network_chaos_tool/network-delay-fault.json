@@ -1,11 +1,6 @@
 {
     "id":"/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Chaos/experiments/<experimentName>",
     "name":"<experimentName>",
-    "systemData":{
-       "createdAt":"2023-11-30T00:13:42.847+00:00",
-       "lastModifiedAt":"2023-11-30T00:13:42.847+00:00",
-       "createdByType":"User"
-    },
     "identity":{
        "userAssignedIdentities":{
           "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<identityName>":{}
@@ -17,7 +12,7 @@
        "selectors":[
           {
              "type":"List",
-             "id":"2e00dd09-19af-4877-0000-ff7ca68cfaf0",
+             "id":"myResources",
              "targets":[
                 {
                    "id":"/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Compute/virtualMachines/<vmName>/providers/Microsoft.Chaos/targets/Microsoft-Agent",
@@ -35,7 +30,7 @@
                    "actions":[
                       {
                          "type":"continuous",
-                         "selectorId":"2e00dd09-19af-0000-9174-ff7ca68cfaf0",
+                         "selectorId":"myResources",
                          "duration":"PT10M",
                          "parameters":[
                             {

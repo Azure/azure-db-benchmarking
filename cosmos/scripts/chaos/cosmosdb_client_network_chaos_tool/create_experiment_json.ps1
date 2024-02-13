@@ -112,7 +112,7 @@ function create_targetId {
         $resourceGroupName = $parts[1]
         $vmName = $parts[2]
 
-        $targetId = "/subscriptions/" + $subscriptionId + "/resourceGroups/" + $resourceGroupName + "/providers/Microsoft.Compute/$computeType/" + $vmName + "/providers/Microsoft.Chaos/targets/Microsoft-Agent"
+        $targetId = "/subscriptions/" + $subscriptionId + "/resourceGroups/" + $resourceGroupName + "/providers/microsoft.compute/$computeType/" + $vmName + "/providers/Microsoft.Chaos/targets/Microsoft-Agent"
         return $targetId
     }
     catch {
