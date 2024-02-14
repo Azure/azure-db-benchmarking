@@ -120,6 +120,38 @@ function create_targetId {
     }
 }
 
+function AddChaosTarget {
+    param(
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
+        [int] $targetIndex,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
+        [string] $id,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
+        [string] $type
+    )
+
+    try {
+        if (-not $json.properties.selectors[0].targets[$targetIndex]) {
+            $json.properties.selectors[0].targets += [PSCustomObject]@{
+                id = $id
+                type = $type
+            }
+        }
+        else {
+            $json.properties.selectors[0].targets[$targetIndex].id = $id
+            $json.properties.selectors[0].targets[$targetIndex].type = $type
+        }
+    }
+    catch {
+        Write-Error "An error occurred while adding the chaos target: $_"
+    }
+}
+
 $json = ""
 $experimentIdPrefix = "/subscriptions/" + $subscriptionId + "/resourceGroups/" + $resourceGroup + "/providers/Microsoft.Chaos/experiments/"
 $jsonPath = ""
@@ -171,35 +203,57 @@ try {
 
     # Set the targets for the experiment
     $targetIndex = 0
+    $targetType = "ChaosTarget"
     if ($targetVMSubRGNameList) {
         $targets = $targetVMSubRGNameList -split ","
 
         foreach ($target in $targets) {
-            $targetId = create_targetId -inputString $target -computeType "virtualMachines"
-            $json.properties.selectors[0].targets[$targetIndex].id = $targetId
-            $json.properties.selectors[0].targets[$targetIndex].type = "ChaosTarget"
+            $targetId = create_targetId -inputString $target -computeType "virtualmachines"
+            AddChaosTarget -targetIndex $targetIndex -id $targetId -type $targetType
             $targetIndex++
         }
     }
 
     if ($targetVMSSSubRGName) {
-        $targetId = create_targetId -inputString $targetVMSSSubRGName -computeType "virtualMachineScaleSets"
-        $json.properties.selectors[0].targets[$targetIndex].id = $targetId
-        $json.properties.selectors[0].targets[$targetIndex].type = "ChaosTarget"
+        $targetId = create_targetId -inputString $targetVMSSSubRGName -computeType "virtualmachinescalesets"
+        AddChaosTarget -targetIndex $targetIndex -id $targetId -type $targetType
         $targetIndex++
     }
 
-    # Set the destinationFilters and virtualMachineScaleSetInstances for the experiment
-    if ($json.properties.steps[0].branches[0].actions[0].parameters)
-    {
+    # Set the destinationFilters for the experiment
+    if ($json.properties.steps[0].branches[0].actions[0].parameters) {
         foreach ($parameter in $json.properties.steps[0].branches[0].actions[0].parameters) {
-            switch ($parameter.key) {
-                "destinationFilters" {
-                    $parameter.value = $filterString
+            if ($parameter.key -eq "destinationFilters") {
+                $parameter.value = $filterString
+                break
+            }
+            else {
+                $destinationFilters = @{
+                    "key" = "destinationFilters"
+                    "value" = $filterString
+                }
+
+                $json.properties.steps[0].branches[0].actions[0].parameters += $destinationFilters
+                break
+            }
+        }
+    }
+
+    # Set the virtualMachineScaleSetInstances for the experiment
+    if ($vmssInstanceIdList -ne $null -and $vmssInstanceIdList -ne '') {
+        if ($json.properties.steps[0].branches[0].actions[0].parameters) {
+            foreach ($parameter in $json.properties.steps[0].branches[0].actions[0].parameters) {
+                if ($parameter.key -eq "virtualMachineScaleSetInstances") {
+                    $parameter.value = $vmssInstanceIdList
                     break
                 }
-                "virtualMachineScaleSetInstances" {
-                    $parameter.value = $vmssInstanceIdList
+                else {
+                    $virtualMachineScaleSetInstances = @{
+                        "key" = "virtualMachineScaleSetInstances"
+                        "value" = "[" + $vmssInstanceIdList + "]"
+                    }
+
+                    $json.properties.steps[0].branches[0].actions[0].parameters += $virtualMachineScaleSetInstances
                     break
                 }
             }
@@ -212,11 +266,8 @@ try {
     # Remove the escape characters
     $newJson = $newJson.Replace('\\\','\')
 
-    # Write the new JSON back to the file
-    $newJson | Set-Content -Path $jsonPath
-
     # Return the updated experiment JSON
-    return Get-Content -Path $jsonPath -Raw
+    return $newJson
 }
 catch {
     Write-Error "An error occurred while creating the experiment JSON: $_"

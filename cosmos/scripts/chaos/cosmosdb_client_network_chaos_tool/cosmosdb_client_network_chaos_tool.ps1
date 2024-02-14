@@ -162,8 +162,11 @@ if ([string]::IsNullOrEmpty($delayInMs)) {
 # Install tool's dependencies on the client VM
 &.\setup_vm.ps1
 
+
 # Get Cosmos DB access token for supported authentication methods
-$dataPlaneAccessToken = & python .\get_cdb_aad_token.py --Endpoint $cosmosDBEndpoint --ClientId $cosmosDBIdentityClientId --ClientSecret $cosmosDBServicePrincipalClientSecret --TenantId $cosmosDBServicePrincipalTenantId
+if (![string]::IsNullOrEmpty($cosmosDBIdentityClientId)) {
+    $dataPlaneAccessToken = & python .\get_cdb_aad_token.py --Endpoint $cosmosDBEndpoint --ClientId $cosmosDBIdentityClientId --ClientSecret $cosmosDBServicePrincipalClientSecret --TenantId $cosmosDBServicePrincipalTenantId
+}
 
 # Get the readable locations
 $databaseAccountResponseJson = & .\get_database_account.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
