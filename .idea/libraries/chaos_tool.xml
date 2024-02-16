@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="chaos-tool">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cosmos/sql/tools/java/ycsb/chaos/chaos-tool.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

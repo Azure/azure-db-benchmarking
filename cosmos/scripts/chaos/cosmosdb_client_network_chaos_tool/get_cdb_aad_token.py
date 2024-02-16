@@ -26,7 +26,7 @@ def get_aad_token(endpoint, client_id, client_secret, tenant_id):
     """
     try:
         if client_id and client_secret and tenant_id:
-            aad_credentials = ClientSecretCredential(client_id, client_secret, tenant_id)
+            aad_credentials = ClientSecretCredential(tenant_id, client_id, client_secret)
         elif client_id and not client_secret and not tenant_id:
             aad_credentials = DefaultAzureCredential(managed_identity_client_id=client_id)
         else:

@@ -206,8 +206,9 @@ try {
     $targetType = "ChaosTarget"
     if ($targetVMSubRGNameList) {
         $targets = $targetVMSubRGNameList -split ","
-
+        
         foreach ($target in $targets) {
+            $target = $target -replace '\s', '' # Remove whitespace
             $targetId = create_targetId -inputString $target -computeType "virtualmachines"
             AddChaosTarget -targetIndex $targetIndex -id $targetId -type $targetType
             $targetIndex++

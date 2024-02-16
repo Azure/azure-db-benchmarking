@@ -158,10 +158,8 @@ if ([string]::IsNullOrEmpty($delayInMs)) {
     $delayInMs = "0"
 }
 
-
 # Install tool's dependencies on the client VM
 &.\setup_vm.ps1
-
 
 # Get Cosmos DB access token for supported authentication methods
 if (![string]::IsNullOrEmpty($cosmosDBIdentityClientId)) {
