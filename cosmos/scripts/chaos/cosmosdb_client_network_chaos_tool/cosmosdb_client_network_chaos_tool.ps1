@@ -30,7 +30,7 @@ The client ID of the managed identity used by the Azure Chaos Studio.
 The name of the chaos experiment.
 
 .PARAMETER chaosExperimentManagedIdentityName
-The name of the managed identity used by the chaos experiment.
+The name of the managed identity used by the chaos experiment. 
 
 .PARAMETER durationOfFaultInMinutes
 The duration of the fault in minutes.
@@ -52,13 +52,13 @@ The duration of the fault in minutes.
 If cosmosDBServicePrincipalClientSecret and cosmosDBServicePrincipalTenantId are also provided, cosmosDBIdentityClientId will be used as the Client ID for the service principal.
 
 .PARAMETER targetVMSubRGNameList
-(Optional*) Specifies a comma-separated list of names for the target virtual machines in the format: "subscriptionId/resourceGroup/virtualMachineName". e.g. "12345678-1234-1234-1234-1234567890ab/rg1/vm1,12567841-4321-4321-1234-1234567890gh/rg2/vm2".
+(Optional*) Specifies a comma-separated list of names for the target virtual machines in the format: "subscriptionId/resourceGroupName/virtualMachineName". e.g. "{12345678-1234-1234-1234-1234567890ab/rg1/vm1, 12567841-4321-4321-1234-1234567890gh/rg2/vm2}".
 
 .PARAMETER targetVMSSSubRGName
-(Optional*) Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroup/virtualMachineScaleSetName". Only one virtual machine scale set can be specified. e.g. "12345678-1234-1234-1234-1234567890ab/rg1/vmss".
+(Optional*) Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroupName/virtualMachineScaleSetName". Only one virtual machine scale set can be specified. e.g. "12345678-1234-1234-1234-1234567890ab/rg/vmss".
 
 .PARAMETER vmssInstanceIdList
-(Optional*) A comma-separated list of VM instance IDs in the target VM scale set. e.g. "0,1,2".
+(Optional*) A comma-separated list of VM instance IDs in the target VM scale set. e.g. "{0,1,2}".
 
 Note for Optional* parameters:
 cosmosDBMasterKey and cosmosDBIdentityClientId cannot be null at the same time. At least one of them should be provided. If both cosmosDBMasterKey and cosmosDBIdentityClientId are provided, the script will use cosmosDBIdentityClientId to get the access token.
@@ -170,9 +170,11 @@ if (![string]::IsNullOrEmpty($cosmosDBIdentityClientId)) {
 $databaseAccountResponseJson = & .\get_database_account.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
 $databaseAccountResponseObject = $databaseAccountResponseJson | ConvertFrom-Json
 $readableLocations = $databaseAccountResponseObject.readableLocations
+$faultRegion = $faultRegion -replace '\s', ''
 
 foreach ($readableLocation in $readableLocations)
 {
+    $readableLocation = $readableLocation -replace '\s', ''
     if ($faultRegion -eq $readableLocation.name)
     {
         $cosmosDBEndpoint = $readableLocation.databaseAccountEndpoint
