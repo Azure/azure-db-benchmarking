@@ -60,8 +60,16 @@ Function GenerateAadAuthorizationKey {
     [CmdletBinding()]
 
     param (
-        [String] $KeyType,    
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
+        [String] $KeyType, 
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]   
         [String] $TokenVersion,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
         [string] $AccessToken
     )
 
@@ -79,12 +87,32 @@ Function GenerateMasterKeyAuthorizationKey {
     [CmdletBinding()]
 
     param (
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
         [string] $Verb,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
         [string] $ResourceId,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
         [string] $ResourceType,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
         [string] $Date,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
         [string] $MasterKey,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
         [String] $KeyType,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNull()]
         [String] $TokenVersion
     )
 

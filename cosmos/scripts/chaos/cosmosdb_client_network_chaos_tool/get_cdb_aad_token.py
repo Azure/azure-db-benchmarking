@@ -14,7 +14,7 @@ def get_aad_token(endpoint, client_id, client_secret, tenant_id):
 
     Args:
         endpoint (str): The endpoint for which to retrieve the Microsoft Entra ID token.
-        client_id (str): The client ID of the Microsoft Entra ID application.
+        client_id (str): The client ID of the Managed Identity or the Microsoft Entra ID application.
         client_secret (str): The client secret of the Microsoft Entra ID application.
         tenant_id (str): The ID of the Microsoft Entra ID tenant.
 

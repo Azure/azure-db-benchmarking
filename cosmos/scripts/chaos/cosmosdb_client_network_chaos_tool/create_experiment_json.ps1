@@ -12,7 +12,7 @@
     Specifies the duration of the fault in minutes. During this time, the selected resources will experience simulated faults.
 
 .PARAMETER faultRegion
-    Specifies the region where the faults will be simulated. Only resources in this region will be affected.
+    Specifies the region where the faults will be simulated.
 
 .PARAMETER resourceGroup
     Specifies the name of the resource group containing the target resources.
@@ -191,7 +191,7 @@ try {
     # Set the location of the experiment
     if ($faultRegion)
     {
-        $faultRegion = $faultRegion -replace '\s', '' # Remove whitespace
+        $faultRegion = $faultRegion -replace '\s', ''
         $json.location = $faultRegion
     }
 
@@ -208,7 +208,7 @@ try {
         $targets = $targetVMSubRGNameList -split ","
         
         foreach ($target in $targets) {
-            $target = $target -replace '\s', '' # Remove whitespace
+            $target = $target -replace '\s', ''
             $targetId = create_targetId -inputString $target -computeType "virtualmachines"
             AddChaosTarget -targetIndex $targetIndex -id $targetId -type $targetType
             $targetIndex++
