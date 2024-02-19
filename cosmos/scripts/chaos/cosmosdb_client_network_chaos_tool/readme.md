@@ -1,7 +1,7 @@
 ## Introduction to Cosmos DB client-side network chaos tool
 
 The Cosmos DB client-side network chaos tool is a set of PowerShell scripts that allows you to simulate network chaos scenarios for Azure Cosmos DB clients. It is designed to help you test the resilience and performance of your Cosmos DB applications under various network conditions. 
-These conditions will only be experience by the clients that you wish to target for the resiliency test. The rest of clients and the Cosmos DB service itself won't notice any disruptions from the use of this tool.
+These conditions will only be experienced by the clients that you wish to target for the resiliency test. The rest of the clients and the Cosmos DB service itself won't notice any disruptions from the use of this tool.
 
 ### Features
 - **Simulate network outage**: You can configure the tool to simulate network outage between the Cosmos DB client and a region of the Cosmos DB service account.
@@ -9,7 +9,7 @@ These conditions will only be experience by the clients that you wish to target 
 
 ### Resiliency scenarios
 - With the network outage chaos between the Cosmos DB client and the primary region of the Cosmos DB service account you can verify if your application can handle read/write request failover from primary region to secondary region depending on your Cosmos DB account's configuration.
-- With the network delay chaos you can verify if your application can handle timeouts on the requests made to the Cosmos DB service account in the affected region. 
+- With the network delay chaos, you can verify if your application can handle timeouts on the requests made to the Cosmos DB service account in the affected region. 
 
 ### Dependencies
 
@@ -21,7 +21,7 @@ The Cosmos DB client-side network chaos tool installs the following dependencies
 
 The tool should be executed with Admin privileges for the above installations to succeed. The tool will uninstall these dependencies at the end of its execution.
 
-### Prequisites
+### Prerequisites
 - Azure Chaos Studio Resource Provider needs to be enabled for the client subscription.
 - An Azure VM that is in the same network as the Cosmos DB account that you wish to use. The Cosmos DB client-side network chaos tool should be downloaded onto this VM and then executed.
 - For authentication between various components the following Identities are required to be set up:
@@ -42,7 +42,7 @@ The tool should be executed with Admin privileges for the above installations to
     2. User-assigned Managed Identity assigned to the **Client VM** and the **resource group containing Chaos Studio experiment** (the experiment will be created in this resource group after the tool is executed). Assign '**Contributor**' role on the ResourceGroup containing the experiment.
     3. User-assigned Managed Identity assigned to the **Chaos Studio experiment** and the **target resource(s)**. Assign '**Reader**' role on the target resource(s). If there are multiple target resources, this identity and the role needs to be assigned to each of them.
 
-- The target resource(s) need to be onboarded to Chaos Studio so that the ChaosAgent is installed on these target resource(s) and the following Agent-based capabilities are enabled for these target resource(s):
+- The target resource(s) needs to be onboarded to Chaos Studio so that the ChaosAgent is installed on these target resource(s) and the following Agent-based capabilities are enabled for these target resource(s):
     1. Network disconnect (via Firewall)
     2. Network latency
     - For more info on how to onboard target resource(s) click [here](#target-onboarding)
@@ -50,7 +50,7 @@ The tool should be executed with Admin privileges for the above installations to
 - This tool supports two types of target resource(s):
     1. Azure Virtual Machines (VM): Multiple VMs are supported.
     2. Azure Virtual Machine Scale Set (VMSS): Exactly one VMSS is supported.
-    - The tool can be used to target a list of VMs or a VMSS or both. These targets can be in different resource groups and subscriptions as long as they have the same identity assigned to them as that of the experiment and the identity has Reader role on these target resource(s).
+    - The tool can be used to target a list of VMs or a VMSS or both. These targets can be in different resource groups and subscriptions if they have the same identity assigned to them as that of the experiment and the identity has Reader role on these target resource(s).
 
 ### Parameters
 
@@ -61,7 +61,7 @@ The tool should be executed with Admin privileges for the above installations to
 | cosmosDBEndpoint| The endpoint URL of the Cosmos DB account
 |databaseId| The ID of the Cosmos DB database
 |containerId| The ID of the Cosmos DB container
-|faultRegion| The region where the fault will be induced
+|faultRegion| The region where the fault will be induced.
 |durationOfFaultInMinutes| The duration of the fault in minutes.
 |cosmosDBIdentityClientId| The client ID of the managed identity used for authentication between Client VM and Cosmos DB account. If cosmosDBServicePrincipalClientSecret and cosmosDBServicePrincipalTenantId are also provided, cosmosDBIdentityClientId will be used as the Client ID for the service principal which will be used for auth.
 |chaosStudioSubscriptionId| The subscription ID of the Azure Chaos Studio
@@ -70,26 +70,26 @@ The tool should be executed with Admin privileges for the above installations to
 |chaosExperimentManagedIdentityName| The name of the managed identity used for authentication between the chaos experiment and the target resource(s)
 |chaosExperimentName| The name of the chaos experiment
 **Optional Parameters**
-|cosmosDBServicePrincipalClientSecret| The client secret of the service principal used for authentication
-|cosmosDBServicePrincipalTenantId| The tenant ID of the service principal used for authentication
+|cosmosDBServicePrincipalClientSecret| The client secret of the service principal used for authentication.
+|cosmosDBServicePrincipalTenantId| The tenant ID of the service principal used for authentication.
 |cosmosDBMasterKey| The master key/primary key of the Cosmos DB account
 |targetVMSubRGNameList| Specifies a comma-separated list of names for the target virtual machine(s) in the format: "subscriptionId/resourceGroupName/virtualMachineName". e.g. "{12345678-1234-1234-1234-1234567890ab/rg1/vm1,12567841-4321-4321-1234-1234567890gh/rg2/vm2}"
-|targetVMSSSubRGName| Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroupName/virtualMachineScaleSetName". Only one virtual machine scale set can be specified. e.g. "12345678-1234-1234-1234-1234567890ab/rg/vmss"
-|vmssInstanceIdList| A comma-separated list of VM instance IDs in the target VM scale set. e.g. "{0,1,2}".
+|targetVMSSSubRGName| Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroupName/virtualMachineScaleSetName". Only one virtual machine scale set can be specified. e.g."12345678-1234-1234-1234-1234567890ab/rg/vmss"
+|vmssInstanceIdList| A comma-separated list of VM instance IDs in the target VM scale set. e.g."{0,1,2}".
 |delayInMs| The delay/latency induced in the network in milliseconds. Only required when performing Network Delay chaos.
 ---
 
 - Note for Optional parameters:
     - cosmosDBMasterKey and cosmosDBIdentityClientId cannot be null at the same time. At least one of them should be provided. If both cosmosDBMasterKey and cosmosDBIdentityClientId are provided, the script will use cosmosDBIdentityClientId to get the access token.
     - cosmosDBServicePrincipalTenantId cannot be null when cosmosDBServicePrincipalClientSecret is provided.
-    - Both targetVMSubRGNameList (list of target VMs) and targetVMSSSubRGName (target VMSS) cannot be null at the same time. At least one target is needed. Both can be speciifed together.
+    - Both targetVMSubRGNameList (list of target VMs) and targetVMSSSubRGName (target VMSS) cannot be null at the same time. At least one target is needed. Both can be specified together.
     - To target a VMSS for fault, VMSSInstanceIdList should specify which VM instances in the VMSS need to be targeted e.g. {0,1,2}. 
 
 ### Usage
 
 To use the Cosmos DB client-side network chaos tool, follow these steps:
 
-1. On the **Client VM** mentioned in the Prequisites section, open a PowerShell terminal with **Admin Privileges** and navigate to the directory where you saved the tool.
+1. On the **Client VM** mentioned in the Prerequisites section, open a PowerShell terminal with **Admin Privileges** and navigate to the directory where you saved the tool.
 2. You may want to Run the following command to bypass powershell checks:
 ``` 
 Powershell -ExecutionPolicy Bypass
@@ -107,13 +107,13 @@ Powershell -ExecutionPolicy Bypass
     .\cosmosdb_client_network_chaos_tool.ps1 -cosmosDBEndpoint "https://mycosmosdb.documents.azure.com:443/" -databaseId "mydatabase" -containerId "mycontainer" -faultRegion "East US" -chaosStudioSubscriptionId "12345678-1234-1234-1234-1234567890ab" -chaosStudioResourceGroupName "chaos-rg" -chaosStudioManagedIdentityClientId "87654321-4321-4321-4321-210987654321" -chaosExperimentName "myexperiment" -chaosExperimentManagedIdentityName "experiment-mi" -durationOfFaultInMinutes 10 -targetVMSubRGNameList "{12345678-1234-1234-1234-1234567890ab/rg1/vm1,12567841-4321-4321-1234-1234567890gh/rg2/vm2}" -targetVMSSSubRGName "12345678-1234-1234-1234-1234567890ab/rg1/vmss" -vmssInstanceIdList "{0,1,2}"
     ```
 4. For creating ```Network Delay Chaos```
-    - Just add one more parameter to the above command -delayInMs "<delayInMs>". So the complete command will look this:
+    - Just add one more parameter to the above command -delayInMs "<delayInMs>". So, the complete command will look like this:
     ```
     .\cosmosdb_client_network_chaos_tool.ps1 -cosmosDBEndpoint "<cosmosDBEndpointUrl>" -databaseId "<databaseId>" -containerId "<containerId>" -faultRegion "<faultRegion>" -chaosStudioSubscriptionId "<chaosStudioSubscriptionId>" -chaosStudioResourceGroupName "<chaosStudioResourceGroupName>" -chaosStudioManagedIdentityClientId "<chaosStudioManagedIdentityClientId>" -chaosExperimentName "<chaosExperimentName>" -chaosExperimentManagedIdentityName "<chaosExperimentManagedIdentityName>" -durationOfFaultInMinutes <durationOfFaultInMinutes> -targetVMSubRGNameList "<targetVMSubRGNameList>" -targetVMSSSubRGName "<targetVMSSSubRGName>" -vmssInstanceIdList "<vmssInstanceIdList>" -delayInMs "<delayInMs>"
     ```
-    - ```Note```: the delayInMs parameter must have value greater than 0 in order to create the ```Network Delay Chaos```
+    - ```Note```: the delayInMs parameter must have value greater than **0** to create the ```Network Delay Chaos```
 
-5. Navigate to the ```Experiments``` tab in Chaos Studio in the Azure Portal to find the Chaos Studio experiment created by the tool, it woulad have the name provided in the ```chaosExperimentName``` parameter . It may at times take upto to 10 minutes for the experiment to show up in Chaos Studio. Make sure the experiment is or eventually goes in ```Running``` state.
+5. Navigate to the ```Experiments``` tab in Chaos Studio in the Azure Portal to find the Chaos Studio experiment created by the tool, it would have the name provided in the ```chaosExperimentName``` parameter. It may at times take upto to 10 minutes for the experiment to show up in Chaos Studio. Make sure the experiment is or eventually goes in ```Running``` state.
 
 ### <a name="target-onboarding"></a>Target Onboarding to Chaos Studio
 
