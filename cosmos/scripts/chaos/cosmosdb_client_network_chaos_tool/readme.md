@@ -42,6 +42,8 @@ The script should be executed with Admin privileges for the above installations 
 - The target resource(s) need to be onboarded to Chaos Studio so that the Chaos Agent is installed on these target resource(s) and the following Agent-based capabilities are enabled for these target resource(s):
     1. Network disconnect (via Firewall)
     2. Network latency
+    - For more info on target onboarding click [here](#target-onboarding)
+
 - This tool supports two types of target resource(s):
     1. Azure Virtual Machines (VM): Multiple VMs are supported.
     2. Azure Virtual Machine Scale Set (VMSS): Exactly one VMSS is supported.
@@ -109,8 +111,22 @@ Powershell -ExecutionPolicy Bypass
     ```
     - ```Note```: the delayInMs parameter must have value greater than 0 in order to create the ```Network Delay Chaos```
 
+5. Navigate to the ```Experiments``` tab in Chaos Studio in the Azure Portal to find the Chaos Studio experiment created by the tool. It may at times take upto to 10 minutes for the experiment to show up in Chaos Studio. Make sure the experiment is or eventually goes in ```Running``` state.
+
+### <a name="target-onboarding"></a>Target Onboarding to Chaos Studio
+
+- Go to Chaos Studio Resource Provider and select the ```Targets``` tab in the left blade. Then select the VM/VMSS that you wish to onboard. Click ```Enable targets``` in the top menu. Select ```Enable agent-based targets (VM, VMSS)```
+![targetOnboarding1](azure-db-benchmarking\cosmos\scripts\chaos\cosmosdb_client_network_chaos_tool\Images\targetOnboarding1.png)
+
+- Provide the Subscription and name for the User-assigned Managed Identity ```chaosExperimentManagedIdentityName```. You can optionally enable Application Insights by providing the details of your Application Insights account. Click Review + Enable.
+![targetOnboarding2](azure-db-benchmarking\cosmos\scripts\chaos\cosmosdb_client_network_chaos_tool\Images\targetOnboarding2.png)
+
+- Once the target is onboarded, you should be able to see ```Enabled``` under the ```Agent-Based``` column for the VM/VMSS. Select ```Manage actions```
+![Image](azure-db-benchmarking\cosmos\scripts\chaos\cosmosdb_client_network_chaos_tool\Images\targetOnboarding2a.png)
+
+- Under ```Agent-based capabilities``` check ```Network Disconnect (Via Firewall)``` and ```Network Latency``` while leaving everything else unchecked. 
+![Image](azure-db-benchmarking\cosmos\scripts\chaos\cosmosdb_client_network_chaos_tool\Images\targetOnboarding3.png)
 
 
-
-
-
+- To check whether you have successfully onboarded the target you can navigate to the VM/VMSS in Azure portal and select the ```Extensions + applications``` tab in the left blade and check if ```ChaosAgent``` is Provisioned Successfully.
+![Image](azure-db-benchmarking\cosmos\scripts\chaos\cosmosdb_client_network_chaos_tool\Images\targetOnboarding4.png)
