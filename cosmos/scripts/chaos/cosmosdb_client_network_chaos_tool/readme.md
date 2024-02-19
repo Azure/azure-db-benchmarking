@@ -115,17 +115,17 @@ Powershell -ExecutionPolicy Bypass
 ### <a name="target-onboarding"></a>Target Onboarding to Chaos Studio
 
 - Go to Chaos Studio Resource Provider and select the ```Targets``` tab in the left blade. Then select the VM/VMSS that you wish to onboard. Click ```Enable targets``` in the top menu. Select ```Enable agent-based targets (VM, VMSS)```
-- ![Image](Images\targetOnboarding1.png)
+- ![Image](Images/targetOnboarding1.png)
 
 - Provide the Subscription and name for the User-assigned Managed Identity ```chaosExperimentManagedIdentityName```. You can optionally enable Application Insights by providing the details of your Application Insights account. Click Review + Enable.
-- ![Image](Images\targetOnboarding2.png)
+- ![Image](Images/targetOnboarding2.png)
 
 - Once the target is onboarded, you should be able to see ```Enabled``` under the ```Agent-Based``` column for the VM/VMSS. Select ```Manage actions```
-- ![Image](Images\targetOnboarding2a.png)
+- ![Image](Images/targetOnboarding2a.png)
 
 - Under ```Agent-based capabilities``` check ```Network Disconnect (Via Firewall)``` and ```Network Latency``` while leaving everything else unchecked. 
-- ![Image](Images\targetOnboarding3.png)
+- ![Image](Images/targetOnboarding3.png)
 
 
 - To check whether you have successfully onboarded the target you can navigate to the VM/VMSS in Azure portal and select the ```Extensions + applications``` tab in the left blade and check if ```ChaosAgent``` is Provisioned Successfully.
-- ![Image](Images\targetOnboarding4.png)
+- ![Image](Images/targetOnboarding4.png)
