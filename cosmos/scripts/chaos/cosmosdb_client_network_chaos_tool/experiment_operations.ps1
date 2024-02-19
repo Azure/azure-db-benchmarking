@@ -295,5 +295,5 @@ try {
     Write-Host "Experiment Execution Started." $experimentExecution
 }
 catch {
-    Write-Host "Error occurred: $_"
+    Write-Host "Error occurred while performing experiment operations: $_"
 }

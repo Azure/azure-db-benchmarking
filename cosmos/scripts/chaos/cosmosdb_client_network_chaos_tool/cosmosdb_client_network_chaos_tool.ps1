@@ -6,7 +6,7 @@ This script performs client-side network chaos testing for a Cosmos DB account i
 This script is used to simulate client-side network chaos on client VMs/VMSS. Two types of Chaos can be created: 1. Outage, 2. Delay. It accepts various parameters to configure the chaos experiment.
 
 .PARAMETER cosmosDBEndpoint
-The endpoint URL of the Cosmos DB instance.
+The endpoint URL of the Cosmos DB account.
 
 .PARAMETER databaseId
 The ID of the Cosmos DB database.
@@ -45,14 +45,14 @@ The duration of the fault in minutes.
 (Optional*) The master key of the Cosmos DB account. If provided, the script will use the master key to get the access token.
 
 .PARAMETER delayInMs
-(Optional*) The delay in milliseconds between each chaos experiment iteration. Only required when performing Delay injection.
+(Optional*) The delay/latency induced in the network in milliseconds. Only required when performing Network Delay chaos.
 
 .PARAMETER cosmosDBIdentityClientId
 (Optional*) The client ID of the user-assigned managed identity used for authentication.
 If cosmosDBServicePrincipalClientSecret and cosmosDBServicePrincipalTenantId are also provided, cosmosDBIdentityClientId will be used as the Client ID for the service principal.
 
 .PARAMETER targetVMSubRGNameList
-(Optional*) Specifies a comma-separated list of names for the target virtual machines in the format: "subscriptionId/resourceGroupName/virtualMachineName". e.g. "{12345678-1234-1234-1234-1234567890ab/rg1/vm1,12567841-4321-4321-1234-1234567890gh/rg2/vm2}".
+(Optional*) Specifies a comma-separated list of names for the target virtual machines in the format: "subscriptionId/resourceGroupName/virtualMachineName". e.g. "{12345678-1234-1234-1234-1234567890ab/rg1/vm1, 12567841-4321-4321-1234-1234567890gh/rg2/vm2}".
 
 .PARAMETER targetVMSSSubRGName
 (Optional*) Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroupName/virtualMachineScaleSetName". Only one virtual machine scale set can be specified. e.g. "12345678-1234-1234-1234-1234567890ab/rg/vmss".
