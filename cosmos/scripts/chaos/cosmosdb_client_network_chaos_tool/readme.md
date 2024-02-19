@@ -66,7 +66,6 @@ The script should be executed with Admin privileges for the above installations 
 |chaosStudioManagedIdentityClientId| The client ID of the managed identity used by the Azure Chaos Studio
 |chaosExperimentManagedIdentityName| The name of the managed identity used by the chaos experiment
 |chaosExperimentName| The name of the chaos experiment
-|
 **Optional Parameters**
 |cosmosDBServicePrincipalClientSecret| The client secret of the service principal used for authentication
 |cosmosDBServicePrincipalTenantId| The tenant ID of the service principal used for authentication
