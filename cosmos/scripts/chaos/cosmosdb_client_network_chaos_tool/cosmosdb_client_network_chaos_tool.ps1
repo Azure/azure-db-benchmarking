@@ -58,7 +58,7 @@ If cosmosDBServicePrincipalClientSecret and cosmosDBServicePrincipalTenantId are
 (Optional*) Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroupName/virtualMachineScaleSetName". Only one virtual machine scale set can be specified. e.g. "12345678-1234-1234-1234-1234567890ab/rg/vmss".
 
 .PARAMETER vmssInstanceIdList
-(Optional*) A comma-separated list of VM instance IDs in the target VM scale set. e.g. "{0,1,2}".
+(Optional*) A comma-separated list of VM instance IDs in the target VM scale set. e.g. "{0,1,2}". The VMs with these Ids within the VMSS will only be targeted. Any other VMs in the VMSS won't be targeted by the chaos.
 
 Note for Optional* parameters:
 cosmosDBMasterKey and cosmosDBIdentityClientId cannot be null at the same time. At least one of them should be provided. If both cosmosDBMasterKey and cosmosDBIdentityClientId are provided, the script will use cosmosDBIdentityClientId to get the access token.

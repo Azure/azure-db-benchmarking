@@ -75,7 +75,7 @@ The tool should be executed with Admin privileges for the above installations to
 |cosmosDBMasterKey| The master key/primary key of the Cosmos DB account
 |targetVMSubRGNameList| Specifies a comma-separated list of names for the target virtual machine(s) in the format: "subscriptionId/resourceGroupName/virtualMachineName". e.g. "{12345678-1234-1234-1234-1234567890ab/rg1/vm1,12567841-4321-4321-1234-1234567890gh/rg2/vm2}"
 |targetVMSSSubRGName| Specifies the name for the target virtual machine scale set in the format: "subscriptionId/resourceGroupName/virtualMachineScaleSetName". Only one virtual machine scale set can be specified. e.g."12345678-1234-1234-1234-1234567890ab/rg/vmss"
-|vmssInstanceIdList| A comma-separated list of VM instance IDs in the target VM scale set. e.g."{0,1,2}".
+|vmssInstanceIdList| A comma-separated list of VM instance IDs in the target VM scale set. e.g."{0,1,2}". The VMs with these Ids within the VMSS will only be targeted. Any other VMs in the VMSS won't be targeted by the chaos.
 |delayInMs| The delay/latency induced in the network in milliseconds. Only required when performing Network Delay chaos.
 ---
 
