@@ -23,7 +23,7 @@ The tool should be executed with Admin privileges for the above installations to
 
 ### Prerequisites
 - Azure Chaos Studio Resource Provider needs to be enabled for the client subscription.
-- An Azure VM that is in the same network as the Cosmos DB account that you wish to use. The Cosmos DB client-side network chaos tool should be downloaded onto this VM and then executed.
+- An Azure VM that is in the same network as the Cosmos DB account that you wish to use. The Cosmos DB client-side network chaos tool should be downloaded onto this VM and then executed. This VM <u>won't</u> be a target of the chaos.
 - For authentication between various components the following Identities are required to be set up:
     1. User-assigned Managed Identity assigned to the **Client VM** (mentioned above) and the **Cosmos DB account**. 
         - Assign the **Cosmos DB reader role** mentioned [here](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#built-in-role-definitions) to this identity on the Cosmos DB account you wish to use for this experiment. Please note this role is not available on Azure Portal yet. The following Azure CLI command can be used to assign the reader role to the identity:
@@ -42,7 +42,7 @@ The tool should be executed with Admin privileges for the above installations to
     2. User-assigned Managed Identity assigned to the **Client VM** and the **resource group containing Chaos Studio experiment** (the experiment will be created in this resource group after the tool is executed). Assign '**Contributor**' role on the ResourceGroup containing the experiment.
     3. User-assigned Managed Identity assigned to the **Chaos Studio experiment** and the **target resource(s)**. Assign '**Reader**' role on the target resource(s). If there are multiple target resources, this identity and the role needs to be assigned to each of them.
 
-- The target resource(s) needs to be onboarded to Chaos Studio so that the ChaosAgent is installed on these target resource(s) and the following Agent-based capabilities are enabled for these target resource(s):
+- The target resource(s) (i.e. the Azure resource(s) which will experience disruption) needs to be onboarded to Chaos Studio so that the ChaosAgent is installed on these target resource(s) and the following Agent-based capabilities are enabled for these target resource(s):
     1. Network disconnect (via Firewall)
     2. Network latency
     - For more info on how to onboard target resource(s) click [here](#target-onboarding)
