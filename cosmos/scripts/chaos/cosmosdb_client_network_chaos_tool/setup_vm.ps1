@@ -52,5 +52,3 @@ try {
 catch {
     Write-Error "An error occurred during the installation process: $($_.Exception.Message)"
 }
-
-
