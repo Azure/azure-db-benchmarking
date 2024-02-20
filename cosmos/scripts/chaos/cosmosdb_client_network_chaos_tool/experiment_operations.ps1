@@ -296,4 +296,5 @@ try {
 }
 catch {
     Write-Host "Error occurred while performing experiment operations: $_"
+    throw $_
 }

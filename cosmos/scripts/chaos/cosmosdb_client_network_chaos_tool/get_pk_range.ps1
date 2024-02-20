@@ -84,13 +84,33 @@ try {
     $pkRangesResourceLink = "dbs/" + $DatabaseID + "/colls/" + $ContainerId + "/pkranges"
     $requestUri = "$Endpoint$pkRangesResourceLink"
 
-    $result = Invoke-RestMethod -Uri $requestUri -Headers $header -Method $verbMethod -ContentType "application/json"
-    $jsonResult = ConvertTo-Json -InputObject $result -Depth 10
-    Write-Output $jsonResult;
+    $retryCount = 3
+    $retryDelay = 5
+    $retryAttempts = 0
+    $success = $false
 
+    while (-not $success -and $retryAttempts -lt $retryCount) {
+        try {
+            $result = Invoke-RestMethod -Uri $requestUri -Headers $header -Method $verbMethod -ContentType "application/json"
+            $jsonResult = ConvertTo-Json -InputObject $result -Depth 10
+            Write-Output $jsonResult;
+            $success = $true
+        }
+        catch {
+            $retryAttempts++
+            Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__
+            Write-Host "Exception Message:" $_.Exception.Message
+            if ($retryAttempts -lt $retryCount) {
+                Write-Host "Retrying in $retryDelay seconds..."
+                Start-Sleep -Seconds $retryDelay
+            }
+        }
+    }
+
+    if (-not $success) {
+        throw "Failed to retrieve partitionKey ranges after $retryCount attempts."
+    }
 }
-catch
-{
-    Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__
-    Write-Host "Exception Message:" $_.Exception.Message
+catch {
+    Write-Host "Error: $_"
 }

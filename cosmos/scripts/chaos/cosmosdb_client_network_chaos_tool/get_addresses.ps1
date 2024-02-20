@@ -70,7 +70,7 @@ try {
         $authKey = & .\get_cosmosdb_auth_key.ps1 -Verb $verbMethod -ResourceId $addressesResourceId -ResourceType $addressesResourceType -Date $xDate -MasterKey $MasterKeyType -KeyType $KeyType -TokenVersion $TokenVersion
     }
     else {
-        throw "Both AccessToken and MasterKey cannot be null simultaneously. Atleast one of them should be provided."
+        throw "Both AccessToken and MasterKey cannot be null simultaneously. At least one of them should be provided."
     }
 
     $header = @{
@@ -85,11 +85,35 @@ try {
     $addressesResourceLink = "addresses/?"+"$"+"resolveFor=dbs%2f"+$DatabaseID+"%2fcolls%2f"+$ContainerId + "%2fdocs&"+"$"+"filter=protocol eq rntbd&"+"$"+"partitionKeyRangeIds="+$PartitionKeyIds
     $requestUri = "$Endpoint$addressesResourceLink"
 
-    $result = Invoke-RestMethod -Uri $requestUri -Headers $header -Method $verbMethod -ContentType "application/json"
-    $jsonResult = ConvertTo-Json -InputObject $result  -Depth 10
-    Write-Output $jsonResult;
+    $retryCount = 3
+    $retryDelay = 5
+    $retryAttempts = 0
+    $success = $false
+
+    while (-not $success -and $retryAttempts -lt $retryCount) {
+        try {
+            $result = Invoke-RestMethod -Uri $requestUri -Headers $header -Method $verbMethod -ContentType "application/json"
+            $jsonResult = ConvertTo-Json -InputObject $result -Depth 10
+            Write-Output $jsonResult
+            $success = $true
+        }
+        catch {
+            $retryAttempts++
+            Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__
+            Write-Host "Exception Message:" $_.Exception.Message
+            if ($retryAttempts -lt $retryCount) {
+                Write-Host "Retrying in $retryDelay seconds..."
+                Start-Sleep -Seconds $retryDelay
+            }
+        }
+    }
+
+    if (-not $success) {
+        throw "Failed to retrieve addresses after $retryCount attempts."
+    }
 }
 catch {
-    Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__
-    Write-Host "Exception Message:" $_.Exception.Message
+    Write-Host "Error: $_"
 }
+
+

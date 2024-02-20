@@ -1,6 +1,7 @@
 from azure.identity import DefaultAzureCredential
 from azure.identity import ClientSecretCredential
 import argparse
+import time
 
 # Author: Darshan Patnekar
 # Date: 02/08/2024
@@ -24,20 +25,30 @@ def get_aad_token(endpoint, client_id, client_secret, tenant_id):
     Raises:
         Exception: If the Microsoft Entra ID token cannot be retrieved.
     """
-    try:
-        if client_id and client_secret and tenant_id:
-            aad_credentials = ClientSecretCredential(tenant_id, client_id, client_secret)
-        elif client_id and not client_secret and not tenant_id:
-            aad_credentials = DefaultAzureCredential(managed_identity_client_id=client_id)
-        else:
-            raise Exception("Either provide Client ID only to retrieve the Microsoft Entra ID token using Manged Identity or provide Client ID, Client Secret and Tenant ID to retrieve the Microsoft Entra ID token using Service Principal.")
-        
-        result = endpoint.split(':')
-        scope = result[0] + ":" + result[1] + "/.default"
-        token = aad_credentials.get_token(scope)
-        print(token.token)
-    except Exception as e:
-        raise Exception("Failed to retrieve Microsoft Entra ID token: " + str(e))
+    max_retries = 3
+    retry_delay = 5
+
+    for retry in range(max_retries):
+        try:
+            if client_id and client_secret and tenant_id:
+                aad_credentials = ClientSecretCredential(tenant_id, client_id, client_secret)
+            elif client_id and not client_secret and not tenant_id:
+                aad_credentials = DefaultAzureCredential(managed_identity_client_id=client_id)
+            else:
+                raise Exception("Either provide Client ID only to retrieve the Microsoft Entra ID token using Manged Identity or provide Client ID, Client Secret and Tenant ID to retrieve the Microsoft Entra ID token using Service Principal.")
+            
+            result = endpoint.split(':')
+            scope = result[0] + ":" + result[1] + "/.default"
+            token = aad_credentials.get_token(scope)
+            print(token.token)
+            break
+        except Exception as e:
+            print("Error occurred while retrieving the Microsoft Entra ID token:", str(e))
+            if retry < max_retries - 1:
+                print(f"Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+            else:
+                raise Exception("Failed to retrieve Microsoft Entra ID token after multiple retries.")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--Endpoint', required=True, type=str, help='Endpoint')
@@ -56,3 +67,4 @@ try:
     get_aad_token(endpoint, client_id, client_secret, tenant_id)
 except Exception as e:
     print("Error occurred while retrieving the Microsoft Entra ID token:", str(e))
+    
