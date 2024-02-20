@@ -2,6 +2,9 @@
 
 The Cosmos DB client-side network chaos tool is a set of PowerShell scripts that allows you to simulate network chaos scenarios for Azure Cosmos DB clients. It is designed to help you test the resilience and performance of your Cosmos DB applications under various network conditions. 
 These conditions will only be experienced by the clients that you wish to target for the resiliency test. The rest of the clients and the Cosmos DB service itself won't notice any disruptions from the use of this tool.
+- <span style="color:red">**Warning**</span>: 
+    - This tool disrupts the network traffic between the specified target VM(s)/VMSS and the Cosmos DB region and can potentially affect multiple Cosmos DB accounts in the region. It may also affect other applications running on the target VM(s)/VMSS.
+    - Only use this tool in stage or test clusters. 
 
 ### Features
 - **Simulate network outage**: You can configure the tool to simulate network outage between the Cosmos DB client and a region of the Cosmos DB service account.
@@ -98,9 +101,21 @@ Powershell -ExecutionPolicy Bypass
 
     - Execute the tool by running the following command making sure to replace all the placeholders with appropriate values:
     ```
-    .\cosmosdb_client_network_chaos_tool.ps1 -cosmosDBEndpoint "<cosmosDBEndpointUrl>" -databaseId "<databaseId>" -containerId "<containerId>" -faultRegion "<faultRegion>" -chaosStudioSubscriptionId "<chaosStudioSubscriptionId>" -chaosStudioResourceGroupName "<chaosStudioResourceGroupName>" -chaosStudioManagedIdentityClientId "<chaosStudioManagedIdentityClientId>" -chaosExperimentName "<chaosExperimentName>" -chaosExperimentManagedIdentityName "<chaosExperimentManagedIdentityName>" -durationOfFaultInMinutes <durationOfFaultInMinutes> -targetVMSubRGNameList "<targetVMSubRGNameList>" -targetVMSSSubRGName "<targetVMSSSubRGName>" -vmssInstanceIdList "<vmssInstanceIdList>"
+    .\cosmosdb_client_network_chaos_tool.ps1 `
+    -cosmosDBEndpoint "<cosmosDBEndpointUrl>" `
+    -databaseId "<databaseId>" `
+    -containerId "<containerId>" `
+    -faultRegion "<faultRegion>" `
+    -chaosStudioSubscriptionId "<chaosStudioSubscriptionId>" `
+    -chaosStudioResourceGroupName "<chaosStudioResourceGroupName>" `
+    -chaosStudioManagedIdentityClientId "<chaosStudioManagedIdentityClientId>" `
+    -chaosExperimentName "<chaosExperimentName>" `
+    -chaosExperimentManagedIdentityName "<chaosExperimentManagedIdentityName>" `
+    -durationOfFaultInMinutes <durationOfFaultInMinutes> `
+    -targetVMSubRGNameList "<targetVMSubRGNameList>" `
+    -targetVMSSSubRGName "<targetVMSSSubRGName>" `
+    -vmssInstanceIdList "<vmssInstanceIdList>"
     ```
-
 
     - Following is an example to understand the input formatting:
     ```
