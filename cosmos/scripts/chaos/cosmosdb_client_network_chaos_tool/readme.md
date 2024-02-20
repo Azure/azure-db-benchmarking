@@ -1,4 +1,4 @@
-## Introduction to Cosmos DB client-side network chaos tool
+## Introduction to Cosmos DB client-side network chaos tool (Preview)
 
 The Cosmos DB client-side network chaos tool is a set of PowerShell scripts that allows you to simulate network chaos scenarios for Azure Cosmos DB clients. It is designed to help you test the resilience and performance of your Cosmos DB applications under various network conditions. 
 These conditions will only be experienced by the clients that you wish to target for the resiliency test. The rest of the clients and the Cosmos DB service itself won't notice any disruptions from the use of this tool.
