@@ -137,6 +137,21 @@ param (
     [string] $vmssInstanceIdList
 )
 
+$date = Get-Date -Format "yyyy-MM-dd-HH-mm-ss"
+$outputLogFilePath = "logs\outputLog\cosmosdb_client_network_chaos_tool_outputLog_$date.txt"
+
+try {
+    if (-not (Test-Path -Path $outputLogFilePath)) {
+        New-Item -ItemType File -Path $outputLogFilePath -Force
+    }
+}
+catch {
+    Write-Host "An error occurred while creating the output log file: $_"
+}
+
+# Start the transcript
+Start-Transcript -Path $outputLogFilePath -Append
+
 # Conditional Validations for the input parameters
 if ($null -eq $cosmosDBMasterKey -and $null -eq $cosmosDBIdentityClientId) {
     throw "Both cosmosDBMasterKey and cosmosDBIdentityClientId cannot be null at the same time."
@@ -159,101 +174,149 @@ if ([string]::IsNullOrEmpty($delayInMs)) {
 }
 
 # Install tool's dependencies on the client VM
-&.\setup_vm.ps1
+try {
+    &.\setup_vm.ps1
+} 
+catch {
+    Write-Host "An error occurred while running setup_vm.ps1: $_"
+}
 
 # Get Cosmos DB access token for supported authentication methods
 if (![string]::IsNullOrEmpty($cosmosDBIdentityClientId)) {
-    $dataPlaneAccessToken = & python .\get_cdb_aad_token.py --Endpoint $cosmosDBEndpoint --ClientId $cosmosDBIdentityClientId --ClientSecret $cosmosDBServicePrincipalClientSecret --TenantId $cosmosDBServicePrincipalTenantId
+    try {
+        $dataPlaneAccessToken = & python .\get_cdb_aad_token.py --Endpoint $cosmosDBEndpoint --ClientId $cosmosDBIdentityClientId --ClientSecret $cosmosDBServicePrincipalClientSecret --TenantId $cosmosDBServicePrincipalTenantId
+    }
+    catch {
+        Write-Host "An error occurred while getting the Cosmos DB Microsoft Entra ID token: $_"
+    }
 }
 
 # Get the readable locations
-$databaseAccountResponseJson = & .\get_database_account.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
-$databaseAccountResponseObject = $databaseAccountResponseJson | ConvertFrom-Json
-$readableLocations = $databaseAccountResponseObject.readableLocations
-$faultRegion = $faultRegion -replace '\s', ''
+try {
+    $databaseAccountResponseJson = & .\get_database_account.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
+    $databaseAccountResponseObject = $databaseAccountResponseJson | ConvertFrom-Json
+    $readableLocations = $databaseAccountResponseObject.readableLocations
+    $faultRegion = $faultRegion -replace '\s', ''
 
-foreach ($readableLocation in $readableLocations)
-{
-    $readableLocation = $readableLocation -replace '\s', ''
-    if ($faultRegion -eq $readableLocation.name)
+    foreach ($readableLocation in $readableLocations)
     {
-        $cosmosDBEndpoint = $readableLocation.databaseAccountEndpoint
+        $readableLocation = $readableLocation -replace '\s', ''
+        if ($faultRegion -eq $readableLocation.name)
+        {
+            $cosmosDBEndpoint = $readableLocation.databaseAccountEndpoint
+        }
     }
+} 
+catch {
+    Write-Host "An error occurred while getting the database account: $_"
 }
 
 # Get the partition key ranges
-$pkRangeResponseJson = & .\get_pk_range.ps1 -Endpoint $cosmosDBEndpoint -DatabaseID $databaseId -ContainerId $containerId -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
-$pkRangeResponse = $pkRangeResponseJson | ConvertFrom-Json
-$partitionKeyRanges = $pkRangeResponse.PartitionKeyRanges
-$commaSeparatedPkid = ""
-foreach ($partitionKeyRange in $partitionKeyRanges)
-{
-    # Check if the string is true or false
-    if ($commaSeparatedPkid)
+try {
+    $pkRangeResponseJson = & .\get_pk_range.ps1 -Endpoint $cosmosDBEndpoint -DatabaseID $databaseId -ContainerId $containerId -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey
+    $pkRangeResponse = $pkRangeResponseJson | ConvertFrom-Json
+    $partitionKeyRanges = $pkRangeResponse.PartitionKeyRanges
+    $commaSeparatedPkid = ""
+    foreach ($partitionKeyRange in $partitionKeyRanges)
     {
-        $commaSeparatedPkid += "," + $partitionKeyRange.id
+        # Check if the string is true or false
+        if ($commaSeparatedPkid)
+        {
+            $commaSeparatedPkid += "," + $partitionKeyRange.id
+        }
+        else
+        {
+            $commaSeparatedPkid += $partitionKeyRange.id
+        }
     }
-    else
-    {
-        $commaSeparatedPkid += $partitionKeyRange.id
-    }
+} 
+catch {
+    Write-Host "An error occurred while getting the partitionKey ranges: $_"
 }
 
 # Get IP addresses and ports of the gateway and backend nodes
-$addressesResponseJson = & .\get_addresses.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey -PartitionKeyIds $commaSeparatedPkid -DatabaseID $databaseId -ContainerId $containerId
-$addressesResponse = $addressesResponseJson | ConvertFrom-Json
-$addresses = $addressesResponse.Addresss
-$backendUriList = New-Object System.Collections.Generic.List[uri]
-foreach ($address in $addresses)
-{
-    $backendUriList += [uri]$address.physcialUri
+try {
+    $addressesResponseJson = & .\get_addresses.ps1 -Endpoint $cosmosDBEndpoint -AccessToken $dataPlaneAccessToken -MasterKey $cosmosDBMasterKey -PartitionKeyIds $commaSeparatedPkid -DatabaseID $databaseId -ContainerId $containerId
+    $addressesResponse = $addressesResponseJson | ConvertFrom-Json
+    $addresses = $addressesResponse.Addresss
+    $backendUriList = New-Object System.Collections.Generic.List[uri]
+    foreach ($address in $addresses)
+    {
+        $backendUriList += [uri]$address.physcialUri
+    }
+    $backendUriList = $backendUriList | Select-Object -uniq
 }
-$backendUriList = $backendUriList | Select-Object -uniq
-
-$endpointUri = [uri]$cosmosDBEndpoint
-$endpointPort = $endpointUri.Port
-$endpointHost = $endpointUri.Host
-$endpointIpAddress = (Resolve-DnsName $endpointHost).IPAddress
-$subnetMask = "255.255.255.255"
-
-# Adding gateway endpoint for filtering
-$filterString = "[{\`"portHigh\`":$endpointPort,\`"subnetMask\`":\`"$subnetMask\`",\`"address\`":\`"$endpointIpAddress\`",\`"portLow\`":$endpointPort}"
-
-#HashSet to store the unique IP addresses
-$uniqueIPAddressHashSet = New-Object System.Collections.Generic.HashSet[string]
-
-foreach ($backendUri in $backendUriList)
-{
-    $backendHost = $backendUri.Host
-    $ipAddress = (Resolve-DnsName $backendHost).IPAddress
-    $uniqueIPAddressHashSet.Add($ipAddress)
+catch {
+    Write-Host "An error occurred while getting the IP addresses and ports of the gateway and backend nodes: $_"
 }
 
-# Adding backend nodes for filtering
-foreach ($ipAddress in $uniqueIPAddressHashSet)
-{
-    $lowPort = 0
-    $highPort = 65535
+try {
+    $endpointUri = [uri]$cosmosDBEndpoint
+    $endpointPort = $endpointUri.Port
+    $endpointHost = $endpointUri.Host
+    $endpointIpAddress = (Resolve-DnsName $endpointHost).IPAddress
+    $subnetMask = "255.255.255.255"
+
+    # Adding gateway endpoint for filtering
+    $filterString = "[{\`"portHigh\`":$endpointPort,\`"subnetMask\`":\`"$subnetMask\`",\`"address\`":\`"$endpointIpAddress\`",\`"portLow\`":$endpointPort}"
+
+    #HashSet to store the unique IP addresses
+    $uniqueIPAddressHashSet = New-Object System.Collections.Generic.HashSet[string]
+
+    foreach ($backendUri in $backendUriList)
+    {
+        $backendHost = $backendUri.Host
+        $ipAddress = (Resolve-DnsName $backendHost).IPAddress
+        $uniqueIPAddressHashSet.Add($ipAddress)
+    }
+
+    # Adding backend nodes for filtering
+    foreach ($ipAddress in $uniqueIPAddressHashSet)
+    {
+        $lowPort = 0
+        $highPort = 65535
+        if ($filterString)
+        {
+            $filterString += ",{\`"portHigh\`":\`"$highPort\`",\`"subnetMask\`":\`"$subnetMask\`",\`"address\`":\`"$ipAddress\`",\`"portLow\`":\`"$lowPort\`"}"
+        }
+        else
+        {
+            $filterString += "[{\`"portHigh\`":\`"$highPort\`",\`"subnetMask\`":\`"$subnetMask\`",\`"address\`":\`"$ipAddress\`",\`"portLow\`":\`"$lowPort\`"}"
+        }
+    }
+
     if ($filterString)
     {
-        $filterString += ",{\`"portHigh\`":\`"$highPort\`",\`"subnetMask\`":\`"$subnetMask\`",\`"address\`":\`"$ipAddress\`",\`"portLow\`":\`"$lowPort\`"}"
-    }
-    else
-    {
-        $filterString += "[{\`"portHigh\`":\`"$highPort\`",\`"subnetMask\`":\`"$subnetMask\`",\`"address\`":\`"$ipAddress\`",\`"portLow\`":\`"$lowPort\`"}"
+        $filterString += "]"
     }
 }
-
-if ($filterString)
-{
-    $filterString += "]"
+catch {
+    Write-Host "An error occurred while creating the destinationFilters: $_"
 }    
 
 # Create the experiment json
-$experimentJSON = & .\create_experiment_json.ps1 -FilterString $filterString -DurationOfFaultInMinutes $durationOfFaultInMinutes -FaultRegion $faultRegion -ExperimentName $chaosExperimentName -ResourceGroup $chaosStudioResourceGroupName -SubscriptionId $chaosStudioSubscriptionId -DelayInMs $delayInMs -TargetVMSubRGNameList $targetVMSubRGNameList -TargetVMSSSubRGName $targetVMSSSubRGName -VmssInstanceIdList $vmssInstanceIdList -ChaosExperimentManagedIdentityName $chaosExperimentManagedIdentityName
+try {
+    $experimentJSON = & .\create_experiment_json.ps1 -FilterString $filterString -DurationOfFaultInMinutes $durationOfFaultInMinutes -FaultRegion $faultRegion -ExperimentName $chaosExperimentName -ResourceGroup $chaosStudioResourceGroupName -SubscriptionId $chaosStudioSubscriptionId -DelayInMs $delayInMs -TargetVMSubRGNameList $targetVMSubRGNameList -TargetVMSSSubRGName $targetVMSSSubRGName -VmssInstanceIdList $vmssInstanceIdList -ChaosExperimentManagedIdentityName $chaosExperimentManagedIdentityName
+}
+catch {
+    Write-Host "An error occurred while creating the experiment JSON: $_"
+}
 
 # Create the experiment on Chaos Studio and Start the experiment
-& .\experiment_operations.ps1 -ExperimentSubscriptionId $chaosStudioSubscriptionId -ExperimentResourceGroup $chaosStudioResourceGroupName  -ExperimentName $chaosExperimentName -ExperimentJSON $experimentJSON -ChaosStudioManagedIdentityClientId $chaosStudioManagedIdentityClientId
+try {
+    & .\experiment_operations.ps1 -ExperimentSubscriptionId $chaosStudioSubscriptionId -ExperimentResourceGroup $chaosStudioResourceGroupName  -ExperimentName $chaosExperimentName -ExperimentJSON $experimentJSON -ChaosStudioManagedIdentityClientId $chaosStudioManagedIdentityClientId
+}
+catch {
+    Write-Host "An error occurred while creating the experiment on Chaos Studio: $_"
+}
 
 # Cleanup the VM after the experiment
-& .\cleanup_vm.ps1
+try {
+    & .\cleanup_vm.ps1
+}
+catch {
+    Write-Host "An error occurred while running cleanup_vm.ps1: $_"
+}
+
+# Stop the transcript
+Stop-Transcript
