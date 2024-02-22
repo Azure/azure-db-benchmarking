@@ -284,15 +284,22 @@ function Wait-ExperimentCreation {
 try {
     $token = Get-AccessToken -ClientId $chaosStudioManagedIdentityClientId
 
-    $experimentCreation = Create-Experiment -SubscriptionId $experimentSubscriptionId -ResourceGroup $experimentResourceGroup -ExperimentName $experimentName -ExperimentJson $experimentJson -Token $token
+    if (![string]::IsNullOrEmpty($token)) {
 
-    Write-Host "Experiment Creation response: " $experimentCreation
+        $experimentCreation = Create-Experiment -SubscriptionId $experimentSubscriptionId -ResourceGroup $experimentResourceGroup -ExperimentName $experimentName -ExperimentJson $experimentJson -Token $token
 
-    Wait-ExperimentCreation -SubscriptionId $experimentSubscriptionId -ResourceGroup $experimentResourceGroup -ExperimentName $experimentName -ExperimentState $experimentCreation.provisioningState -Token $token
+        Write-Host "Experiment Creation response: " $experimentCreation
 
-    $experimentExecution = Execute-Experiment -SubscriptionId $experimentSubscriptionId -ResourceGroup $experimentResourceGroup -ExperimentName $experimentName -Token $token
+        Wait-ExperimentCreation -SubscriptionId $experimentSubscriptionId -ResourceGroup $experimentResourceGroup -ExperimentName $experimentName -ExperimentState $experimentCreation.provisioningState -Token $token
 
-    Write-Host "Experiment Execution Started." $experimentExecution
+        $experimentExecution = Execute-Experiment -SubscriptionId $experimentSubscriptionId -ResourceGroup $experimentResourceGroup -ExperimentName $experimentName -Token $token
+
+        Write-Host "Experiment Execution Started." $experimentExecution
+    }
+    else {
+        Write-Host "Failed to retrieve access token from Microsoft Entra ID"
+        throw "Experiment Operations: Control plane token is null"
+    }
 }
 catch {
     Write-Host "Error occurred while performing experiment operations: $_"

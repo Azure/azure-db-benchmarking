@@ -67,7 +67,7 @@ try {
         $utcDate = $date.ToUniversalTime()
         $xDate = $utcDate.ToString('r', [System.Globalization.CultureInfo]::InvariantCulture)
         $MasterKeyType = "master"
-        $authKey = & .\get_cosmosdb_auth_key.ps1 -Verb $verbMethod -ResourceId $addressesResourceId -ResourceType $addressesResourceType -Date $xDate -MasterKey $MasterKeyType -KeyType $KeyType -TokenVersion $TokenVersion
+        $authKey = & .\get_cosmosdb_auth_key.ps1 -Verb $verbMethod -ResourceId $addressesResourceId -ResourceType $addressesResourceType -Date $xDate -MasterKey $MasterKey -KeyType $MasterKeyType -TokenVersion $TokenVersion
     }
     else {
         throw "Both AccessToken and MasterKey cannot be null simultaneously. At least one of them should be provided."
