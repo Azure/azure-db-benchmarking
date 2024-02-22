@@ -90,15 +90,7 @@ Function GenerateMasterKeyAuthorizationKey {
         [Parameter(Mandatory=$true)]
         [ValidateNotNull()]
         [string] $Verb,
-
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNull()]
-        [string] $ResourceId,
-
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNull()]
-        [string] $ResourceType,
-
+ 
         [Parameter(Mandatory=$true)]
         [ValidateNotNull()]
         [string] $Date,
@@ -113,7 +105,11 @@ Function GenerateMasterKeyAuthorizationKey {
 
         [Parameter(Mandatory=$true)]
         [ValidateNotNull()]
-        [String] $TokenVersion
+        [String] $TokenVersion,
+
+        [string] $ResourceId,
+
+        [string] $ResourceType
     )
 
     try {
