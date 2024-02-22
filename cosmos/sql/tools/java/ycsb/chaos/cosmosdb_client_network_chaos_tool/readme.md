@@ -90,13 +90,13 @@ The tool should be executed with Admin privileges for the above installations to
 ### Usage
 
 To use the Cosmos DB client-side network chaos tool, follow these steps:
-
-1. On the **Client VM** mentioned in the Prerequisites section, open a PowerShell terminal with **Admin Privileges** and navigate to the directory where you saved the tool.
-2. You may want to Run the following command to bypass powershell checks:
+1. Download the [tool's zip file](./cosmosdb_client_network_chaos_tool.zip) on the **Client VM** mentioned in the Prerequisites section.
+2. On the **Client VM**, open a PowerShell terminal with **Admin Privileges** and navigate to the directory where you saved the tool.
+3. You may want to Run the following command to bypass powershell checks:
 ``` 
 Powershell -ExecutionPolicy Bypass
 ```
-3. For creating ```Network Outage Chaos```
+4. For creating ```Network Outage Chaos```
 
     - Execute the tool by running the following command making sure to replace all the placeholders with appropriate values:
     ```
@@ -133,7 +133,7 @@ Powershell -ExecutionPolicy Bypass
     -targetVMSSSubRGName "12345678-1234-1234-1234-1234567890ab/rg1/vmss" `
     -vmssInstanceIdList "{0,1,2}"
     ```
-4. For creating ```Network Delay Chaos```
+5. For creating ```Network Delay Chaos```
     - Just add one more parameter to the above command -delayInMs "<delayInMs>". So, the complete command will look like this:
     ```
      .\cosmosdb_client_network_chaos_tool.ps1 `
@@ -153,7 +153,7 @@ Powershell -ExecutionPolicy Bypass
     ```
     - ```Note```: the delayInMs parameter must have value greater than **0** to create the ```Network Delay Chaos```
 
-5. Navigate to the ```Experiments``` tab in Chaos Studio in the Azure Portal to find the Chaos Studio experiment created by the tool, it would have the name provided in the ```chaosExperimentName``` parameter. It may at times take upto to 10 minutes for the experiment to show up in Chaos Studio. Make sure the experiment is or eventually goes in ```Running``` state.
+6. Navigate to the ```Experiments``` tab in Chaos Studio in the Azure Portal to find the Chaos Studio experiment created by the tool, it would have the name provided in the ```chaosExperimentName``` parameter. It may at times take upto to 10 minutes for the experiment to show up in Chaos Studio. Make sure the experiment is or eventually goes in ```Running``` state.
 
 ### <a name="target-onboarding"></a>Target Onboarding to Chaos Studio
 
