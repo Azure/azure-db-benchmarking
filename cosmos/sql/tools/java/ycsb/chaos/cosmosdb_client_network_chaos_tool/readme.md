@@ -105,6 +105,7 @@ Powershell -ExecutionPolicy Bypass
     -databaseId "<databaseId>" `
     -containerId "<containerId>" `
     -faultRegion "<faultRegion>" `
+    -cosmosDBIdentityClientId "<cosmosDBIdentityClientId>" `
     -chaosStudioSubscriptionId "<chaosStudioSubscriptionId>" `
     -chaosStudioResourceGroupName "<chaosStudioResourceGroupName>" `
     -chaosStudioManagedIdentityClientId "<chaosStudioManagedIdentityClientId>" `
@@ -123,6 +124,7 @@ Powershell -ExecutionPolicy Bypass
     -databaseId "mydatabase" `
     -containerId "mycontainer" `
     -faultRegion "East US" `
+    -cosmosDBIdentityClientId "12345678-7895-1234-1234-1234567890ab" `
     -chaosStudioSubscriptionId "12345678-1234-1234-1234-1234567890ab" `
     -chaosStudioResourceGroupName "chaos-rg" `
     -chaosStudioManagedIdentityClientId "87654321-4321-4321-4321-210987654321" `
@@ -140,6 +142,7 @@ Powershell -ExecutionPolicy Bypass
     -cosmosDBEndpoint "<cosmosDBEndpointUrl>" `
     -databaseId "<databaseId>" -containerId "<containerId>" `
     -faultRegion "<faultRegion>" `
+    -cosmosDBIdentityClientId "12345678-7895-1234-1234-1234567890ab" `
     -chaosStudioSubscriptionId "<chaosStudioSubscriptionId>" `
     -chaosStudioResourceGroupName "<chaosStudioResourceGroupName>" `
     -chaosStudioManagedIdentityClientId "<chaosStudioManagedIdentityClientId>" `
