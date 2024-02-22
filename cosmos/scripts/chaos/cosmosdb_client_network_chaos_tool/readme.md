@@ -119,12 +119,38 @@ Powershell -ExecutionPolicy Bypass
 
     - Following is an example to understand the input formatting:
     ```
-    .\cosmosdb_client_network_chaos_tool.ps1 -cosmosDBEndpoint "https://mycosmosdb.documents.azure.com:443/" -databaseId "mydatabase" -containerId "mycontainer" -faultRegion "East US" -chaosStudioSubscriptionId "12345678-1234-1234-1234-1234567890ab" -chaosStudioResourceGroupName "chaos-rg" -chaosStudioManagedIdentityClientId "87654321-4321-4321-4321-210987654321" -chaosExperimentName "myexperiment" -chaosExperimentManagedIdentityName "experiment-mi" -durationOfFaultInMinutes 10 -targetVMSubRGNameList "{12345678-1234-1234-1234-1234567890ab/rg1/vm1,12567841-4321-4321-1234-1234567890gh/rg2/vm2}" -targetVMSSSubRGName "12345678-1234-1234-1234-1234567890ab/rg1/vmss" -vmssInstanceIdList "{0,1,2}"
+     .\cosmosdb_client_network_chaos_tool.ps1 `
+    -cosmosDBEndpoint "https://mycosmosdb.documents.azure.com:443/" `
+    -databaseId "mydatabase" `
+    -containerId "mycontainer" `
+    -faultRegion "East US" `
+    -chaosStudioSubscriptionId "12345678-1234-1234-1234-1234567890ab" `
+    -chaosStudioResourceGroupName "chaos-rg" `
+    -chaosStudioManagedIdentityClientId "87654321-4321-4321-4321-210987654321" `
+    -chaosExperimentName "myexperiment" `
+    -chaosExperimentManagedIdentityName "experiment-mi" `
+    -durationOfFaultInMinutes 10 `
+    -targetVMSubRGNameList "{12345678-1234-1234-1234-1234567890ab/rg1/vm1,12567841-4321-4321-1234-1234567890gh/rg2/vm2}" `
+    -targetVMSSSubRGName "12345678-1234-1234-1234-1234567890ab/rg1/vmss" `
+    -vmssInstanceIdList "{0,1,2}"
     ```
 4. For creating ```Network Delay Chaos```
     - Just add one more parameter to the above command -delayInMs "<delayInMs>". So, the complete command will look like this:
     ```
-    .\cosmosdb_client_network_chaos_tool.ps1 -cosmosDBEndpoint "<cosmosDBEndpointUrl>" -databaseId "<databaseId>" -containerId "<containerId>" -faultRegion "<faultRegion>" -chaosStudioSubscriptionId "<chaosStudioSubscriptionId>" -chaosStudioResourceGroupName "<chaosStudioResourceGroupName>" -chaosStudioManagedIdentityClientId "<chaosStudioManagedIdentityClientId>" -chaosExperimentName "<chaosExperimentName>" -chaosExperimentManagedIdentityName "<chaosExperimentManagedIdentityName>" -durationOfFaultInMinutes <durationOfFaultInMinutes> -targetVMSubRGNameList "<targetVMSubRGNameList>" -targetVMSSSubRGName "<targetVMSSSubRGName>" -vmssInstanceIdList "<vmssInstanceIdList>" -delayInMs "<delayInMs>"
+     .\cosmosdb_client_network_chaos_tool.ps1 `
+    -cosmosDBEndpoint "<cosmosDBEndpointUrl>" `
+    -databaseId "<databaseId>" -containerId "<containerId>" `
+    -faultRegion "<faultRegion>" `
+    -chaosStudioSubscriptionId "<chaosStudioSubscriptionId>" `
+    -chaosStudioResourceGroupName "<chaosStudioResourceGroupName>" `
+    -chaosStudioManagedIdentityClientId "<chaosStudioManagedIdentityClientId>" `
+    -chaosExperimentName "<chaosExperimentName>" `
+    -chaosExperimentManagedIdentityName "<chaosExperimentManagedIdentityName>" `
+    -durationOfFaultInMinutes <durationOfFaultInMinutes> `
+    -targetVMSubRGNameList "<targetVMSubRGNameList>" `
+    -targetVMSSSubRGName "<targetVMSSSubRGName>" `
+    -vmssInstanceIdList "<vmssInstanceIdList>" `
+    -delayInMs "<delayInMs>"
     ```
     - ```Note```: the delayInMs parameter must have value greater than **0** to create the ```Network Delay Chaos```
 
