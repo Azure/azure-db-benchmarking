@@ -1,0 +1,53 @@
+{
+    "id":"/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Chaos/experiments/<experimentName>",
+    "name":"<experimentName>",
+    "identity":{
+       "userAssignedIdentities":{
+          "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<identityName>":{}
+       },
+       "type":"identityType"
+    },
+    "location":"<Azure region>",
+    "properties":{
+       "selectors":[
+          {
+             "type":"List",
+             "id":"myResources",
+             "targets":[
+                {
+                   "id":"/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Compute/virtualMachines/<vmName>/providers/Microsoft.Chaos/targets/Microsoft-Agent",
+                   "type":"ChaosTarget"
+                }
+             ]
+          }
+       ],
+       "steps":[
+          {
+             "name":"Step 1",
+             "branches":[
+                {
+                   "name":"Branch 1",
+                   "actions":[
+                      {
+                         "type":"continuous",
+                         "selectorId":"myResources",
+                         "duration":"PT10M",
+                         "parameters":[
+                            {
+                               "key":"destinationFilters",
+                               "value":"<destinationFilterList>"
+                            },
+                            {
+                               "key":"latencyInMilliseconds",
+                               "value":"<milliseconds>"
+                            }
+                         ],
+                         "name":"urn:csci:microsoft:agent:networkLatency/1.1"
+                      }
+                   ]
+                }
+             ]
+          }
+       ]
+    }
+ }

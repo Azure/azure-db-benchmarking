@@ -1,0 +1,55 @@
+{
+   "id":"/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Chaos/experiments/<experimentName>",
+   "identity":{
+      "userAssignedIdentities":{
+         "/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<identityName>":{}
+      },
+      "type":"identityType"
+   },
+   "location":"<Azure region>",
+   "name":"<experimentName>",
+   "properties":{
+      "selectors":[
+         {
+            "id":"myResources",
+            "targets":[
+               {
+                  "id":"/subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Compute/virtualMachines/<vmName>/providers/Microsoft.Chaos/targets/Microsoft-Agent",
+                  "type":"ChaosTarget"
+               }
+            ],
+            "type":"List"
+         }
+      ],
+      "steps":[
+         {
+            "branches":[
+               {
+                  "actions":[
+                     {
+                        "duration":"PT10M",
+                        "name":"urn:csci:microsoft:agent:networkDisconnectViaFirewall/1.0",
+                        "parameters":[
+                           {
+                              "key":"destinationFilters",
+                              "value":"<destinationFilterList>"
+                           }
+                        ],
+                        "selectorId":"myResources",
+                        "type":"continuous"
+                     }
+                  ],
+                  "name":"Branch 1"
+               }
+            ],
+            "name":"Step 1"
+         }
+      ]
+   },
+   "systemData":{
+      "createdAt":"2023-11-22T14:21:15.351-08:00",
+      "createdByType":"User",
+      "lastModifiedAt":"2023-12-14T14:40:40.609-08:00"
+   },
+   "type":"Microsoft.Chaos/experiments"
+}
