@@ -50,6 +50,8 @@ param (
     [string] $MasterKey
 )
 
+Add-Type -AssemblyName System.Web
+
 $TokenVersion = "1.0"
 $verbMethod = "GET"
 $authKey = ""

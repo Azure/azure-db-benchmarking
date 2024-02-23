@@ -23,6 +23,8 @@ param (
     [string] $clientId
 )
 
+Add-Type -AssemblyName System.Web
+
 try {
     $resource = "https://management.azure.com/"
     $uri = "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&client_id=" + $clientId + "&resource=" + $resource

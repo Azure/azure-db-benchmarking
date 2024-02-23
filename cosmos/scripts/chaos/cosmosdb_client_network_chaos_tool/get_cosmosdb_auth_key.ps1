@@ -55,6 +55,8 @@ param (
     [string] $AccessToken
 )
 
+Add-Type -AssemblyName System.Web
+
 Function GenerateAadAuthorizationKey {
 
     [CmdletBinding()]

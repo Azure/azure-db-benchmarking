@@ -64,6 +64,8 @@ param(
     [string] $chaosStudioManagedIdentityClientId
 )
 
+Add-Type -AssemblyName System.Web
+
 function Get-AccessToken {
 
     param (
