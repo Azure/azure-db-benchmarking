@@ -50,7 +50,7 @@ This recipe encapsulates a read workload that executes for 20-25 minutes. Around
 
  [More details about the parameters](../../#basic-configuration)
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fjava%2Fycsb%2Fchaos%2Fnetwork-faults%2Fdelay%2Frecipes%2Fread-delay%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-db-benchmarking%2Fmain%2Fcosmos%2Fsql%2Ftools%2Fchaos%2Fnetwork-faults%2Fdelay%2Frecipes%2Fread-delay%2Fazuredeploy.json)
 
 
 ## Output
