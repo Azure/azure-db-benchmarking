@@ -7,7 +7,7 @@ The Cosmos DB client-side network chaos tool is a set of scripts that allows you
 
 ### High level architecture
 
-![Architecture](/azure-db-benchmarking/images/chaos/high_level_arch%2050.png) 
+![Architecture](./../../../../../images/chaos/high_level_arch%2050.png) 
 
 ### Features
 - **Simulate network outage**: You can configure the tool to simulate network outage between the Cosmos DB client and a region of the Cosmos DB service account.
