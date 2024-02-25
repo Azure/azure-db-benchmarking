@@ -3,7 +3,11 @@
 The Cosmos DB client-side network chaos tool is a set of scripts that allows you to simulate network chaos scenarios for Azure Cosmos DB clients. It is designed to help you test the resilience and performance of your Cosmos DB applications under various network conditions. These conditions will only be experienced by the clients that you wish to target for the resiliency test. The rest of the clients and the Cosmos DB service itself won't notice any disruptions from the use of this tool.
 - <span style="color:red">**Warning**</span>: 
     - This tool disrupts the network traffic between the specified target VM(s)/VMSS and the specified Cosmos DB collection/container for the specified account within the specified region but it can potentially affect multiple Cosmos DB accounts in the region. It may also affect other applications running on the specified target VM(s)/VMSS.
-    - Only use this tool in stage or test clusters. 
+    - Only use this tool in stage or test clusters.
+
+### High level architecture
+
+![](/azure-db-benchmarking/images/chaos/high_level_arch%2050.png)
 
 ### Features
 - **Simulate network outage**: You can configure the tool to simulate network outage between the Cosmos DB client and a region of the Cosmos DB service account.
@@ -11,7 +15,8 @@ The Cosmos DB client-side network chaos tool is a set of scripts that allows you
 
 ### Resiliency scenarios
 - With the network outage chaos between the Cosmos DB client and the primary region of the Cosmos DB service account you can verify if your application can handle read/write request failover from primary region to secondary region depending on your Cosmos DB account's configuration.
-- With the network delay chaos, you can verify if your application can handle timeouts on the requests made to the Cosmos DB service account in the affected region. 
+- With the network delay chaos, you can verify if your application can handle timeouts on the requests made to the Cosmos DB service account in the affected region.
+- This [document](https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/troubleshoot-sdk-availability) describes the behavior of the latest version of Azure Cosmos DB SDKs when you see a connectivity issue to a particular region or when a region failover occurs. 
 
 ### Dependencies
 
