@@ -7,7 +7,7 @@ The Cosmos DB client-side network chaos tool is a set of scripts that allows you
 
 ### High level architecture
 
-![Architecture](./../../../../../images/chaos/high_level_arch%2050.png) 
+![Architecture](./../../../../../images/chaos/high_level_arch%2050%20new.png) 
 
 ### Features
 - **Simulate network outage**: You can configure the tool to simulate network outage between the Cosmos DB client and a region of the Cosmos DB service account.
@@ -30,9 +30,9 @@ The tool should be executed with Admin privileges for the above installations to
 
 ### Prerequisites
 - Azure Chaos Studio Resource Provider needs to be enabled for the client subscription.
-- An Azure VM that is in the same network as the Cosmos DB account that you wish to use and this VM should be able to connect to the Cosmos DB account. The Cosmos DB client-side network chaos tool should be downloaded onto this VM and then executed. This VM <u>won't</u> be a target of the chaos.
+- ```Tool VM```: An Azure VM that is in the same network as the Cosmos DB account that you wish to use and this VM should be able to connect to the Cosmos DB account. The Cosmos DB client-side network chaos tool should be downloaded onto this VM and then executed. This VM <u>won't</u> be a target of the chaos.
 - For authentication between various components the following Identities are required to be set up:
-    1. User-assigned Managed Identity assigned to the **Client VM** (mentioned above) and the **Cosmos DB account**. 
+    1. User-assigned Managed Identity assigned to the **Tool VM** and the **Cosmos DB account**. 
         - Assign the **Cosmos DB reader role** mentioned [here](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#built-in-role-definitions) to this identity on the Cosmos DB account you wish to use for this experiment. Please note this role is not available on Azure Portal yet. The following Azure CLI command can be used to assign the reader role to the identity:
         ```azurecli
         $resourceGroupName='<resourceGroupName>'
@@ -43,10 +43,10 @@ The tool should be executed with Admin privileges for the above installations to
         $principalId='<clientId of user-assigned managed Identity>'
         az cosmosdb sql role assignment create --account-name $accountName --resource-group $resourceGroupName --scope $scope --principal-id $principalId --role-definition-id $readOnlyRoleDefinitionId
         ```
-        - This tool supports two more forms of authentication between the **Client VM** and the **Cosmos DB account**:
+        - This tool supports two more forms of authentication between the **Tool VM** and the **Cosmos DB account**:
             - Cosmos DB account's Master Key/Primary Key
             - Service Principal: The Service Principal needs to be assigned the **Cosmos DB reader role** the same way as mentioned in case of the User-assigned managed Identity.     
-    2. User-assigned Managed Identity assigned to the **Client VM** and the **resource group containing Chaos Studio experiment** (the experiment will be created in this resource group after the tool is executed). Assign '**Contributor**' role on the ResourceGroup containing the experiment.
+    2. User-assigned Managed Identity assigned to the **Tool VM** and the **resource group containing Chaos Studio experiment** (the experiment will be created in this resource group after the tool is executed). Assign '**Contributor**' role on the ResourceGroup containing the experiment.
     3. User-assigned Managed Identity assigned to the **Chaos Studio experiment** and the **target resource(s)**. Assign '**Reader**' role on the target resource(s). If there are multiple target resources, this identity and the role needs to be assigned to each of them.
 
 - The target resource(s) (i.e. the Azure resource(s) which will experience disruption) needs to be onboarded to Chaos Studio so that the ChaosAgent is installed on these target resource(s) and the following Agent-based capabilities are enabled for these target resource(s):
@@ -82,10 +82,10 @@ The tool should be executed with Admin privileges for the above installations to
 |containerId| The ID of the Cosmos DB container
 |faultRegion| The region where the fault will be induced.
 |durationOfFaultInMinutes| The duration of the fault in minutes.
-|cosmosDBIdentityClientId| The client ID of the managed identity used for authentication between Client VM and Cosmos DB account. If cosmosDBServicePrincipalClientSecret and cosmosDBServicePrincipalTenantId are also provided, cosmosDBIdentityClientId will be used as the Client ID for the service principal which will be used for auth.
+|cosmosDBIdentityClientId| The client ID of the managed identity used for authentication between Tool VM and Cosmos DB account. If cosmosDBServicePrincipalClientSecret and cosmosDBServicePrincipalTenantId are also provided, cosmosDBIdentityClientId will be used as the Client ID for the service principal which will be used for auth.
 |chaosStudioSubscriptionId| The subscription ID of the Azure Chaos Studio
 |chaosStudioResourceGroupName| The resource group name of the Azure Chaos Studio experiment
-|chaosStudioManagedIdentityClientId| The client ID of the managed identity used for authentication between Client VM and Azure Chaos Studio
+|chaosStudioManagedIdentityClientId| The client ID of the managed identity used for authentication between Tool VM and Azure Chaos Studio
 |chaosExperimentManagedIdentityName| The name of the managed identity used for authentication between the chaos experiment and the target resource(s)
 |chaosExperimentName| The name of the chaos experiment
 **Optional Parameters**
@@ -107,8 +107,8 @@ The tool should be executed with Admin privileges for the above installations to
 ### Usage
 
 To use the Cosmos DB client-side network chaos tool, follow these steps:
-1. Download the [tool's zip file](./cosmosdb_client_network_chaos_tool.zip) on the **Client VM** mentioned in the Prerequisites section.
-2. On the **Client VM**, open a PowerShell terminal with **Admin Privileges** and navigate to the directory where you saved the tool.
+1. Download the [tool's zip file](./cosmosdb_client_network_chaos_tool.zip) on the **Tool VM** mentioned in the Prerequisites section.
+2. On the **Tool VM**, open a PowerShell terminal with **Admin Privileges** and navigate to the directory where you saved the tool.
 3. You may want to Run the following command to bypass powershell checks:
 ``` 
 Powershell -ExecutionPolicy Bypass
