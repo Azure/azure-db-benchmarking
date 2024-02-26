@@ -30,7 +30,7 @@ The tool should be executed with Admin privileges for the above installations to
 
 ### Prerequisites
 - Azure Chaos Studio Resource Provider needs to be enabled for the client subscription.
-- An Azure VM that is in the same network as the Cosmos DB account that you wish to use. The Cosmos DB client-side network chaos tool should be downloaded onto this VM and then executed. This VM <u>won't</u> be a target of the chaos.
+- An Azure VM that is in the same network as the Cosmos DB account that you wish to use and this VM should be able to connect to the Cosmos DB account. The Cosmos DB client-side network chaos tool should be downloaded onto this VM and then executed. This VM <u>won't</u> be a target of the chaos.
 - For authentication between various components the following Identities are required to be set up:
     1. User-assigned Managed Identity assigned to the **Client VM** (mentioned above) and the **Cosmos DB account**. 
         - Assign the **Cosmos DB reader role** mentioned [here](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac#built-in-role-definitions) to this identity on the Cosmos DB account you wish to use for this experiment. Please note this role is not available on Azure Portal yet. The following Azure CLI command can be used to assign the reader role to the identity:
@@ -52,7 +52,19 @@ The tool should be executed with Admin privileges for the above installations to
 - The target resource(s) (i.e. the Azure resource(s) which will experience disruption) needs to be onboarded to Chaos Studio so that the ChaosAgent is installed on these target resource(s) and the following Agent-based capabilities are enabled for these target resource(s):
     1. Network disconnect (via Firewall)
     2. Network latency
-    - For more info on how to onboard target resource(s) click [here](#target-onboarding)
+    - For more info on how to onboard target resource(s) refer the section below
+
+### <a name="target-onboarding"></a>Target Onboarding to Chaos Studio
+
+- Go to Chaos Studio Resource Provider and select the ```Targets``` tab in the left blade. Then select the VM/VMSS that you wish to onboard. Click ```Enable targets``` in the top menu. Select ```Enable agent-based targets (VM, VMSS)```
+
+- Provide the Subscription and name for the User-assigned Managed Identity ```chaosExperimentManagedIdentityName```. You can optionally enable Application Insights by providing the details of your Application Insights account. Click ```Review + Enable```.
+
+- Once the target is onboarded, you should be able to see ```Enabled``` under the ```Agent-Based``` column for the VM/VMSS. Select ```Manage actions```
+
+- Under ```Agent-based capabilities``` check ```Network Disconnect (Via Firewall)``` and ```Network Latency``` while leaving everything else unchecked. 
+
+- To check whether you have successfully onboarded the target you can navigate to the VM/VMSS in Azure portal and select the ```Extensions + applications``` tab in the left blade and check if ```ChaosAgent``` is Provisioned Successfully.
 
 - This tool supports two types of target resource(s):
     1. Azure Virtual Machines (VM): Multiple VMs are supported.
@@ -162,16 +174,4 @@ Powershell -ExecutionPolicy Bypass
     - ```Note```: the delayInMs parameter must have value greater than **0** to create the ```Network Delay Chaos```
 
 6. Navigate to the ```Experiments``` tab in Chaos Studio in the Azure Portal to find the Chaos Studio experiment created by the tool, it would have the name provided in the ```chaosExperimentName``` parameter. It may at times take upto to 10 minutes for the experiment to show up in Chaos Studio. Make sure the experiment is or eventually goes in ```Running``` state.
-
-### <a name="target-onboarding"></a>Target Onboarding to Chaos Studio
-
-- Go to Chaos Studio Resource Provider and select the ```Targets``` tab in the left blade. Then select the VM/VMSS that you wish to onboard. Click ```Enable targets``` in the top menu. Select ```Enable agent-based targets (VM, VMSS)```
-
-- Provide the Subscription and name for the User-assigned Managed Identity ```chaosExperimentManagedIdentityName```. You can optionally enable Application Insights by providing the details of your Application Insights account. Click ```Review + Enable```.
-
-- Once the target is onboarded, you should be able to see ```Enabled``` under the ```Agent-Based``` column for the VM/VMSS. Select ```Manage actions```
-
-- Under ```Agent-based capabilities``` check ```Network Disconnect (Via Firewall)``` and ```Network Latency``` while leaving everything else unchecked. 
-
-- To check whether you have successfully onboarded the target you can navigate to the VM/VMSS in Azure portal and select the ```Extensions + applications``` tab in the left blade and check if ```ChaosAgent``` is Provisioned Successfully.
 
