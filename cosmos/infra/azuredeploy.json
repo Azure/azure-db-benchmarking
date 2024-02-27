@@ -257,7 +257,8 @@
             "type": "string",
             "defaultValue": "azurecosmos-ycsb",
             "metadata": {
-                "description": "Specifies the user agent name."
+                "description": "Specifies the user agent name for the Cosmos DB SDK."
+
             }
         },
         "waitForFaultToStartInSec": {
