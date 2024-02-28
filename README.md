@@ -14,7 +14,7 @@ The provided recipes encapsulate the workload definitions that are passed to the
 The first version of the framework uses [YCSB](https://github.com/brianfrankcooper/YCSB), a popular open-source benchmarking tool, for performance benchmarking Cosmos DB SQL API and Mongo API. We intend to onboard more databases and benchmarking tools in the future. We welcome contributions.
 
 > **Note**
-> ***We have added a client-side chaos tool that allows users to validate the resiliency of their applications during unexpected events. Please scroll down to the getting started page for more details.***
+> ***We have added a client-side chaos tool that allows users to validate the resiliency of their applications during unexpected events. Please navigate to [Getting Started](cosmos/sql/tools/java/ycsb/chaos) page for more details.***
 
 ## Tech Stack
 - ARM Templates
@@ -43,7 +43,7 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
      - [/cosmos/infra](/cosmos/infra)  Common resource creation templates  
      - [/cosmos/sql/tools/java/ycsb/recipes](/cosmos/sql/tools/java/ycsb/recipes) SQL API YCSB Recipes 
      - [/cosmos/mongoapi/tools/java/ycsb/recipes](/cosmos/mongoapi/tools/java/ycsb/recipes) Mongo API YCSB Recipes
-     - [/cosmos/sql/tools/java/ycsb/chaos/network-faults](/cosmos/sql/tools/java/ycsb/chaos/network-faults) SQL API Chaos Recipes 
+     - [/cosmos/sql/tools/java/ycsb/chaos/network-faults](/cosmos/sql/tools/java/ycsb/chaos) SQL API Chaos Recipes 
 
 
 ## Getting Started
