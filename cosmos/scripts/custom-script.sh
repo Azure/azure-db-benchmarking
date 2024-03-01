@@ -58,7 +58,7 @@ totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
 benchmarkname=$PROJECT_NAME
 if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 0 ]; then
   fault=true
-  benchmarkname="${PROJECT_NAME}" + "withfault"
+  benchmarkname= $PROJECT_NAME + "withfault"
 fi
 
 #Cloning Test Bench Repo
