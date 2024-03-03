@@ -55,10 +55,10 @@ insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
 recordcount=$((YCSB_RECORD_COUNT * MACHINE_INDEX))
 # Record count for Run. Since we run read workload after load this is the total number of records loaded by all VMs/clients during load.
 totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
-benchmarkname=$PROJECT_NAME
+benchmarkname=ycsbbenchmarking
 if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 0 ]; then
   fault=true
-  benchmarkname= $PROJECT_NAME + "withfault"
+  benchmarkname=ycsbwithfault
 fi
 
 #Cloning Test Bench Repo
