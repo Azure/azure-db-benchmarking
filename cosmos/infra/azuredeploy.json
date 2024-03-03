@@ -517,3 +517,4 @@
             "value": "The Benchmarking job has been triggered successfully. Please check the storage account you provided for Job Status and Results. The jobs status will be available in a storage table within a few minutes and results will be available once the job finishes."
         }
     }
+}
