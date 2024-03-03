@@ -29,7 +29,7 @@
 # This script should be run on a virtual machine that has network access to the Cosmos DB instance.
 
 echo "##########PROJECT_NAME###########: $PROJECT_NAME"
-echo "##########VM NAME###########: $DB_BINDING_NAME"
+echo "##########DB_BINDING_NAME###########: $DB_BINDING_NAME"
 echo "##########VM NAME###########: $VM_NAME"
 echo "##########YCSB_RECORD_COUNT###########: $YCSB_RECORD_COUNT"
 echo "##########MACHINE_INDEX###########: $MACHINE_INDEX"
@@ -55,10 +55,21 @@ insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
 recordcount=$((YCSB_RECORD_COUNT * MACHINE_INDEX))
 # Record count for Run. Since we run read workload after load this is the total number of records loaded by all VMs/clients during load.
 totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
-benchmarkname=ycsbbenchmarking
+
+benchmarkname=""
+if [[ -n $PROJECT_NAME ]]; then
+  benchmarkname=$PROJECT_NAME
+else
+  benchmarkname=ycsbbenchmarking
+fi
+
 if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 0 ]; then
   fault=true
-  benchmarkname=ycsbwithfault
+  if [[ -n $PROJECT_NAME ]]; then
+    benchmarkname=$PROJECT_NAME
+  else
+    benchmarkname=ycsbwithfault
+  fi
 fi
 
 #Cloning Test Bench Repo
