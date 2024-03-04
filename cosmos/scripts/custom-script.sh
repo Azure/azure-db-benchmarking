@@ -66,7 +66,7 @@ fi
 if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 0 ]; then
   fault=true
   if [[ -n $PROJECT_NAME ]]; then
-    benchmarkname=$PROJECT_NAME
+    benchmarkname="${PROJECT_NAME}withfault"
   else
     benchmarkname=ycsbwithfault
   fi
