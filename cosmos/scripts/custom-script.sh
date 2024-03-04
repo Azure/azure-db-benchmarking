@@ -48,7 +48,6 @@ echo "##########FAULT_REGION###########: $FAULT_REGION"
 echo "##########DELAY_IN_MS###########: $DELAY_IN_MS"
 echo "##########USER_AGENT###########: $USER_AGENT"
 
-
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
 # Records already in the DB + records to be added, during load
