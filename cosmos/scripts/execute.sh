@@ -6,11 +6,6 @@
 cloud-init status --wait
 echo "##########CUSTOM_SCRIPT_URL###########: $CUSTOM_SCRIPT_URL"
 
-if [ -n $PROJECT_NAME ] && [ $PROJECT_NAME =~ .*[-_ ].* ]; then
-  echo "Error: PROJECT_NAME does not match the required pattern. Project Name must start or end with a letter or number, and can contain only letters and numbers. No blankspace or special characters are allowed."
-  exit 1
-fi
-
 # check to enforce only once instance of the workload is running. 
 if pgrep -xf "bash custom-script.sh"
 then
