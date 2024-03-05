@@ -9,7 +9,7 @@ echo "##########PROJECT_NAME###########: $PROJECT_NAME"
 
 # Regex check for $PROJECT_NAME
 if [[ ! $PROJECT_NAME =~ ^[a-zA-Z0-9]+$ ]]; then
-    echo "Invalid project name. Project name should not contain hyphens, underscores, or blank spaces."
+    echo "Invalid project name. Project name should only contain lower case letters and numbers."
     exit 1
 fi
 
