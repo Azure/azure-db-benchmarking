@@ -1,6 +1,7 @@
 ## Introduction to Cosmos DB client-side network chaos tool (Preview)
 
-- **Strictly for use in non-production only**
+- **Strictly for use in non-production only.**
+- **If any help is required in context of this tool, please raise an issue on this repo.**
 
 The Cosmos DB client-side network chaos tool is a set of scripts that allows you to simulate network chaos scenarios for Azure Cosmos DB clients. It is designed to help you test the resilience and performance of your Cosmos DB applications under various network conditions. These conditions will only be experienced by the clients that you wish to target for the resiliency test. The rest of the clients and the Cosmos DB service itself won't notice any disruptions from the use of this tool.
 
@@ -178,7 +179,4 @@ Powershell -ExecutionPolicy Bypass
     - ```Note```: the delayInMs parameter must have value greater than **0** to create the ```Network Delay Chaos```
 
 6. Navigate to the ```Experiments``` tab in Chaos Studio in the Azure Portal to find the Chaos Studio experiment created by the tool, it would have the name provided in the ```chaosExperimentName``` parameter. It may at times take upto to 10 minutes for the experiment to show up in Chaos Studio. Make sure the experiment is or eventually goes in ```Running``` state.
-
-### Support
-- If need any help please raise an issue on this repo.
 
