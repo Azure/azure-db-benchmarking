@@ -21,6 +21,7 @@ echo "##########DROP_PROBABILITY###########: $DROP_PROBABILITY"
 echo "##########FAULT_REGION###########: $FAULT_REGION"
 echo "##########DELAY_IN_MS###########: $DELAY_IN_MS"
 echo "##########USER_AGENT###########: $USER_AGENT"
+echo "##########CONSISTENCY_LEVEL###########: $CONSISTENCY_LEVEL"
 
 
 # The index of the record to start at during the Load
