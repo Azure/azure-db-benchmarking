@@ -256,15 +256,22 @@
         "consistencyLevel": {
             "type": "string",
             "defaultValue": "SESSION",
+            "allowedValues": [
+                "STRONG", 
+                "BOUNDED_STALENESS", 
+                "SESSION",
+                "CONSISTENT_PREFIX",
+                "EVENTUAL"
+              ],
             "metadata": {
-                "description": "Specifies the client consisteny level"
-            }
+                "description": "Specifies the client consisteny level."
+            }            
         },
         "userAgent": {
             "type": "string",
             "defaultValue": "azurecosmos-ycsb",
             "metadata": {
-                "description": "Specifies the user agent name for the Cosmos DB SDK."
+                "description": "Specifies the user agent name."
 
             }
         },
