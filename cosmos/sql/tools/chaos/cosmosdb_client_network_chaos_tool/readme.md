@@ -1,10 +1,14 @@
 ## Introduction to Cosmos DB client-side network chaos tool (Preview)
 
+- **Strictly for use in non-production only.**
+- **If any help is required in context of this tool, please raise an issue on this repo.**
+
 The Cosmos DB client-side network chaos tool is a set of scripts that allows you to simulate network chaos scenarios for Azure Cosmos DB clients. It is designed to help you test the resilience and performance of your Cosmos DB applications under various network conditions. These conditions will only be experienced by the clients that you wish to target for the resiliency test. The rest of the clients and the Cosmos DB service itself won't notice any disruptions from the use of this tool.
-- <span style="color:red">**Warning**</span>: 
+
+- <span style="color:red">**Warning**</span>:
     - If public access is enabled for the Cosmos DB account, the tool can potentially affect connectivity from the target VM(s)/VMSS to multiple Cosmos DB accounts in the region.
     - If private endpoint is enabled, then, the tool will affect connectivity from the target VM(s)/VMSS to all the collections in the specified Cosmos DB account.
-    - Only use this tool in stage or test clusters.
+    - The tool may continue affecting the connectivity even after the Chaos experiment has finished and would need to be stopped manually. This can happen if the VM restarts when the experiment is about to finish and the Chaos agent in the VM misses the stop signal from the Chaos Agent service. This is a limitation on Chaos Studio side and will be fixed soon.
 
 ### High level architecture
 
