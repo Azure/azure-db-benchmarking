@@ -1,4 +1,8 @@
 # SQL(Core) API Chaos:
+
+- **Strictly for use in non-production only**
+- **If any help is required in context of this tool, please raise an issue on this repo.**
+
 The provided recipes encapsulate the workloads and chaos faults to provide a one-click experience to observe the resiliency of applications using Cosmos DB SDK. Every recipe has a detailed description of the workload, fault, and the expected result. Provided is also a build your own recipe for scenarios not covered in the one-click recipes. The faults simulate network outages and network delays on the client side. The former will result in complete or partial outage while the latter will degrade performance.
 
 You can also download and execute the chaos tool within your own environment to validate the resiliency of your workloads.
