@@ -472,8 +472,7 @@
                         "disablePasswordAuthentication": false,
                         "provisionVMAgent": true,
                         "patchSettings": {
-                            "patchMode": "ImageDefault",
-                            "assessmentMode": "ImageDefault"
+                        "patchMode": "AutomaticByPlatform"                      
                         }
                     },
                     "allowExtensionOperations": true
