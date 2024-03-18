@@ -78,7 +78,7 @@ echo "########## Cloning Test Bench repository ##########"
 git clone -b "$BENCHMARKING_TOOLS_BRANCH_NAME" --single-branch "$BENCHMARKING_TOOLS_URL"
 echo "########## Pulling Latest YCSB TOOLS ##########"
 git -C azure-db-benchmarking pull
-mkdir /tmp/ycsb
+mkdir -p /tmp/ycsb
 # Clearing data from previous run
 rm -rf /tmp/ycsb/*
 rm -rf "/tmp/$VM_NAME-system-diagnostics"
