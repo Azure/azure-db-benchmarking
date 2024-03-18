@@ -18,4 +18,3 @@ runcmd:
   - sudo apt-get update
   - sudo apt-get install -y powershell
   - sudo apt install net-tools
-  - sudo wget https://github.com/microsoft/ApplicationInsights-Java/releases/download/3.5.1/applicationinsights-agent-3.5.1.jar

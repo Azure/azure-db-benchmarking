@@ -85,12 +85,12 @@ rm -rf "/tmp/$VM_NAME-system-diagnostics"
 cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 
 #Copying application insights java agent to /tmp/ycsb
-export MAVEN_OPTS=-javaagent:"/applicationinsights-agent-3.5.0.jar"
+wget -P /tmp/ycsb https://github.com/microsoft/ApplicationInsights-Java/releases/download/3.5.1/applicationinsights-agent-3.5.1.jar
+export MAVEN_OPTS=-javaagent:"/tmp/ycsb/applicationinsights-agent-3.5.0.jar"
 
 #Build YCSB from source
 echo "########## Cloning YCSB repository ##########"
 git clone -b "$YCSB_GIT_BRANCH_NAME" --single-branch "$YCSB_GIT_REPO_URL"
-
 cd YCSB
 echo "########## Pulling Latest YCSB ##########"
 git pull
