@@ -86,7 +86,7 @@ cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 
 #Copying application insights java agent to /tmp/ycsb
 wget -P /tmp/ycsb https://github.com/microsoft/ApplicationInsights-Java/releases/download/3.5.1/applicationinsights-agent-3.5.1.jar
-export MAVEN_OPTS=-javaagent:"/tmp/ycsb/applicationinsights-agent-3.5.0.jar"
+export MAVEN_OPTS=-javaagent:"/tmp/ycsb/applicationinsights-agent-3.5.1.jar"
 
 #Build YCSB from source
 echo "########## Cloning YCSB repository ##########"
