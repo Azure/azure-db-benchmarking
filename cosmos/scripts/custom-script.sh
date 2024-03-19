@@ -105,14 +105,16 @@ user_home="/home/${ADMIN_USER_NAME}"
 
 echo "########## Extracting YCSB ##########"
 tar xfvz ycsb-$DB_BINDING_NAME-binding*.tar.gz
-export APPLICATIONINSIGHTS_CONNECTION_STRING=$APP_INSIGHT_CONN_STR
-export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10
-java -javaagent:"ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar" -jar ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar
-
 cp ./$DB_BINDING_NAME-run.sh ./$ycsb_folder_name
 cp ./*.properties ./$ycsb_folder_name
 cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
+
+if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
+  export APPLICATIONINSIGHTS_CONNECTION_STRING=$APP_INSIGHT_CONN_STR
+  export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10
+  export MAVEN_OPTS=-javaagent:"ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"
+fi
 
 # Adding chaos scripts
 cp ./chaos/*.sh ./$ycsb_folder_name
