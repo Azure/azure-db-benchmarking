@@ -28,6 +28,8 @@
 # This script assumes that the Azure CLI and azcopy are installed and that the user is logged in to the Azure CLI.
 # This script should be run on a virtual machine that has network access to the Cosmos DB instance.
 
+
+
 echo "##########PROJECT_NAME###########: $PROJECT_NAME"
 echo "##########DB_BINDING_NAME###########: $DB_BINDING_NAME"
 echo "##########VM NAME###########: $VM_NAME"
@@ -100,9 +102,7 @@ cp -r ./$DB_BINDING_NAME/target/ycsb-$DB_BINDING_NAME-binding*.tar.gz /tmp/ycsb
 cp -r ./$DB_BINDING_NAME/conf/* /tmp/ycsb
 cd /tmp/ycsb/
 
-ycsb_folder_name=ycsb-$DB_BINDING_NAME-binding-*-SNAPSHOT
-user_home="/home/${ADMIN_USER_NAME}"
-
+ycsb_folder_name=ycsb-$DB_BINDING_NAME-binding-*-SNAPSHOTexport APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10
 echo "########## Extracting YCSB ##########"
 tar xfvz ycsb-$DB_BINDING_NAME-binding*.tar.gz
 cp ./$DB_BINDING_NAME-run.sh ./$ycsb_folder_name
@@ -111,9 +111,11 @@ cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
 
 if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
+  echo "########## Setting up Application Insights ###########"
   export APPLICATIONINSIGHTS_CONNECTION_STRING=$APP_INSIGHT_CONN_STR
   export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10
-  export MAVEN_OPTS=-javaagent:"ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"
+  export JAVA_OPTS="$JAVA_OPTS -javaagent:"ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"
+  echo env
 fi
 
 # Adding chaos scripts
