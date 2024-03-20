@@ -83,7 +83,7 @@ echo "########## Cloning Test Bench repository ##########"
 git clone -b "$BENCHMARKING_TOOLS_BRANCH_NAME" --single-branch "$BENCHMARKING_TOOLS_URL"
 echo "########## Pulling Latest YCSB TOOLS ##########"
 git -C azure-db-benchmarking pull
-mkdir -p /tmp/ycsb
+mkdir /tmp/ycsb
 # Clearing data from previous run
 rm -rf /tmp/ycsb/*
 rm -rf "/tmp/$VM_NAME-system-diagnostics"
@@ -102,7 +102,7 @@ cp -r ./$DB_BINDING_NAME/target/ycsb-$DB_BINDING_NAME-binding*.tar.gz /tmp/ycsb
 cp -r ./$DB_BINDING_NAME/conf/* /tmp/ycsb
 cd /tmp/ycsb/
 
-ycsb_folder_name=ycsb-$DB_BINDING_NAME-binding-*-SNAPSHOTexport APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10
+ycsb_folder_name=ycsb-$DB_BINDING_NAME-binding-*-SNAPSHOT
 echo "########## Extracting YCSB ##########"
 tar xfvz ycsb-$DB_BINDING_NAME-binding*.tar.gz
 cp ./$DB_BINDING_NAME-run.sh ./$ycsb_folder_name
@@ -114,8 +114,6 @@ if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
   echo "########## Setting up Application Insights ###########"
   export APPLICATIONINSIGHTS_CONNECTION_STRING=$APP_INSIGHT_CONN_STR
   export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10
-  export JAVA_OPTS="$JAVA_OPTS -javaagent:/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"
-  echo env
 fi
 
 # Adding chaos scripts
