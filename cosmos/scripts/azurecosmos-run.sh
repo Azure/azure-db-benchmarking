@@ -168,13 +168,13 @@ log_filename="/tmp/ycsb.log"
 
 if [ ! -z "$threads" ] && [ ! -z "$target" ]
 then
-  ./bin/ycsb.sh $operation azurecosmos -P workloads/$workload -P azurecosmos.properties -s -threads $threads -target $target -jvm-args= -javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar" 2>&1 | tee -a "$log_filename"
+  ./bin/ycsb.sh $operation azurecosmos -P workloads/$workload -P azurecosmos.properties -s -threads $threads -target $target 2>&1 | tee -a "$log_filename"
 elif [ ! -z "$threads" ]
 then
-  ./bin/ycsb.sh $operation azurecosmos -P workloads/$workload -P azurecosmos.properties -s -threads $threads -jvm-args= -javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar" 2>&1 | tee -a "$log_filename"
+  ./bin/ycsb.sh $operation azurecosmos -P workloads/$workload -P azurecosmos.properties -s -threads $threads 2>&1 | tee -a "$log_filename"
 elif [ ! -z "$target" ]
 then
-  ./bin/ycsb.sh $operation azurecosmos -P workloads/$workload -P azurecosmos.properties -s -target $target -jvm-args= -javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar" 2>&1 | tee -a "$log_filename"
+  ./bin/ycsb.sh $operation azurecosmos -P workloads/$workload -P azurecosmos.properties -s -target $target 2>&1 | tee -a "$log_filename"
 else
-  ./bin/ycsb.sh $operation azurecosmos -P workloads/$workload -P azurecosmos.properties -s  -jvm-args= -javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar" 2>&1 | tee -a "$log_filename"
+  ./bin/ycsb.sh $operation azurecosmos -P workloads/$workload -P azurecosmos.properties -s 2>&1 | tee -a "$log_filename"
 fi
