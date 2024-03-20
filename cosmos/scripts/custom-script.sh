@@ -114,7 +114,7 @@ if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
   echo "########## Setting up Application Insights ###########"
   export APPLICATIONINSIGHTS_CONNECTION_STRING=$APP_INSIGHT_CONN_STR
   export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10
-  export JAVA_OPTS="$JAVA_OPTS -javaagent:"ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"
+  export JAVA_OPTS="$JAVA_OPTS -javaagent:/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"
   echo env
 fi
 
