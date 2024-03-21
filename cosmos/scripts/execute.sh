@@ -25,10 +25,10 @@ else
 
 if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
   echo "########## Setting up Application Insights ###########"
-  echo 'export APPLICATIONINSIGHTS_CONNECTION_STRING=${APP_INSIGHT_CONN_STR}' >> ~/.bashrc
-  echo 'export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10' >> ~/.bashrc
-  echo 'export JAVA_OPTS=-javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"' >> ~/.bashrc
-  source ~/.bashrc
+  echo 'export APPLICATIONINSIGHTS_CONNECTION_STRING=${APP_INSIGHT_CONN_STR}' >> ~/.profile
+  echo 'export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10' >> ~/.profile
+  echo 'export JAVA_OPTS=-javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"' >> ~/.profile
+  source ~/.profile
 fi
 
 # Running custom-script in background, arm template completion wont wait on this
