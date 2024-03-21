@@ -22,6 +22,15 @@ then
     exit 1
 else
     echo Starting the worklaod.
+
+if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
+  echo "########## Setting up Application Insights ###########"
+  echo 'export APPLICATIONINSIGHTS_CONNECTION_STRING=${APP_INSIGHT_CONN_STR}' >> ~/.bashrc
+  echo 'export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10' >> ~/.bashrc
+  echo 'export JAVA_OPTS=-javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"' >> ~/.bashrc
+  source ~/.bashrc
+fi
+
 # Running custom-script in background, arm template completion wont wait on this
 # stdout and stderr will be logged in <$HOME>/agent.out and <$HOME>/agent.err
     curl -o custom-script.sh $CUSTOM_SCRIPT_URL

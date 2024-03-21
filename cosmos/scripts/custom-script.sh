@@ -110,14 +110,6 @@ cp ./*.properties ./$ycsb_folder_name
 cp ./aggregate_multiple_file_results.py ./$ycsb_folder_name
 cp ./converting_log_to_csv.py ./$ycsb_folder_name
 
-if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
-  echo "########## Setting up Application Insights ###########"
-  echo 'export APPLICATIONINSIGHTS_CONNECTION_STRING=$APP_INSIGHT_CONN_STR' >> ~/.bashrc
-  echo 'export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10' >> ~/.bashrc
-  echo 'export JAVA_OPTS=-javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"' >> ~/.bashrc
-  source ~/.bashrc
-fi
-
 # Adding chaos scripts
 cp ./chaos/*.sh ./$ycsb_folder_name
 cp ./chaos/*.ps1 ./$ycsb_folder_name
