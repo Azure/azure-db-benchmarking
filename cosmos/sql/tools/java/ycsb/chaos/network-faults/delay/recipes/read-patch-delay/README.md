@@ -10,7 +10,7 @@ This recipe encapsulates a read and patch workload that executes for 20-25 minut
 | Benchmarking tool | YCSB |
 | Workload | Read & Patch (80:20) |
 | Duration | 20-25 minutes |
-| Fault Type | Nertwork Delay |
+| Fault Type | Network Delay |
 | Fault Start | 5 Minutes after the workload starts |
 | Fault duration | 5 minutes |
 | Number of documents in DB | 30 |
