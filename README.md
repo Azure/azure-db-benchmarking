@@ -54,6 +54,18 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
    | Cosmos Mongo API | YCSB | [Getting Started ](/cosmos/mongoapi/tools/java/ycsb/recipes)
    | Cosmos SQL API(Chaos) | YCSB | [Getting Started](/cosmos/sql/tools/java/ycsb/chaos)
 
+## Sending benchmarking Telemetry to Azure Application Insights
+- This framework supports sending telemetry data like operation metrics & Cosmos client diagnostic logs to Azure Application Insights.
+- In order to send the telemetry data to Azure Application Insights, you need to set desired values for the following parameters:
+  
+  | Parameter                                       | Default Value |
+  |-------------------------------------------------|----------|
+  | appInsightConnectionString          |    ""      |
+  | pointOperationLatencyThresholdInMS  | 100      |
+  | nonPointOperationLatencyThresholdInMS | 500    |
+  | requestChargeThreshold              | 100      |
+  | appInsightsMetricIntervalInSeconds | 10        |
+
 
 ## Contributing
 
