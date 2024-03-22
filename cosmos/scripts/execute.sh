@@ -21,12 +21,13 @@ then
 
     exit 1
 else
-    echo Starting the worklaod.
+    echo Starting the workload.
 
+# Setting up Application Insights
 if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
   echo "########## Setting up Application Insights ###########"
   echo 'export APPLICATIONINSIGHTS_CONNECTION_STRING=${APP_INSIGHT_CONN_STR}' >> ~/.profile
-  echo 'export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=10' >> ~/.profile
+  echo 'export APPLICATIONINSIGHTS_METRIC_INTERVAL_SECONDS=${APP_INSIGHT_METRIC_INTERVAL_IN_SECONDS}' >> ~/.profile
   echo 'export JAVA_OPTS=-javaagent:"/tmp/ycsb/ycsb-azurecosmos-binding-0.18.0-SNAPSHOT/lib/applicationinsights-agent-3.5.1.jar"' >> ~/.profile
   source ~/.profile
 fi

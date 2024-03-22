@@ -18,6 +18,11 @@
 # The BENCHMARKING_TOOLS_BRANCH_NAME and BENCHMARKING_TOOLS_URL environment variables are used to clone the benchmarking tools repository.
 # The YCSB_GIT_BRANCH_NAME and YCSB_GIT_REPO_URL environment variables are used to clone the YCSB repository.
 # The WAIT_FOR_FAULT_TO_START_IN_SEC, DURATION_OF_FAULT_IN_SEC, DROP_PROBABILITY, FAULT_REGION, and DELAY_IN_MS environment variables are used to configure fault injection.
+# The USER_AGENT environment variable is used to set the user agent for the test.
+# The CONSISTENCY_LEVEL environment variable is used to set the Cosmos DB consistency level for the test.
+# The APP_INSIGHT_CONN_STR environment variable is used to set the Application Insights connection string.
+# The POINT_OPERATION_THRESHOLD and NON_POINT_OPERATION_THRESHOLD environment variables are used to set the latency thresholds for point and non-point operations, if these thresholds are breached client diagnotics will be logged for the request.
+# The REQUEST_CHARGE_THRESHOLD environment variable is used to set the request charge threshold for the test,  if this threshold is breached client diagnotics will be logged for the request.
 
 # The script starts by printing the values of all the environment variables.
 # It then clones the benchmarking tools and YCSB repositories, and builds YCSB from source.
@@ -27,8 +32,6 @@
 
 # This script assumes that the Azure CLI and azcopy are installed and that the user is logged in to the Azure CLI.
 # This script should be run on a virtual machine that has network access to the Cosmos DB instance.
-
-
 
 echo "##########PROJECT_NAME###########: $PROJECT_NAME"
 echo "##########DB_BINDING_NAME###########: $DB_BINDING_NAME"
