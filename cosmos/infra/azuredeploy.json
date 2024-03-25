@@ -243,21 +243,21 @@
             "type": "int",
             "defaultValue": 100,
             "metadata": {
-                "description": "Specifies the threshold for point operation (e.g. point read, etc) latency in milliseconds. If latency exceeds this threshold, it will be logged in cosmos client diagnostics log."
+                "description": "Specifies the threshold for point operation (e.g. point read, etc) latency in milliseconds. If latency exceeds this threshold, the request diagnostics will be sent to application insights."
             }
         },
         "nonPointOperationLatencyThresholdInMS": {
             "type": "int",
             "defaultValue": 500,
             "metadata": {
-                "description": "Specifies the threshold for non-point operation (e.g. query, etc) latency in milliseconds. If latency exceeds this threshold, it will be logged in cosmos client diagnostics log."
+                "description": "Specifies the threshold for non-point operation (e.g. query, etc) latency in milliseconds. If latency exceeds this threshold, the request diagnostics will be sent to application insights."
             }
         },
         "requestChargeThreshold": {
             "type": "int",
             "defaultValue": 100,
             "metadata": {
-                "description": "Specifies the threshold for request units. If latency exceeds this threshold, it will be logged in cosmos client diagnostics log."
+                "description": "Specifies the threshold for request units. If latency exceeds this threshold, the request diagnostics will be sent to application insights."
             }
         },
         "appInsightsMetricIntervalInSeconds": {
