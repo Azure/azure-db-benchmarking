@@ -183,13 +183,6 @@
             "metadata": {
                 "description": "Specifies field count in the item"
             }
-        },
-         "appInsightConnectionString": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Specifies application insight connection string for live monitering"
-            }
         }
     },
     "variables": {
@@ -290,9 +283,6 @@
                     },
                     "fieldcount": {
                         "value": "[parameters('fieldcount')]"
-                    },
-                    "appInsightConnectionString": {
-                        "value": "[parameters('appInsightConnectionString')]"
                     }
                 }
             }
