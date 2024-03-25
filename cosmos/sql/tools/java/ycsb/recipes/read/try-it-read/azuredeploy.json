@@ -190,34 +190,6 @@
             "metadata": {
                 "description": "Specifies application insight connection string for live monitering"
             }
-        },
-        "pointOperationLatencyThresholdInMS": {
-            "type": "int",
-            "defaultValue": 100,
-            "metadata": {
-                "description": "Specifies the threshold for point operation (e.g. point read, etc) latency in milliseconds. If latency exceeds this threshold, it will be logged in cosmos client diagnostics log."
-            }
-        },
-        "nonPointOperationLatencyThresholdInMS": {
-            "type": "int",
-            "defaultValue": 500,
-            "metadata": {
-                "description": "Specifies the threshold for non-point operation (e.g. query, etc) latency in milliseconds. If latency exceeds this threshold, it will be logged in cosmos client diagnostics log."
-            }
-        },
-        "requestChargeThreshold": {
-            "type": "int",
-            "defaultValue": 100,
-            "metadata": {
-                "description": "Specifies the threshold for request units. If latency exceeds this threshold, it will be logged in cosmos client diagnostics log."
-            }
-        },
-        "appInsightsMetricIntervalInSeconds": {
-            "type": "int",
-            "defaultValue": 10,
-            "metadata": {
-                "description": "Specifies the interval in seconds for logging metrics to application insights."
-            }
         }
     },
     "variables": {
@@ -321,18 +293,6 @@
                     },
                     "appInsightConnectionString": {
                         "value": "[parameters('appInsightConnectionString')]"
-                    },
-                    "pointOperationLatencyThresholdInMS": {
-                        "value": "[parameters('pointOperationLatencyThresholdInMS')]"
-                    },
-                    "nonPointOperationLatencyThresholdInMS": {
-                        "value": "[parameters('nonPointOperationLatencyThresholdInMS')]"
-                    },
-                    "requestChargeThreshold": {
-                        "value": "[parameters('requestChargeThreshold')]"
-                    },
-                    "appInsightsMetricIntervalInSeconds": {
-                        "value": "[parameters('appInsightsMetricIntervalInSeconds')]"
                     }
                 }
             }
