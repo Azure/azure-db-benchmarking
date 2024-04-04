@@ -48,6 +48,7 @@ rm -rf "/tmp/$VM_NAME-system-diagnostics"
 cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 
 # Setting up logrotate for propetually running worklaods to avoid disk space issues.
+echo "################# Setting up logrotate ###################"
 if [ "$YCSB_OPERATION_COUNT" -eq 0 ]; then
   cp -r ./azure-db-benchmarking/cosmos/sql/tools/java/ycsb/config/* /home/benchmarking
   sudo logrotate /home/benchmarking/logrotate/logrotate.conf --state /home/benchmarking/logrotate/logrotate.state
