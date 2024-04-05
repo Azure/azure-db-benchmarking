@@ -50,6 +50,10 @@ cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 # Setting up logrotate for propetually running worklaods to avoid disk space issues.
 echo "################# Setting up logrotate ###################"
 if [ "$YCSB_OPERATION_COUNT" -eq 0 ]; then
+  echo "Clearing previous logrotate configurations and logs"
+  sudo rm -rf /home/${ADMIN_USER_NAME}/logrotate
+  sudo rm -rf /home/${ADMIN_USER_NAME}/*.gz
+  sudo rm -rf /tmp/cosmos_client_logs
   cp -r ./azure-db-benchmarking/cosmos/sql/tools/java/ycsb/config/* /home/${ADMIN_USER_NAME}
   sudo logrotate /home/${ADMIN_USER_NAME}/logrotate/logrotate.conf --state /home/${ADMIN_USER_NAME}/logrotate/logrotate.state
   crontab -l | { cat; echo "0 * * * * /usr/sbin/logrotate /home/${ADMIN_USER_NAME}/logrotate/logrotate.conf --state /home/$/logrotate/logrotate.state"; } | crontab -
