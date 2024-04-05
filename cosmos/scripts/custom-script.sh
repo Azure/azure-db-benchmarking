@@ -4,27 +4,27 @@
 # Licensed under the MIT License.
 
 # This script is used to run a YCSB (Yahoo! Cloud Serving Benchmark) test on a Cosmos DB instance.
-# It takes several environment variables as input, which are used to configure the test.
+# It takes several inputs, which are used to configure the test.
 # The script supports both load and run operations, and can optionally introduce faults during the test.
 
-# The PROJECT_NAME environment variable is used to name the benchmark.
-# The DB_BINDING_NAME environment variable specifies the YCSB binding to use.
-# The VM_NAME environment variable is used to name the virtual machine that runs the test.
-# The YCSB_RECORD_COUNT environment variable specifies the number of records for the test.
-# The MACHINE_INDEX environment variable is used to calculate the start index for insert operations.
-# The YCSB_OPERATION_COUNT environment variable specifies the number of operations for the test.
-# The VM_COUNT environment variable is used to calculate the total number of records for read operations.
-# The WRITE_ONLY_OPERATION environment variable determines whether to run a write-only workload.
-# The BENCHMARKING_TOOLS_BRANCH_NAME and BENCHMARKING_TOOLS_URL environment variables are used to clone the benchmarking tools repository.
-# The YCSB_GIT_BRANCH_NAME and YCSB_GIT_REPO_URL environment variables are used to clone the YCSB repository.
-# The WAIT_FOR_FAULT_TO_START_IN_SEC, DURATION_OF_FAULT_IN_SEC, DROP_PROBABILITY, FAULT_REGION, and DELAY_IN_MS environment variables are used to configure fault injection.
-# The USER_AGENT environment variable is used to set the user agent for the test.
-# The CONSISTENCY_LEVEL environment variable is used to set the Cosmos DB consistency level for the test.
-# The APP_INSIGHT_CONN_STR environment variable is used to set the Application Insights connection string.
-# The POINT_OPERATION_THRESHOLD and NON_POINT_OPERATION_THRESHOLD environment variables are used to set the latency thresholds for point and non-point operations, if these thresholds are breached client diagnotics will be logged for the request.
-# The REQUEST_CHARGE_THRESHOLD environment variable is used to set the request charge threshold for the test,  if this threshold is breached client diagnotics will be logged for the request.
+# The PROJECT_NAME variable is used to name the benchmark.
+# The DB_BINDING_NAME variable specifies the YCSB binding to use.
+# The VM_NAME variable is used to name the virtual machine that runs the test.
+# The YCSB_RECORD_COUNT variable specifies the number of records for the test.
+# The MACHINE_INDEX variable is used to calculate the start index for insert operations.
+# The YCSB_OPERATION_COUNT variable specifies the number of operations for the test.
+# The VM_COUNT variable is used to calculate the total number of records for read operations.
+# The WRITE_ONLY_OPERATION variable determines whether to run a write-only workload.
+# The BENCHMARKING_TOOLS_BRANCH_NAME and BENCHMARKING_TOOLS_URL variables are used to clone the benchmarking tools repository.
+# The YCSB_GIT_BRANCH_NAME and YCSB_GIT_REPO_URL variables are used to clone the YCSB repository.
+# The WAIT_FOR_FAULT_TO_START_IN_SEC, DURATION_OF_FAULT_IN_SEC, DROP_PROBABILITY, FAULT_REGION, and DELAY_IN_MS variables are used to configure fault injection.
+# The USER_AGENT variable is used to set the user agent for the test.
+# The CONSISTENCY_LEVEL variable is used to set the Cosmos DB consistency level for the test.
+# The APP_INSIGHT_CONN_STR variable is used to set the Application Insights connection string.
+# The POINT_OPERATION_THRESHOLD and NON_POINT_OPERATION_THRESHOLD variables are used to set the latency thresholds for point and non-point operations, if these thresholds are breached client diagnotics will be logged for the request.
+# The REQUEST_CHARGE_THRESHOLD variable is used to set the request charge threshold for the test,  if this threshold is breached client diagnotics will be logged for the request.
 
-# The script starts by printing the values of all the environment variables.
+# The script starts by printing the values of all the input variables.
 # It then clones the benchmarking tools and YCSB repositories, and builds YCSB from source.
 # The script then checks whether to run a load operation, and if so, it executes the load operation.
 # After the load operation, the script checks whether to introduce faults, and if so, it starts a chaos script.
@@ -106,6 +106,7 @@ cp -r ./$DB_BINDING_NAME/conf/* /tmp/ycsb
 cd /tmp/ycsb/
 
 ycsb_folder_name=ycsb-$DB_BINDING_NAME-binding-*-SNAPSHOT
+user_home="/home/${ADMIN_USER_NAME}"
 echo "########## Extracting YCSB ##########"
 tar xfvz ycsb-$DB_BINDING_NAME-binding*.tar.gz
 cp ./$DB_BINDING_NAME-run.sh ./$ycsb_folder_name

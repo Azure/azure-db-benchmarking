@@ -6,7 +6,7 @@
             "type": "string",
             "defaultValue": "benchmarking",
             "metadata": {
-                "description": "Specifies a name for generating resource names. Should be one word, do not use any hypens/minus or underscores."
+                "description": "Specifies a name for generating resource names. Should be one word, lowercase, do not use any hypens/minus or underscores."
             }
         },
         "location": {
@@ -183,13 +183,6 @@
             "metadata": {
                 "description": "Specifies field count in the item"
             }
-        },
-         "appInsightConnectionString": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Specifies application insight connection string for live monitering"
-            }
         }
     },
     "variables": {
@@ -290,9 +283,6 @@
                     },
                     "fieldcount": {
                         "value": "[parameters('fieldcount')]"
-                    },
-                    "appInsightConnectionString": {
-                        "value": "[parameters('appInsightConnectionString')]"
                     }
                 }
             }

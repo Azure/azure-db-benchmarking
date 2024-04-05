@@ -6,7 +6,7 @@
             "type": "string",
             "defaultValue": "benchmarking",
             "metadata": {
-                "description": "Specifies a name for generating resource names. Should be one word, do not use any hypens/minus or underscores."
+                "description": "Specifies a name for generating resource names. Should be one word, lowercase, do not use any hypens/minus or underscores."
             }
         },
         "location": {

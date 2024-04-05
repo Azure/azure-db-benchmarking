@@ -81,8 +81,8 @@ if [ -z "$duration_of_fault_in_sec" ]; then
 fi
 
 if [ -z "$fault_region" ]; then
-  echo "Error: The fault_region environment variable is not set."
-  echo "Please set the fault_region environment variable and try again."
+  echo "The fault_region is not set. Please pass it with -r option."
+  usage
   exit 1
 fi
 
