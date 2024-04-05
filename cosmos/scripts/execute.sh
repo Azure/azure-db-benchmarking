@@ -35,5 +35,5 @@ fi
 # Running custom-script in background, arm template completion wont wait on this
 # stdout and stderr will be logged in <$HOME>/agent.out and <$HOME>/agent.err
     curl -o custom-script.sh $CUSTOM_SCRIPT_URL
-    nohup bash custom-script.sh > "/home/${ADMIN_USER_NAME}/agent.out" 2> "/home/${ADMIN_USER_NAME}/agent.err" &
+    nohup bash custom-script.sh >> "/home/${ADMIN_USER_NAME}/agent.out" 2>> "/home/${ADMIN_USER_NAME}/agent.err" &
 fi

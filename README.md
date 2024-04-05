@@ -54,7 +54,6 @@ The first version of the framework uses [YCSB](https://github.com/brianfrankcoop
    | Cosmos Mongo API | YCSB | [Getting Started ](/cosmos/mongoapi/tools/java/ycsb/recipes)
    | Cosmos SQL API(Chaos) | YCSB | [Getting Started](/cosmos/sql/tools/java/ycsb/chaos)
 
-
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
