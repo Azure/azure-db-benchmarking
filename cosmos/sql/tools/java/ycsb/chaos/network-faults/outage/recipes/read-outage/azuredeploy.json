@@ -4,9 +4,9 @@
     "parameters": {
         "projectName": {
             "type": "string",
-            "defaultValue": "Chaos",
+            "defaultValue": "chaos",
             "metadata": {
-                "description": "Specifies a name for generating resource names."
+                "description": "Specifies a name for generating resource names. Should be one word, lowercase letters and numbers only."
             }
         },
         "location": {
@@ -209,6 +209,13 @@
             "metadata": {
                 "description": "Specifies field count in the item"
             }
+        },
+         "appInsightConnectionString": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies application insight connection string for live monitering"
+            }
         }
     },
     "variables": {
@@ -321,6 +328,9 @@
                     },
                     "dropProbability": {
                         "value": "[parameters('dropProbability')]"
+                    },
+                    "appInsightConnectionString": {
+                        "value": "[parameters('appInsightConnectionString')]"
                     }
                 }
             }

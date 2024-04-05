@@ -3,6 +3,37 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
+# This script is used to run a YCSB (Yahoo! Cloud Serving Benchmark) test on a Cosmos DB instance.
+# It takes several inputs, which are used to configure the test.
+# The script supports both load and run operations, and can optionally introduce faults during the test.
+
+# The PROJECT_NAME variable is used to name the benchmark.
+# The DB_BINDING_NAME variable specifies the YCSB binding to use.
+# The VM_NAME variable is used to name the virtual machine that runs the test.
+# The YCSB_RECORD_COUNT variable specifies the number of records for the test.
+# The MACHINE_INDEX variable is used to calculate the start index for insert operations.
+# The YCSB_OPERATION_COUNT variable specifies the number of operations for the test.
+# The VM_COUNT variable is used to calculate the total number of records for read operations.
+# The WRITE_ONLY_OPERATION variable determines whether to run a write-only workload.
+# The BENCHMARKING_TOOLS_BRANCH_NAME and BENCHMARKING_TOOLS_URL variables are used to clone the benchmarking tools repository.
+# The YCSB_GIT_BRANCH_NAME and YCSB_GIT_REPO_URL variables are used to clone the YCSB repository.
+# The WAIT_FOR_FAULT_TO_START_IN_SEC, DURATION_OF_FAULT_IN_SEC, DROP_PROBABILITY, FAULT_REGION, and DELAY_IN_MS variables are used to configure fault injection.
+# The USER_AGENT variable is used to set the user agent for the test.
+# The CONSISTENCY_LEVEL variable is used to set the Cosmos DB consistency level for the test.
+# The APP_INSIGHT_CONN_STR variable is used to set the Application Insights connection string.
+# The POINT_OPERATION_THRESHOLD and NON_POINT_OPERATION_THRESHOLD variables are used to set the latency thresholds for point and non-point operations, if these thresholds are breached client diagnotics will be logged for the request.
+# The REQUEST_CHARGE_THRESHOLD variable is used to set the request charge threshold for the test,  if this threshold is breached client diagnotics will be logged for the request.
+
+# The script starts by printing the values of all the input variables.
+# It then clones the benchmarking tools and YCSB repositories, and builds YCSB from source.
+# The script then checks whether to run a load operation, and if so, it executes the load operation.
+# After the load operation, the script checks whether to introduce faults, and if so, it starts a chaos script.
+# Finally, the script executes the run operation, and copies the results to a storage account.
+
+# This script assumes that the Azure CLI and azcopy are installed and that the user is logged in to the Azure CLI.
+# This script should be run on a virtual machine that has network access to the Cosmos DB instance.
+
+echo "##########PROJECT_NAME###########: $PROJECT_NAME"
 echo "##########DB_BINDING_NAME###########: $DB_BINDING_NAME"
 echo "##########VM NAME###########: $VM_NAME"
 echo "##########YCSB_RECORD_COUNT###########: $YCSB_RECORD_COUNT"
@@ -22,7 +53,10 @@ echo "##########FAULT_REGION###########: $FAULT_REGION"
 echo "##########DELAY_IN_MS###########: $DELAY_IN_MS"
 echo "##########USER_AGENT###########: $USER_AGENT"
 echo "##########CONSISTENCY_LEVEL###########: $CONSISTENCY_LEVEL"
-
+echo "###########APP_INSIGHT_CONN_STR########: $APP_INSIGHT_CONN_STR"
+echo "###########POINT_OPERATION_THRESHOLD########: $POINT_OPERATION_THRESHOLD_IN_MS"
+echo "###########NON_POINT_OPERATION_THRESHOLD########: $NON_POINT_OPERATION_THRESHOLD_IN_MS"
+echo "###########REQUEST_CHARGE_THRESHOLD########: $REQUEST_CHARGE_THRESHOLD"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
@@ -30,10 +64,21 @@ insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
 recordcount=$((YCSB_RECORD_COUNT * MACHINE_INDEX))
 # Record count for Run. Since we run read workload after load this is the total number of records loaded by all VMs/clients during load.
 totalrecordcount=$((YCSB_RECORD_COUNT * VM_COUNT))
-benchmarkname=ycsbbenchmarking
+
+benchmarkname=""
+if [ -n $PROJECT_NAME ]; then
+  benchmarkname=$PROJECT_NAME
+else
+  benchmarkname=ycsbbenchmarking
+fi
+
 if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 0 ]; then
   fault=true
-  benchmarkname=ycsbwithfault
+  if [ -n $PROJECT_NAME ]; then
+    benchmarkname="${PROJECT_NAME}withfault"
+  else
+    benchmarkname=ycsbwithfault
+  fi
 fi
 
 #Cloning Test Bench Repo
@@ -46,12 +91,11 @@ mkdir /tmp/ycsb
 rm -rf /tmp/ycsb/*
 rm -rf "/tmp/$VM_NAME-system-diagnostics"
 cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
-#cp -r ./azure-db-benchmarking/core/data/* /tmp/ycsb
+
 
 #Build YCSB from source
 echo "########## Cloning YCSB repository ##########"
 git clone -b "$YCSB_GIT_BRANCH_NAME" --single-branch "$YCSB_GIT_REPO_URL"
-
 cd YCSB
 echo "########## Pulling Latest YCSB ##########"
 git pull
@@ -63,7 +107,6 @@ cd /tmp/ycsb/
 
 ycsb_folder_name=ycsb-$DB_BINDING_NAME-binding-*-SNAPSHOT
 user_home="/home/${ADMIN_USER_NAME}"
-
 echo "########## Extracting YCSB ##########"
 tar xfvz ycsb-$DB_BINDING_NAME-binding*.tar.gz
 cp ./$DB_BINDING_NAME-run.sh ./$ycsb_folder_name
@@ -94,6 +137,8 @@ if [ $MACHINE_INDEX -eq 1 ]; then
   fi
 
   ## Creating SAS URL for result storage container
+  # The block also checks if the current machine is the first one to start the job. If it is, it inserts a new entity into the metadata table in Azure Storage.
+  # If the current machine is not the first one, it waits until the first machine has inserted the entity, and then retrieves the job start time and SAS URL from the entity.
   echo "########## Creating SAS URL for result storage container ###########"
   end=$(date -u -d "30 days" '+%Y-%m-%dT%H:%MZ')
   current_time="$(date '+%Y-%m-%d-%Hh%Mm%Ss')"
@@ -128,7 +173,7 @@ else
   for i in $(seq 1 10); do
     latest_table_entry=$(az storage entity show --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --partition-key "${tool_api}" --row-key "${GUID}")
     if [ -z "$latest_table_entry" ]; then
-      echo "sleeping for 1 min, table row not availble yet"
+      echo "sleeping for 1 min, table row not available yet"
       sleep 1m
       continue
     fi
@@ -287,7 +332,7 @@ if [ $MACHINE_INDEX -eq 1 ]; then
   finish_time="$(date '+%Y-%m-%dT%H:%M:%SZ')"
   echo "Updating latest table entry with incremented NoOfClientsCompleted"
   az storage entity merge --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --entity PartitionKey="${tool_api}" RowKey="${GUID}" JobFinishTime=$finish_time JobStatus="Finished" NoOfClientsCompleted=$no_of_clients_completed --if-match=$etag
-  echo "Job finished sucessfully at $finish_time"
+  echo "Job finished successfully at $finish_time"
 else
   for j in $(seq 1 60); do
     echo "Reading latest table entry for updating NoOfClientsCompleted"
@@ -304,7 +349,7 @@ else
       echo "Hit race condition on table entry for updating no_of_clients_completed"
       sleep 1s
     else
-      echo "Task finished sucessfully"
+      echo "Task finished successfully"
       break
     fi
   done
