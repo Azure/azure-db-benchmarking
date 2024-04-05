@@ -50,9 +50,9 @@ cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 # Setting up logrotate for propetually running worklaods to avoid disk space issues.
 echo "################# Setting up logrotate ###################"
 if [ "$YCSB_OPERATION_COUNT" -eq 0 ]; then
-  cp -r ./azure-db-benchmarking/cosmos/sql/tools/java/ycsb/config/* /home/benchmarking
-  sudo logrotate /home/benchmarking/logrotate/logrotate.conf --state /home/benchmarking/logrotate/logrotate.state
-  crontab -l | { cat; echo "0 * * * * /usr/sbin/logrotate /home/benchmarking/logrotate/logrotate.conf --state /home/benchmarking/logrotate/logrotate.state"; } | crontab -
+  cp -r ./azure-db-benchmarking/cosmos/sql/tools/java/ycsb/config/* /home/${ADMIN_USER_NAME}
+  sudo logrotate /home/${ADMIN_USER_NAME}/logrotate/logrotate.conf --state /home/${ADMIN_USER_NAME}/logrotate/logrotate.state
+  crontab -l | { cat; echo "0 * * * * /usr/sbin/logrotate /home/${ADMIN_USER_NAME}/logrotate/logrotate.conf --state /home/$/logrotate/logrotate.state"; } | crontab -
 fi
 
 #Build YCSB from source
