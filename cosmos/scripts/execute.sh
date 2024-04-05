@@ -5,6 +5,13 @@
 
 cloud-init status --wait
 echo "##########CUSTOM_SCRIPT_URL###########: $CUSTOM_SCRIPT_URL"
+echo "##########PROJECT_NAME###########: $PROJECT_NAME"
+
+# Regex check for $PROJECT_NAME
+if [[ ! $PROJECT_NAME =~ ^[a-zA-Z0-9]+$ ]]; then
+    echo "Invalid project name. Project name should only contain lower case letters and numbers."
+    exit 1
+fi
 
 # check to enforce only once instance of the workload is running. 
 if pgrep -xf "bash custom-script.sh"
@@ -26,7 +33,7 @@ if [ -n "$APP_INSIGHT_CONN_STR" ] && [ "$APP_INSIGHT_CONN_STR" != "null" ]; then
 fi
 
 # Running custom-script in background, arm template completion wont wait on this
-# stdout and stderr will be logged in <$HOME>/custom-script.out and <$HOME>/custom-script.err
+# stdout and stderr will be logged in <$HOME>/agent.out and <$HOME>/agent.err
     curl -o custom-script.sh $CUSTOM_SCRIPT_URL
     nohup bash custom-script.sh >> "/home/${ADMIN_USER_NAME}/agent.out" 2>> "/home/${ADMIN_USER_NAME}/agent.err" &
 fi

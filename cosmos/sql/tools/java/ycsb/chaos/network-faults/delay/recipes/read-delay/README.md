@@ -10,7 +10,7 @@ This recipe encapsulates a read workload that executes for 20-25 minutes. Around
 | Benchmarking tool | YCSB |
 | Workload | Read |
 | Duration | 20-25 minutes |
-| Fault Type | Packet Drop |
+| Fault Type | Network Delay |
 | Fault Start | 5 Minutes after the workload starts |
 | Fault duration | 5 minutes |
 | Number of documents in DB | 30 |
