@@ -6,7 +6,7 @@
             "type": "string",
             "defaultValue": "chaos",
             "metadata": {
-                "description": "Specifies a name for generating resource names."
+                "description": "Specifies a name for generating resource names. Should be one word, lowercase letters and numbers only."
             }
         },
         "location": {

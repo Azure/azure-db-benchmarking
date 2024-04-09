@@ -31,6 +31,61 @@ install_powershell() {
   pwsh
 }
 
+while getopts "e:m:d:c:w:t:r:p:l:" opt;
+do
+    case "$opt" in
+    e)  endpoint=$OPTARG;;
+    m)  masterkey=$OPTARG;;
+    d)  databaseid=$OPTARG;;
+    c)  containerid=$OPTARG;;
+    w)  wait_for_fault_to_start_in_sec=$OPTARG;;
+    t)  duration_of_fault_in_sec=$OPTARG;;
+    r)  fault_region=$OPTARG;;
+    p)  drop_probability=$OPTARG;;
+    l)  delay_in_ms=$OPTARG;;
+    esac
+done
+
+usage(){
+  echo "Usage: ./chaos_script.sh -e <endpoint> -d <databaseid> -c <containerid> -w <wait_for_fault_to_start_in_sec> -t <duration_of_fault_in_sec> -r <fault_region> -p <drop_probability> -l <delay_in_ms>"
+}
+
+if [ -z "$endpoint" ]; then
+  echo "The endpoint for the Cosmos DB instance is not set. Please pass it with -e option."
+  usage
+  exit 1
+fi
+
+if [ -z "$masterkey" ]; then
+  echo "The masterkey for the Cosmos DB instance is not set. Please pass it with -m option."
+  usage
+  exit 1
+fi
+
+if [ -z "$databaseid" ]; then
+  echo "The databaseid for the Cosmos DB instance is not set. Please pass it with -d option."
+  usage
+  exit 1
+fi
+
+if [ -z "$containerid" ]; then
+  echo "The containerid for the Cosmos DB instance is not set. Please pass it with -c option."
+  usage
+  exit 1
+fi
+
+if [ -z "$duration_of_fault_in_sec" ]; then
+  echo "The duration_of_fault_in_sec is not set. Please pass it with -t option."
+  usage
+  exit 1
+fi
+
+if [ -z "$fault_region" ]; then
+  echo "The fault_region is not set. Please pass it with -r option."
+  usage
+  exit 1
+fi
+
 if ! command -v pwsh &>/dev/null; then
   install_powershell
 fi

@@ -4,9 +4,9 @@
     "parameters": {
         "projectName": {
             "type": "string",
-            "defaultValue": "Benchmarking",
+            "defaultValue": "benchmarking",
             "metadata": {
-                "description": "Specifies a name for generating resource names."
+                "description": "Specifies a name for generating resource names. Should be one word, lowercase letters and numbers only."
             }
         },
         "location": {
@@ -68,7 +68,7 @@
         "resultsStorageConnectionString": {
             "type": "string",
             "metadata": {
-                "description": "Specifies a connection string of the storage account where results will be avaialble"
+                "description": "Specifies a connection string of the storage account where results will be available."
             }
         },
         "cosmosURI": {
@@ -155,7 +155,7 @@
             "type": "bool",
             "defaultValue": false,
             "metadata": {
-                "description": "Specifies if the gateway connectivity mode should be used. The default value 'flase' indicates direct connectivity mode"
+                "description": "Specifies if the gateway connectivity mode should be used. The default value 'false' indicates direct connectivity mode"
             }
         },
         "diagnosticsLatencyThresholdInMS": {
@@ -543,7 +543,7 @@
                 "settings": {
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat('DB_BINDING_NAME=',parameters('ycsbDatabaseBindingName'),' ','ADMIN_USER_NAME=',parameters('adminUsername'),' ','BENCHMARKING_TOOLS_URL=',variables('benchmarkingToolsURL'),' ','BENCHMARKING_TOOLS_BRANCH_NAME=',parameters('benchmarkingToolsBranchName'),' ','YCSB_GIT_REPO_URL=',variables('ycsbGitHubRepoUrl'),' ','GUID=',parameters('guidValue'),' ','YCSB_GIT_BRANCH_NAME=',parameters('ycsbGitHubBranchName'),' ','TARGET_OPERATIONS_PER_SECOND=',parameters('targetOperationsPerSecond'),' ','THREAD_COUNT=',parameters('threads'),' ','YCSB_OPERATION_COUNT=',parameters('ycsbOperationCount'), ' ','WORKLOAD_TYPE=',parameters('workloadType'),' ','VM_NAME=',variables('vmName'),copyIndex(1), ' ','RESULT_STORAGE_CONNECTION_STRING=','\"',parameters('resultsStorageConnectionString'),'\"',' ','COSMOS_URI=','\"',parameters('cosmosURI'),'\"', ' ','COSMOS_KEY=',parameters('cosmosKey'), ' ','VM_COUNT=',parameters('vmCount'), ' ','USE_GATEWAY=',parameters('useGateway'), ' ','DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS=',parameters('diagnosticsLatencyThresholdInMS'), ' ','YCSB_RECORD_COUNT=',parameters('ycsbRecordCount'), ' ','WRITE_ONLY_OPERATION=',parameters('writeOnlyOperation'), ' ','READ_PROPORTION=',parameters('readproportion'), ' ','SCAN_PROPORTION=',parameters('scanproportion'), ' ','UPDATE_PROPORTION=',parameters('updateproportion'), ' ','INSERT_PROPORTION=',parameters('insertproportion'), ' ','REQUEST_DISTRIBUTION=',parameters('requestdistribution'), ' ','INSERT_ORDER=',parameters('insertorder'), ' ','CUSTOM_SCRIPT_URL=',variables('customScriptUrl'), ' ','MACHINE_INDEX=',copyIndex(1), ' ','INCLUDE_EXCEPTION_STACK=',parameters('includeExceptionStackInLog'), ' ','FIELD_COUNT=',parameters('fieldcount'), ' ','SKIP_LOAD_PHASE=',parameters('skipLoadPhase'), ' ','WAIT_FOR_FAULT_TO_START_IN_SEC=',parameters('waitForFaultToStartInSec'), ' ','DURATION_OF_FAULT_IN_SEC=',parameters('durationOfFaultInSec'), ' ','DROP_PROBABILITY=',parameters('dropProbability'), ' ','FAULT_REGION=','\"',parameters('faultRegion'),'\"',' ','DELAY_IN_MS=',parameters('delayInMs'),' ','USER_AGENT=',parameters('userAgent'),' ','CONSISTENCY_LEVEL=',parameters('consistencyLevel'),' ','PREFERRED_REGION_LIST=','\"',parameters('preferredRegionList'),'\"',' ','APP_INSIGHT_CONN_STR=','\"',parameters('appInsightConnectionString'),'\"',' ','POINT_OPERATION_THRESHOLD_IN_MS=',parameters('pointOperationLatencyThresholdInMS'),' ','NON_POINT_OPERATION_THRESHOLD_IN_MS=',parameters('nonPointOperationLatencyThresholdInMS'),' ','REQUEST_CHARGE_THRESHOLD=',parameters('requestChargeThreshold'),' ','APP_INSIGHT_METRIC_INTERVAL_IN_SECONDS=',parameters('appInsightsMetricIntervalInSeconds'),' ', 'bash ',variables('vmScriptExtensionScriptName'))]",
+                    "commandToExecute": "[concat('DB_BINDING_NAME=',parameters('ycsbDatabaseBindingName'),' ','ADMIN_USER_NAME=',parameters('adminUsername'),' ','PROJECT_NAME=',parameters('projectName'),' ','BENCHMARKING_TOOLS_URL=',variables('benchmarkingToolsURL'),' ','BENCHMARKING_TOOLS_BRANCH_NAME=',parameters('benchmarkingToolsBranchName'),' ','YCSB_GIT_REPO_URL=',variables('ycsbGitHubRepoUrl'),' ','GUID=',parameters('guidValue'),' ','YCSB_GIT_BRANCH_NAME=',parameters('ycsbGitHubBranchName'),' ','TARGET_OPERATIONS_PER_SECOND=',parameters('targetOperationsPerSecond'),' ','THREAD_COUNT=',parameters('threads'),' ','YCSB_OPERATION_COUNT=',parameters('ycsbOperationCount'), ' ','WORKLOAD_TYPE=',parameters('workloadType'),' ','VM_NAME=',variables('vmName'),copyIndex(1), ' ','RESULT_STORAGE_CONNECTION_STRING=','\"',parameters('resultsStorageConnectionString'),'\"',' ','COSMOS_URI=','\"',parameters('cosmosURI'),'\"', ' ','COSMOS_KEY=',parameters('cosmosKey'), ' ','VM_COUNT=',parameters('vmCount'), ' ','USE_GATEWAY=',parameters('useGateway'), ' ','DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS=',parameters('diagnosticsLatencyThresholdInMS'), ' ','YCSB_RECORD_COUNT=',parameters('ycsbRecordCount'), ' ','WRITE_ONLY_OPERATION=',parameters('writeOnlyOperation'), ' ','READ_PROPORTION=',parameters('readproportion'), ' ','SCAN_PROPORTION=',parameters('scanproportion'), ' ','UPDATE_PROPORTION=',parameters('updateproportion'), ' ','INSERT_PROPORTION=',parameters('insertproportion'), ' ','REQUEST_DISTRIBUTION=',parameters('requestdistribution'), ' ','INSERT_ORDER=',parameters('insertorder'), ' ','CUSTOM_SCRIPT_URL=',variables('customScriptUrl'), ' ','MACHINE_INDEX=',copyIndex(1), ' ','INCLUDE_EXCEPTION_STACK=',parameters('includeExceptionStackInLog'), ' ','FIELD_COUNT=',parameters('fieldcount'), ' ','SKIP_LOAD_PHASE=',parameters('skipLoadPhase'), ' ','WAIT_FOR_FAULT_TO_START_IN_SEC=',parameters('waitForFaultToStartInSec'), ' ','DURATION_OF_FAULT_IN_SEC=',parameters('durationOfFaultInSec'), ' ','DROP_PROBABILITY=',parameters('dropProbability'), ' ','FAULT_REGION=','\"',parameters('faultRegion'),'\"',' ','DELAY_IN_MS=',parameters('delayInMs'),' ','USER_AGENT=',parameters('userAgent'),' ','CONSISTENCY_LEVEL=',parameters('consistencyLevel'),' ','PREFERRED_REGION_LIST=','\"',parameters('preferredRegionList'),'\"',' ','APP_INSIGHT_CONN_STR=','\"',parameters('appInsightConnectionString'),'\"',' ','POINT_OPERATION_THRESHOLD_IN_MS=',parameters('pointOperationLatencyThresholdInMS'),' ','NON_POINT_OPERATION_THRESHOLD_IN_MS=',parameters('nonPointOperationLatencyThresholdInMS'),' ','REQUEST_CHARGE_THRESHOLD=',parameters('requestChargeThreshold'),' ','APP_INSIGHT_METRIC_INTERVAL_IN_SECONDS=',parameters('appInsightsMetricIntervalInSeconds'),' ', 'bash ',variables('vmScriptExtensionScriptName'))]",
                     "fileUris": [ "[concat(variables('vmScriptExtensionScriptURL'))]" ]
                 }
             },
