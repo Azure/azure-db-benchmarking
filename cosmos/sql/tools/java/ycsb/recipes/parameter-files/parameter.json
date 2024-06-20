@@ -13,6 +13,9 @@
     },
     "cosmosKey": {
       "value": ""
+    },
+    "userAssignedIdentityClientId": {
+      "value": ""
     }
   }
 }

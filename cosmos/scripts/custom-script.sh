@@ -243,13 +243,20 @@ if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; the
   recordcountForWriteOps=$((YCSB_OPERATION_COUNT * MACHINE_INDEX))
 
   # Starting chaos script if opt in
+  # TODO Add MSI handling.
   if [ "$fault" = true ]; then
     databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY fault_region=$FAULT_REGION delay_in_ms=$DELAY_IN_MS bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
   fi
 
   ## Execute run phase for YCSB tests with write only workload
   echo "########## Run operation with write only workload for YCSB tests ###########"
-  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+  if [[ -z "$COSMOS_KEY" ]]; then
+    echo "########## Running operation with Auth Method: AAD ###########"
+    uri=$COSMOS_URI userAssignedIdentityClientId=$USER_ASSIGNED_IDENTITY_ID workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+  else
+    echo "########## Running operation with Auth Method: MasterKey ###########"
+    uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+  fi
 else
   if [ "$SKIP_LOAD_PHASE" = False ] || [ "$SKIP_LOAD_PHASE" = false ]; then
     ## Execute load operation for YCSB tests
@@ -260,7 +267,13 @@ else
       loadthreadcount=1
     fi
     echo "##########loadthreadcount###########: $loadthreadcount"
-    uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="load" recordcount=$recordcount insertstart=$insertstart insertcount=$YCSB_RECORD_COUNT threads=$loadthreadcount target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR core_workload_insertion_retry_limit=5 userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+    if [[ -z "$COSMOS_KEY" ]]; then
+      echo "########## Running operation with Auth Method: AAD ###########"
+      uri=$COSMOS_URI userAssignedIdentityClientId=$USER_ASSIGNED_IDENTITY_ID workload_type=$WORKLOAD_TYPE ycsb_operation="load" recordcount=$recordcount insertstart=$insertstart insertcount=$YCSB_RECORD_COUNT threads=$loadthreadcount target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR core_workload_insertion_retry_limit=5 userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+    else
+      echo "########## Running operation with Auth Method: MasterKey ###########"
+      uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="load" recordcount=$recordcount insertstart=$insertstart insertcount=$YCSB_RECORD_COUNT threads=$loadthreadcount target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR core_workload_insertion_retry_limit=5 userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+    fi
   fi
   now=$(date +"%s")
   wait_interval=$(($job_start_time - $now))
@@ -277,13 +290,20 @@ else
   sudo rm -f /tmp/ycsb.log
 
   # Starting chaos script if opt in
+  # TODO Add MSI handling.
   if [ "$fault" = true ]; then
     databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY fault_region=$FAULT_REGION delay_in_ms=$DELAY_IN_MS bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
   fi
 
   ## Execute run phase for YCSB tests
   echo "########## Run operation for YCSB tests ###########"
-  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+  if [[ -z "$COSMOS_KEY" ]]; then
+    echo "########## Running operation with Auth Method: AAD ###########"
+    uri=$COSMOS_URI userAssignedIdentityClientId=$USER_ASSIGNED_IDENTITY_ID workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+  else
+    echo "########## Running operation with Auth Method: MasterKey ###########"
+    uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+  fi
 fi
 
 #Copy YCSB log to storage account

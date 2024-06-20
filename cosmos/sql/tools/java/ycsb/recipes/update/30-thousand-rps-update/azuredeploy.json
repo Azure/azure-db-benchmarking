@@ -34,6 +34,12 @@
                 "description": "Specifies the key for the Cosmos DB account"
             }
         },
+        "userAssignedIdentityClientId": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies MSI User Assigned Identity Client ID"
+            }
+        },
         "vmSize": {
             "type": "string",
             "defaultValue": "Standard_D32s_v4",

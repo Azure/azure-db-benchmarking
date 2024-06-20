@@ -90,6 +90,12 @@
                 "description": "Specifies the key for the Cosmos DB account"
             }
         },
+        "userAssignedIdentityClientId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies MSI User Assigned Identity Client ID"
+            }
+        },
         "workloadType": {
             "type": "string",
             "defaultValue": "workloadc",
@@ -278,6 +284,9 @@
                     },
                     "cosmosKey": {
                         "value": "[parameters('cosmosKey')]"
+                    },
+                    "userAssignedIdentityClientId": {
+                        "value": "[parameters('userAssignedIdentityClientId')]"
                     },
                     "workloadType": {
                         "value": "[parameters('workloadType')]"
