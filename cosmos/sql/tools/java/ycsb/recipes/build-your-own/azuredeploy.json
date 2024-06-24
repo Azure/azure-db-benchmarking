@@ -86,8 +86,16 @@
         },
         "cosmosKey": {
             "type": "securestring",
+            "defaultValue": "",
             "metadata": {
                 "description": "Specifies the key for the Cosmos DB account"
+            }
+        },
+        "userAssignedIdentityClientId": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies MSI User Assigned Identity Client ID"
             }
         },
         "workloadType": {
@@ -278,6 +286,9 @@
                     },
                     "cosmosKey": {
                         "value": "[parameters('cosmosKey')]"
+                    },
+                    "userAssignedIdentityClientId": {
+                        "value": "[parameters('userAssignedIdentityClientId')]"
                     },
                     "workloadType": {
                         "value": "[parameters('workloadType')]"

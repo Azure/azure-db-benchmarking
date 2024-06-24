@@ -30,8 +30,16 @@
         },
         "cosmosKey": {
             "type": "securestring",
+            "defaultValue": "",
             "metadata": {
                 "description": "Specifies the key for the Cosmos DB account"
+            }
+        },
+        "userAssignedIdentityClientId": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies MSI User Assigned Identity Client ID"
             }
         },
         "vmSize": {
@@ -203,6 +211,9 @@
                     },
                     "cosmosKey": {
                         "value": "[parameters('cosmosKey')]"
+                    },
+                    "userAssignedIdentityClientId": {
+                        "value": "[parameters('userAssignedIdentityClientId')]"
                     },
                     "vmSize": {
                         "value": "[parameters('vmSize')]"

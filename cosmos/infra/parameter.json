@@ -17,6 +17,9 @@
     "cosmosKey": {
       "value": ""
     },
+    "userAssignedIdentityClientId": {
+      "value": ""
+    },
     "vmCount": {
       "value": 1
     },
