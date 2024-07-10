@@ -3,6 +3,35 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
+# This script is used to run a YCSB (Yahoo! Cloud Serving Benchmark) test on a Cosmos DB instance.
+# It takes several inputs, which are used to configure the test.
+# The script supports both load and run operations, and can optionally introduce faults during the test.
+
+# The PROJECT_NAME variable is used to name the benchmark.
+# The DB_BINDING_NAME variable specifies the YCSB binding to use.
+# The VM_NAME variable is used to name the virtual machine that runs the test.
+# The YCSB_RECORD_COUNT variable specifies the number of records for the test.
+# The MACHINE_INDEX variable is used to calculate the start index for insert operations.
+# The YCSB_OPERATION_COUNT variable specifies the number of operations for the test.
+# The VM_COUNT variable is used to calculate the total number of records for read operations.
+# The WRITE_ONLY_OPERATION variable determines whether to run a write-only workload.
+# The BENCHMARKING_TOOLS_BRANCH_NAME and BENCHMARKING_TOOLS_URL variables are used to clone the benchmarking tools repository.
+# The YCSB_GIT_BRANCH_NAME and YCSB_GIT_REPO_URL variables are used to clone the YCSB repository.
+# The WAIT_FOR_FAULT_TO_START_IN_SEC, DURATION_OF_FAULT_IN_SEC, DROP_PROBABILITY, FAULT_REGION, and DELAY_IN_MS variables are used to configure fault injection.
+# The USER_AGENT variable is used to set the user agent for the test.
+# The CONSISTENCY_LEVEL variable is used to set the Cosmos DB consistency level for the test.
+# The APP_INSIGHT_CONN_STR variable is used to set the Application Insights connection string.
+
+# The script starts by printing the values of all the input variables.
+# It then clones the benchmarking tools and YCSB repositories, and builds YCSB from source.
+# The script then checks whether to run a load operation, and if so, it executes the load operation.
+# After the load operation, the script checks whether to introduce faults, and if so, it starts a chaos script.
+# Finally, the script executes the run operation, and copies the results to a storage account.
+
+# This script assumes that the Azure CLI and azcopy are installed and that the user is logged in to the Azure CLI.
+# This script should be run on a virtual machine that has network access to the Cosmos DB instance.
+
+echo "##########PROJECT_NAME###########: $PROJECT_NAME"
 echo "##########DB BINDING NAME###########: $DB_BINDING_NAME"
 echo "##########VM NAME###########: $VM_NAME"
 echo "##########YCSB_RECORD_COUNT###########: $YCSB_RECORD_COUNT"
@@ -23,9 +52,6 @@ echo "##########DELAY_IN_MS###########: $DELAY_IN_MS"
 echo "##########USER_AGENT###########: $USER_AGENT"
 echo "##########CONSISTENCY_LEVEL###########: $CONSISTENCY_LEVEL"
 echo "###########APP_INSIGHT_CONN_STR########: $APP_INSIGHT_CONN_STR"
-echo "###########POINT_OPERATION_THRESHOLD########: $POINT_OPERATION_THRESHOLD_IN_MS"
-echo "###########NON_POINT_OPERATION_THRESHOLD########: $NON_POINT_OPERATION_THRESHOLD_IN_MS"
-echo "###########REQUEST_CHARGE_THRESHOLD########: $REQUEST_CHARGE_THRESHOLD"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
