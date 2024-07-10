@@ -32,7 +32,7 @@
 # This script should be run on a virtual machine that has network access to the Cosmos DB instance.
 
 echo "##########PROJECT_NAME###########: $PROJECT_NAME"
-echo "##########DB BINDING NAME###########: $DB_BINDING_NAME"
+echo "##########DB_BINDING_NAME###########: $DB_BINDING_NAME"
 echo "##########VM NAME###########: $VM_NAME"
 echo "##########YCSB_RECORD_COUNT###########: $YCSB_RECORD_COUNT"
 echo "##########MACHINE_INDEX###########: $MACHINE_INDEX"
