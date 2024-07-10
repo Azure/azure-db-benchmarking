@@ -152,18 +152,6 @@ if [ ! -z "$exportfile" ]; then
    sed -i "s|^[#]*\s*exportfile\ =.*|exportfile\ =\ $exportfile|" azurecosmos.properties
 fi
 
-if [ ! -z "$pointOperationLatencyThresholdInMS" ]; then
-   sed -i "s/^[#]*\s*azurecosmos.pointOperationLatencyThresholdInMS\ =.*/azurecosmos.pointOperationLatencyThresholdInMS\ =\ $pointOperationLatencyThresholdInMS/" azurecosmos.properties
-fi
-
-if [ ! -z "$nonPointOperationLatencyThresholdInMS" ]; then
-   sed -i "s/^[#]*\s*azurecosmos.nonPointOperationLatencyThresholdInMS\ =.*/azurecosmos.nonPointOperationLatencyThresholdInMS\ =\ $nonPointOperationLatencyThresholdInMS/" azurecosmos.properties
-fi
-
-if [ ! -z "$requestChargeThreshold" ]; then
-   sed -i "s/^[#]*\s*azurecosmos.requestChargeThreshold\ =.*/azurecosmos.requestChargeThreshold\ =\ $requestChargeThreshold/" azurecosmos.properties
-fi
-
 log_filename="/tmp/ycsb.log"
 
 if [ ! -z "$threads" ] && [ ! -z "$target" ]
