@@ -1,0 +1,166 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: <deploymentname>
+  labels:
+     app: benchmarking
+spec:
+  ttlSecondsAfterFinished: 10
+  template:
+    spec:
+      containers:
+      - name: benchmarking-client
+        image: ravitella/bootstrapper:latest
+        imagePullPolicy: Always
+        command: ["./execute-kubernetes.sh"]
+        resources:
+           limits:
+             memory: "<memorylimit>"
+             cpu: "<cpulimit>"
+        env:
+        - name: DB_BINDING_NAME
+          value: "azurecosmos"
+        - name: ADMIN_USER_NAME
+          value: "benchmarking"
+        - name: POD_NAME
+          value: "<podname>"
+        - name: POD_INDEX
+          value: "<podindex>"  
+        - name: POD_COUNT
+          value: "<podcount>"  
+        - name: WORKLOAD_TYPE
+          value: "workloadc"
+        - name: RESULT_STORAGE_CONNECTION_STRING
+          valueFrom:
+             secretKeyRef:
+               name: benchmarking-secrets
+               key: RESULT_STORAGE_CONNECTION_STRING
+        - name: COSMOS_URI
+          valueFrom:
+             secretKeyRef:
+               name: benchmarking-secrets
+               key: COSMOS_URI
+        - name: COSMOS_KEY
+          valueFrom:
+             secretKeyRef:
+               name: benchmarking-secrets
+               key: COSMOS_KEY  
+        - name: GUID
+          valueFrom:
+             secretKeyRef:
+               name: benchmarking-secrets
+               key: GUID   
+        - name: PREFERRED_REGION_LIST
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: PREFERRED_REGION_LIST
+               optional: true        
+        - name: WRITE_ONLY_OPERATION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: WRITE_ONLY_OPERATION               
+        - name: TARGET_OPERATIONS_PER_SECOND
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: TARGET_OPERATIONS_PER_SECOND
+        - name: THREAD_COUNT
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: THREAD_COUNT
+        - name: YCSB_OPERATION_COUNT
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: YCSB_OPERATION_COUNT
+        - name: YCSB_RECORD_COUNT
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: YCSB_RECORD_COUNT
+               optional: true 
+        - name: USE_GATEWAY
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: USE_GATEWAY
+        - name: DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS        
+        - name: REQUEST_DISTRIBUTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: REQUEST_DISTRIBUTION
+        - name: INSERT_ORDER
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: INSERT_ORDER
+        - name: INCLUDE_EXCEPTION_STACK
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: INCLUDE_EXCEPTION_STACK
+        - name: FIELD_COUNT
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: FIELD_COUNT
+        - name: SKIP_LOAD_PHASE
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: SKIP_LOAD_PHASE
+               optional: true 
+        - name: INSERT_PROPORTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: INSERT_PROPORTION
+               optional: true 
+        - name: UPDATE_PROPORTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: UPDATE_PROPORTION
+               optional: true 
+        - name: SCAN_PROPORTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: SCAN_PROPORTION
+               optional: true 
+        - name: READ_PROPORTION
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: READ_PROPORTION
+               optional: true 
+        - name: BENCHMARKING_FRAMEWORK_REPO
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: BENCHMARKING_FRAMEWORK_REPO
+        - name: BENCHMARKING_FRAMEWORK_BRANCH
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: BENCHMARKING_FRAMEWORK_BRANCH
+        - name: YCSB_REPO
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: YCSB_REPO
+        - name: YCSB_BRANCH
+          valueFrom:
+             configMapKeyRef:
+               name: benchmarking-recipe-config
+               key: YCSB_BRANCH
+      restartPolicy: Never
+  backoffLimit: 0
