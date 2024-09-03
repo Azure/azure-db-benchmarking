@@ -94,14 +94,14 @@
             "type": "int",
             "defaultValue": 5000,
             "metadata": {
-                "description": "Specifies the maximum number of operations each client pefroms per second"
+                "description": "Specifies the maximum number of operations each client performs per second"
             }
         },
         "ycsbOperationCount": {
             "type": "int",
             "defaultValue": 18000000,
             "metadata": {
-                "description": "Specifies the total number of operations each client perfoms"
+                "description": "Specifies the total number of operations each client performs"
             }
         },
         "ycsbGitHubRepoName": {
