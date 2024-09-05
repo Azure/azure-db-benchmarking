@@ -57,6 +57,7 @@ echo "###########APP_INSIGHT_CONN_STR########: $APP_INSIGHT_CONN_STR"
 echo "###########POINT_OPERATION_THRESHOLD########: $POINT_OPERATION_THRESHOLD_IN_MS"
 echo "###########NON_POINT_OPERATION_THRESHOLD########: $NON_POINT_OPERATION_THRESHOLD_IN_MS"
 echo "###########REQUEST_CHARGE_THRESHOLD########: $REQUEST_CHARGE_THRESHOLD"
+echo "###########USE_UPSERT########: $USE_UPSERT"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
@@ -249,7 +250,7 @@ if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; the
 
   ## Execute run phase for YCSB tests with write only workload
   echo "########## Run operation with write only workload for YCSB tests ###########"
-  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useUpsert=$USE_UPSERT useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
 else
   if [ "$SKIP_LOAD_PHASE" = False ] || [ "$SKIP_LOAD_PHASE" = false ]; then
     ## Execute load operation for YCSB tests
@@ -260,7 +261,7 @@ else
       loadthreadcount=1
     fi
     echo "##########loadthreadcount###########: $loadthreadcount"
-    uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="load" recordcount=$recordcount insertstart=$insertstart insertcount=$YCSB_RECORD_COUNT threads=$loadthreadcount target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR core_workload_insertion_retry_limit=5 userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+    uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="load" recordcount=$recordcount insertstart=$insertstart insertcount=$YCSB_RECORD_COUNT threads=$loadthreadcount target=$TARGET_OPERATIONS_PER_SECOND useUpsert=$USE_UPSERT useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR core_workload_insertion_retry_limit=5 userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
   fi
   now=$(date +"%s")
   wait_interval=$(($job_start_time - $now))
@@ -285,7 +286,7 @@ else
   ## Execute run phase for YCSB tests
   echo "########## Run operation for YCSB tests ###########"
   sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.3.log" "$result_storage_url"
-  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
+  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION useUpsert=$USE_UPSERT useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL pointOperationLatencyThreshold=$POINT_OPERATION_THRESHOLD_IN_MS nonPointOperationLatencyThreshold=$NON_POINT_OPERATION_THRESHOLD_IN_MS requestChargeThreshold=$REQUEST_CHARGE_THRESHOLD bash $DB_BINDING_NAME-run.sh
   sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.4.log" "$result_storage_url"
 fi
 
