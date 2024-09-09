@@ -269,23 +269,30 @@ else
   sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.log" "$result_storage_url"
   # Clearing log file from above load operation
   sudo rm -f /tmp/ycsb.log
-
+  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.1.log" "$result_storage_url"
   # Starting chaos script if opt in
   if [ "$fault" = true ]; then
     databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY fault_region=$FAULT_REGION delay_in_ms=$DELAY_IN_MS bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
+    sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.2.log" "$result_storage_url"
   fi
 
   ## Execute run phase for YCSB tests
   echo "########## Run operation for YCSB tests ###########"
+  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.3.log" "$result_storage_url"
   uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL bash $DB_BINDING_NAME-run.sh
+  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.4.log" "$result_storage_url"
 fi
 
 #Copy YCSB log to storage account
 echo "########## Copying Results to Storage ###########"
+sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.5.log" "$result_storage_url"
 # Clearing log file from last run if applicable
 sudo rm -f $user_home/"$VM_NAME-ycsb.log"
+sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.7.log" "$result_storage_url"
 cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb.log"
+sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.8.log" "$result_storage_url"
 sudo python3 converting_log_to_csv.py $user_home/"$VM_NAME-ycsb.log"
+sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.9.log" "$result_storage_url"
 sudo azcopy copy "$VM_NAME-ycsb.csv" "$result_storage_url"
 sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
 sudo mkdir "/tmp/$VM_NAME-system-diagnostics"
