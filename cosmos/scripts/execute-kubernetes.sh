@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+echo "#####Building custom script url####"
+customScriptUrl="https://raw.githubusercontent.com/${BENCHMARKING_FRAMEWORK_REPO}/${BENCHMARKING_FRAMEWORK_BRANCH}/cosmos/scripts/custom-script.sh"
+export BENCHMARKING_TOOLS_URL="https://github.com/${BENCHMARKING_FRAMEWORK_REPO}.git"
+export BENCHMARKING_TOOLS_BRANCH_NAME=$BENCHMARKING_FRAMEWORK_BRANCH
+export YCSB_GIT_REPO_URL="https://github.com/${YCSB_REPO}.git"
+export YCSB_GIT_BRANCH_NAME=$YCSB_BRANCH
+export VM_NAME=$POD_NAME
+export MACHINE_INDEX=$POD_INDEX
+export VM_COUNT=$POD_COUNT
+
+curl -o custom-script.sh $customScriptUrl
+
+# stdout and stderr will be logged in <$HOME>/agent.out, <$HOME>/agent.err and all output will go to the console
+bash custom-script.sh > >(tee $"/home/${ADMIN_USER_NAME}/agent.out") 2> >(tee "/home/${ADMIN_USER_NAME}/agent.err" >&2)
+
