@@ -60,6 +60,10 @@ if [ ! -z "$insertproportion" ]; then
    sed -i "s/^[#]*\s*insertproportion=.*/insertproportion=$insertproportion/" workloads/$workload
 fi
 
+if [ ! -z "$deleteproportion" ]; then
+   sed -i "s/^[#]*\s*deleteproportion=.*/deleteproportion=$deleteproportion/" workloads/$workload
+fi
+
 if [ ! -z "$requestdistribution" ]; then
    sed -i "s/^[#]*\s*requestdistribution=.*/requestdistribution=$requestdistribution/" workloads/$workload
 fi

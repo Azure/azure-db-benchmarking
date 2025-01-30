@@ -3,6 +3,17 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
+# Function to parse repo name from git repo URL
+parse_repo_name() {
+    local repo_url="$1"
+    # Remove the .git suffix if present
+    YCSB_REPO_NAME=$(basename "$repo_url" .git)
+    echo "$YCSB_REPO_NAME"
+}
+
+# Parse repo name from git url
+YCSB_REPO_NAME=$(parse_repo_name "$YCSB_GIT_REPO_URL")
+
 echo "##########VM NAME###########: $DB_BINDING_NAME"
 echo "##########VM NAME###########: $VM_NAME"
 echo "##########YCSB_RECORD_COUNT###########: $YCSB_RECORD_COUNT"
@@ -15,13 +26,14 @@ echo "##########BENCHMARKING_TOOLS_BRANCH_NAME###########: $BENCHMARKING_TOOLS_B
 echo "##########BENCHMARKING_TOOLS_URL###########: $BENCHMARKING_TOOLS_URL"
 echo "##########YCSB_GIT_BRANCH_NAME###########: $YCSB_GIT_BRANCH_NAME"
 echo "##########YCSB_GIT_REPO_URL###########: $YCSB_GIT_REPO_URL"
+echo "##########YCSB_GIT_REPO_NAME###########: $YCSB_REPO_NAME"
 echo "##########WAIT_FOR_FAULT_TO_START_IN_SEC###########: $WAIT_FOR_FAULT_TO_START_IN_SEC"
 echo "##########DURATION_OF_FAULT_IN_SEC###########: $DURATION_OF_FAULT_IN_SEC"
 echo "##########DROP_PROBABILITY###########: $DROP_PROBABILITY"
 echo "##########FAULT_REGION###########: $FAULT_REGION"
 echo "##########DELAY_IN_MS###########: $DELAY_IN_MS"
 echo "##########USER_AGENT###########: $USER_AGENT"
-
+echo "##########PREFERRED_REGION_LIST###########: $PREFERRED_REGION_LIST"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
@@ -51,7 +63,7 @@ cp -r ./azure-db-benchmarking/cosmos/scripts/* /tmp/ycsb
 echo "########## Cloning YCSB repository ##########"
 git clone -b "$YCSB_GIT_BRANCH_NAME" --single-branch "$YCSB_GIT_REPO_URL"
 
-cd YCSB
+cd $YCSB_REPO_NAME
 echo "########## Pulling Latest YCSB ##########"
 git pull
 echo "########## Building YCSB ##########"
@@ -189,7 +201,7 @@ if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; the
 
   ## Execute run phase for YCSB tests with write only workload
   echo "########## Run operation with write only workload for YCSB tests ###########"
-  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST bash $DB_BINDING_NAME-run.sh
+  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" insertproportion=1 readproportion=0 updateproportion=0 scanproportion=0 deleteproportion=0 recordcount=$recordcountForWriteOps operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST bash $DB_BINDING_NAME-run.sh
 else
   if [ "$SKIP_LOAD_PHASE" = False ] || [ "$SKIP_LOAD_PHASE" = false ]; then
     ## Execute load operation for YCSB tests
@@ -223,7 +235,7 @@ else
 
   ## Execute run phase for YCSB tests
   echo "########## Run operation for YCSB tests ###########"
-  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST bash $DB_BINDING_NAME-run.sh
+  uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION deleteproportion=$DELETE_PROPORTION useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST bash $DB_BINDING_NAME-run.sh
 fi
 
 #Copy YCSB log to storage account
