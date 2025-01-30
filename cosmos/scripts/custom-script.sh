@@ -33,6 +33,7 @@ echo "##########DROP_PROBABILITY###########: $DROP_PROBABILITY"
 echo "##########FAULT_REGION###########: $FAULT_REGION"
 echo "##########DELAY_IN_MS###########: $DELAY_IN_MS"
 echo "##########USER_AGENT###########: $USER_AGENT"
+echo "##########PREFERRED_REGION_LIST###########: $PREFERRED_REGION_LIST"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
