@@ -5,6 +5,7 @@ import argparse
 import asyncio
 import random
 import time
+import logging
 
 from azure.cosmos import PartitionKey, ConsistencyLevel
 from azure.cosmos.aio import CosmosClient, DatabaseProxy
@@ -36,18 +37,29 @@ def get_cosmos_client(endpoint: str,
                       account_key: str,
                       use_envoy: bool,
                       proxy_host: str) -> (CosmosClient, aiohttp.ClientSession, ProxiedTCPConnector):
+    logger = logging.getLogger('azure')
+    logger.setLevel(logging.DEBUG)
+    handler = logging.FileHandler(filename="azurecosmos")
+    logger.addHandler(handler)
+
     envoy_host="localhost" if (proxy_host is None) or (proxy_host == "") else proxy_host
-    print(f"Initializing a proxy connector with proxy_host={envoy_host} and proxy_port={5100}")
-    proxied_connector = ProxiedTCPConnector(proxy_host= envoy_host, proxy_port=5100, keepalive_timeout=30)
+    print(f"Initializing a proxy connector with proxy_host={envoy_host} and proxy_port={5100} and use_envoy={use_envoy}")
+    proxied_connector = ProxiedTCPConnector(
+        proxy_host= envoy_host,
+        proxy_port=5100,
+        keepalive_timeout=30) if (use_envoy == True) else None
+
     session = aiohttp.ClientSession(
         connector=proxied_connector,
-    )
+    ) if (use_envoy == True) else None
+
     cosmos_endpoint = endpoint #"https://localhost:5100" if (use_envoy == True) else endpoint
     return (CosmosClient(
         url=cosmos_endpoint,
         credential=account_key,
         transport=AioHttpTransport(session=session, session_owner=False),  # type: ignore
-        logging_enable=False,
+        logging_enable=True,
+        logger=logger,
         consistency_level=ConsistencyLevel.Session,
         connection_timeout=5,
         enable_diagnostics_logging=True,
@@ -56,8 +68,8 @@ def get_cosmos_client(endpoint: str,
     ) if (use_envoy == True) else CosmosClient(
         url=cosmos_endpoint,
         credential=account_key,
-        #transport=AioHttpTransport(session=session, session_owner=False),  # type: ignore
-        logging_enable=False,
+        logging_enable=True,
+        logger=logger,
         consistency_level=ConsistencyLevel.Session,
         connection_timeout=5,
         enable_diagnostics_logging=True,
@@ -72,7 +84,7 @@ async def write_workload(container, metrics: Metrics, ops, rate_limit=None):
         timehash = datetime.now().strftime("%Y%m%d%H%M%S.%f")
         doc = {"id": f"user{(uuid.uuid4())}{timehash}", "value": random.random()}
         try:
-            await container.create_item(doc)
+            item = await container.create_item(doc)
             latency = (time.perf_counter_ns() - start) / 1_000
             await metrics.record(latency, True)
         except Exception as e:
@@ -146,8 +158,13 @@ async def read_workload(container, metrics: Metrics, ops, num_docs_loaded: int, 
             if to_sleep > 0:
                 await asyncio.sleep(to_sleep)
 
+def str_to_bool(s: str) -> bool:
+    return s.strip().lower() in ("true", "1", "yes", "y")
+
 async def main(args):
-    client, session, connector = get_cosmos_client(args.endpoint, args.key, args.use_envoy, args.proxy_host)
+    use_envoy_bool = str_to_bool(args.use_envoy)
+    print(f"{args.endpoint} is connecting to {use_envoy_bool}")
+    client, session, connector = get_cosmos_client(args.endpoint, args.key, use_envoy_bool, args.proxy_host)
     async with client:
         container = await init_container(client, args.database, args.container)
 
@@ -201,8 +218,9 @@ async def main(args):
         #Metrics.generate_summary_artifacts(CSV_FILENAME)
         print(f"✅ Benchmark complete. Results saved. {datetime.now(timezone.utc).isoformat()}")
 
-    await session.close()
-    await connector.close()
+    if use_envoy_bool:
+        await session.close()
+        await connector.close()
 
 
 if __name__ == "__main__":
@@ -216,7 +234,7 @@ if __name__ == "__main__":
     parser.add_argument("--target_ops_per_sec", type=int, default=0, help="Target operations/sec (0 = unthrottled)")
     parser.add_argument("--workload_type", type=str, default="READ", help="Workload type (read / write)")
     parser.add_argument("--read_document_count", type=int, default=10000, help="Total documents inserted for read operations")
-    parser.add_argument("--use_envoy", type=bool, default=False, help="Use Envoy Proxy for connecting to Cosmos DB")
+    parser.add_argument("--use_envoy", type=str, default="False", help="Use Envoy Proxy for connecting to Cosmos DB")
     parser.add_argument("--proxy_host", type=str, help="Proxy endpoint URL")
     args = parser.parse_args()
 

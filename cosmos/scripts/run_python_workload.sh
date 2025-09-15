@@ -50,7 +50,15 @@ launch_script() {
 
   source "$VENV_DIR/bin/activate"
   echo "$(which python3.13) -u $PYTHON_SCRIPT --endpoint $COSMOS_URI --database "ycsb" --container "usertable" --key $COSMOS_KEY --workload_type $workload_type --read_document_count $read_document_count --ops $YCSB_OPERATION_COUNT --concurrency $THREAD_COUNT --target_ops_per_sec $TARGET_OPERATIONS_PER_SECOND --use_envoy $USE_ENVOY --proxy_host $PROXY_DNS_NAME"
-  sudo $(which python3.13) "$PYTHON_SCRIPT" --endpoint $COSMOS_URI --database "ycsb" --container "usertable" --key $COSMOS_KEY --workload_type $workload_type --read_document_count $read_document_count --ops $YCSB_OPERATION_COUNT --concurrency $THREAD_COUNT --target_ops_per_sec $TARGET_OPERATIONS_PER_SECOND --use_envoy $USE_ENVOY --proxy_host $PROXY_DNS_NAME > "$LOG_FILE" 2>&1
+
+  # do not pass --use_envoy and --proxy_host if not using envoy
+  if [ "$USE_ENVOY" != "true" ] && [ "$USE_ENVOY" != "True" ]; then
+    echo "🚀 Launching $PYTHON_SCRIPT without --use_envoy and --proxy_host..."
+    sudo $(which python3.13) "$PYTHON_SCRIPT" --endpoint $COSMOS_URI --database "ycsb" --container "usertable" --key $COSMOS_KEY --workload_type $workload_type --read_document_count $read_document_count --ops $YCSB_OPERATION_COUNT --concurrency $THREAD_COUNT --target_ops_per_sec $TARGET_OPERATIONS_PER_SECOND > "$LOG_FILE" 2>&1
+  else
+    echo "🚀 Launching $PYTHON_SCRIPT with --use_envoy and --proxy_host..."
+    sudo $(which python3.13) "$PYTHON_SCRIPT" --endpoint $COSMOS_URI --database "ycsb" --container "usertable" --key $COSMOS_KEY --workload_type $workload_type --read_document_count $read_document_count --ops $YCSB_OPERATION_COUNT --concurrency $THREAD_COUNT --target_ops_per_sec $TARGET_OPERATIONS_PER_SECOND --use_envoy $USE_ENVOY --proxy_host $PROXY_DNS_NAME > "$LOG_FILE" 2>&1
+  fi
   echo "✅ Script launched. Logging to $LOG_FILE"
 }
 

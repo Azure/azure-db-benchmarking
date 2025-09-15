@@ -127,7 +127,7 @@ static_resources:
                   key: "via"
                   value: "%ENVIRONMENT(POD_NAME)%"
             virtual_hosts:
-            - name: local_aakpandey-stage-nosql
+            - name: local_aakpandey-canary-nosql-noatm
               domains:
               - ["*"]
               routes:
@@ -145,10 +145,10 @@ static_resources:
                   #   - name: ":authority"
                   #     string_match:
                   #       safe_regex:
-                  #         regex: '.*aakpandey-stage-nosql\.*'
+                  #         regex: '.*aakpandey-canary-nosql-noatm\.*'
                 route:
-                  # host_rewrite_literal: "aakpandey-stage-nosql.documents-staging.windows-ppe.net" # remove this line to use the original host
-                  cluster: aakpandey-stage-nosql
+                  # host_rewrite_literal: "aakpandey-canary-nosql-noatm.documents.azure.com" # remove this line to use the original host
+                  cluster: aakpandey-canary-nosql-noatm
                   timeout: 300s
                   retry_policy:
                     retry_on: "connect-failure,refused-stream,reset"
@@ -160,10 +160,10 @@ static_resources:
               #       - name: ":authority"
               #         string_match:
               #           safe_regex:
-              #             regex: '.*aakpandey-stage-nosql\.*'
+              #             regex: '.*aakpandey-canary-nosql-noatm\.*'
               #   route:
               #     host_rewrite_literal: "{{ENDPOINT_REGIONAL}}" # remove this line to use the original host
-              #     cluster: aakpandey-stage-nosql
+              #     cluster: aakpandey-canary-nosql-noatm
               #     timeout: 300s
               #     retry_policy:
               #       retry_on: "connect-failure,refused-stream,reset"
@@ -193,7 +193,7 @@ static_resources:
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
   clusters:
-  - name: aakpandey-stage-nosql
+  - name: aakpandey-canary-nosql-noatm
     lb_policy: CLUSTER_PROVIDED
     cluster_type:
       name: envoy.clusters.dynamic_forward_proxy
@@ -233,7 +233,11 @@ static_resources:
       envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
         "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
         common_http_protocol_options:
-          max_connection_duration: 120s
+          # As of time of writing, we have habitat-envoy-namespaced, which receives low QPS.
+          # We have a limited number of CosmosDB accounts to connect to, so we can keep them all open
+          # and in-memory and make all requests fast.
+          max_connection_duration: 0s
+          idle_timeout: 180s
         upstream_http_protocol_options:
           auto_sni: true
           auto_san_validation: true
@@ -274,7 +278,11 @@ static_resources:
       envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
         "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
         common_http_protocol_options:
-          max_connection_duration: 120s
+          # As of time of writing, we have habitat-envoy-namespaced, which receives low QPS.
+          # We have a limited number of CosmosDB accounts to connect to, so we can keep them all open
+          # and in-memory and make all requests fast.
+          max_connection_duration: 0s
+          idle_timeout: 180s
         upstream_http_protocol_options:
           auto_sni: true
           auto_san_validation: true
