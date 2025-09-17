@@ -11,6 +11,8 @@ from azure.cosmos import PartitionKey, ConsistencyLevel
 from azure.cosmos.aio import CosmosClient, DatabaseProxy
 from azure.core.pipeline.transport import AioHttpTransport
 
+# from logging.handlers import RotatingFileHandler
+from logging import FileHandler
 from datetime import datetime, timezone
 from ProxyConnector import ProxiedTCPConnector
 from AsyncAtomicInt import AsyncAtomicInt
@@ -24,6 +26,10 @@ CHART_FILENAME = "metrics_chart.png"
 LATENCY_CHART_FILENAME = "latency_chart.png"
 EXCEL_FILENAME = "metrics_summary.xlsx"
 
+_NOISY_ERRORS = set([404, 409, 412])
+_NOISY_SUB_STATUS_CODES = set([0, None])
+_REQUIRED_ATTRIBUTES = ["resource_type", "verb", "operation_type", "status_code", "sub_status_code", "duration"]
+
 async def init_container(client: CosmosClient, database_name, container_name):
     db: DatabaseProxy = await client.create_database_if_not_exists(database_name)
     container = await db.create_container_if_not_exists(
@@ -33,15 +39,44 @@ async def init_container(client: CosmosClient, database_name, container_name):
     )
     return container
 
+def create_logger(file_name: str):
+    logger = logging.getLogger()
+    #prefix = os.path.splitext(file_name)[0] + "-" + str(os.getpid())
+    # Create a rotating file handler
+    handler = FileHandler(file_name)
+    logger.setLevel(logging.DEBUG)
+    # create filters for the logger handler to reduce the noise
+    workload_logger_filter = WorkloadLoggerFilter()
+    handler.addFilter(workload_logger_filter)
+    logger.addHandler(handler)
+    return logger
+
+
+class WorkloadLoggerFilter(logging.Filter):
+    def filter(self, record):
+        if record.msg:
+            if isinstance(record.msg, str):
+                request_url_index = record.msg.find("Request URL:")
+                response_status_index = record.msg.find("Response status:")
+                if request_url_index == -1 and response_status_index == -1:
+                    return True
+        if all(hasattr(record, attr) for attr in _REQUIRED_ATTRIBUTES):
+            # Check database account reads
+            if record.resource_type == "databaseaccount" and record.verb == "GET" and record.operation_type == "Read":
+                return True
+            # Check if there is an error and omit noisy errors
+            if record.status_code >= 400:
+                return True
+            # Check if the latency (duration) was above 100 ms
+            if record.duration >= 100:
+                return True
+        return False
+
 def get_cosmos_client(endpoint: str,
                       account_key: str,
                       use_envoy: bool,
                       proxy_host: str) -> (CosmosClient, aiohttp.ClientSession, ProxiedTCPConnector):
-    logger = logging.getLogger('azure')
-    logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(filename="azurecosmos")
-    logger.addHandler(handler)
-
+    logger = create_logger("azure-cosmosdb-client.log")
     envoy_host="localhost" if (proxy_host is None) or (proxy_host == "") else proxy_host
     print(f"Initializing a proxy connector with proxy_host={envoy_host} and proxy_port={5100} and use_envoy={use_envoy}")
     proxied_connector = ProxiedTCPConnector(
@@ -58,7 +93,7 @@ def get_cosmos_client(endpoint: str,
         url=cosmos_endpoint,
         credential=account_key,
         transport=AioHttpTransport(session=session, session_owner=False),  # type: ignore
-        logging_enable=True,
+        #logging_enable=True,
         logger=logger,
         consistency_level=ConsistencyLevel.Session,
         connection_timeout=5,
@@ -68,7 +103,7 @@ def get_cosmos_client(endpoint: str,
     ) if (use_envoy == True) else CosmosClient(
         url=cosmos_endpoint,
         credential=account_key,
-        logging_enable=True,
+        #logging_enable=True,
         logger=logger,
         consistency_level=ConsistencyLevel.Session,
         connection_timeout=5,
