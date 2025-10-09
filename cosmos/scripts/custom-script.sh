@@ -59,6 +59,13 @@ echo "###########ENVOY_FILE_NAME########: $ENVOY_FILE_NAME"
 echo "###########USE_PYTHON_SDK########: $USE_PYTHON_SDK"
 echo "###########PROXY_DNS_NAME########: $PROXY_DNS_NAME"
 
+echo "Installing azure-cli"
+curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+sudo apt-get update
+sudo apt-get install azure-cli
+echo "Azure-cli installed successfully"
+
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
 # Records already in the DB + records to be added, during load
