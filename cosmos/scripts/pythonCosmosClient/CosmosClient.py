@@ -6,6 +6,8 @@ import asyncio
 import random
 import time
 import logging
+import os
+import json
 
 from azure.cosmos import PartitionKey, ConsistencyLevel
 from azure.cosmos.aio import CosmosClient, DatabaseProxy
@@ -113,13 +115,24 @@ def get_cosmos_client(endpoint: str,
     ), session, proxied_connector)
 
 async def write_workload(container, metrics: Metrics, ops, rate_limit=None):
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    json_path = os.path.join(script_dir, "large_doc.json")
+
+    with open(json_path, "r") as f:
+        large_json = json.load(f)
+
     interval = 1 / rate_limit if rate_limit else 0
     for _ in range(ops):
         start = time.perf_counter_ns()
         timehash = datetime.now().strftime("%Y%m%d%H%M%S.%f")
-        doc = {"id": f"user{(uuid.uuid4())}{timehash}", "value": random.random()}
+        doc = {
+            "id": f"user{(uuid.uuid4())}{timehash}",
+            "value": random.random(),
+            "dump": large_json
+        }
+
         try:
-            item = await container.create_item(doc)
+            item = await container.upsert_item(doc)
             latency = (time.perf_counter_ns() - start) / 1_000
             await metrics.record(latency, True)
         except Exception as e:
