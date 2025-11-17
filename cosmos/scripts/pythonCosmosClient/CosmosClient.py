@@ -78,7 +78,7 @@ def get_cosmos_client(endpoint: str,
                       account_key: str,
                       use_envoy: bool,
                       proxy_host: str) -> (CosmosClient, aiohttp.ClientSession, ProxiedTCPConnector):
-    logger = create_logger("azure-cosmosdb-client.log")
+    #logger = create_logger("azure-cosmosdb-client.log")
     envoy_host="localhost" if (proxy_host is None) or (proxy_host == "") else proxy_host
     print(f"Initializing a proxy connector with proxy_host={envoy_host} and proxy_port={5100} and use_envoy={use_envoy}")
     proxied_connector = ProxiedTCPConnector(
@@ -96,7 +96,7 @@ def get_cosmos_client(endpoint: str,
         credential=account_key,
         transport=AioHttpTransport(session=session, session_owner=False),  # type: ignore
         #logging_enable=True,
-        logger=logger,
+        #logger=logger,
         consistency_level=ConsistencyLevel.Session,
         connection_timeout=5,
         enable_diagnostics_logging=True,
@@ -106,7 +106,7 @@ def get_cosmos_client(endpoint: str,
         url=cosmos_endpoint,
         credential=account_key,
         #logging_enable=True,
-        logger=logger,
+        #logger=logger,
         consistency_level=ConsistencyLevel.Session,
         connection_timeout=5,
         enable_diagnostics_logging=True,
@@ -168,9 +168,15 @@ async def load_generation(container, metrics: Metrics, count: int):
 
 async def add_document_worker(container, metrics: Metrics, count: int, total_ingested: AsyncAtomicInt, index: int):
     #print(f"Adding {count} documents with partition key start index {index}")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    json_path = os.path.join(script_dir, "large_doc.json")
+
+    with open(json_path, "r") as f:
+        large_json = json.load(f)
+
     for i in range(index, index+count):
         start = time.perf_counter_ns()
-        doc = {"id": f"user{i}", "value": random.random()}
+        doc = {"id": f"user{i}", "value": random.random(), "dump": large_json}
         try:
             await container.upsert_item(doc)
             #out = await container.upsert_item(doc)
