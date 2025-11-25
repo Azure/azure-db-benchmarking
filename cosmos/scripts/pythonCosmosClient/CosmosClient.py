@@ -116,7 +116,7 @@ def get_cosmos_client(endpoint: str,
 
 async def write_workload(container, metrics: Metrics, ops, rate_limit=None):
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    json_path = os.path.join(script_dir, "very_large_doc.json")
+    json_path = os.path.join(script_dir, "very_very_large_doc.json")
 
     with open(json_path, "r") as f:
         large_json = json.load(f)
@@ -169,7 +169,7 @@ async def load_generation(container, metrics: Metrics, count: int):
 async def add_document_worker(container, metrics: Metrics, count: int, total_ingested: AsyncAtomicInt, index: int):
     #print(f"Adding {count} documents with partition key start index {index}")
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    json_path = os.path.join(script_dir, "very_large_doc.json")
+    json_path = os.path.join(script_dir, "very_very_large_doc.json")
 
     with open(json_path, "r") as f:
         large_json = json.load(f)
