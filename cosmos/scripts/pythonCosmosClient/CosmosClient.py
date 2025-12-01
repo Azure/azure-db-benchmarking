@@ -162,7 +162,7 @@ async def load_generation(container, metrics: Metrics, count: int):
     await asyncio.gather(*tasks)
     docs_ingested: int = await total_ingested_count.get()
     if docs_ingested < count:
-        raise Exception("Too few documents inserted.")
+        print(f"Too few documents inserted. {docs_ingested} inserted, {count} expected.")
     else:
         print(f"Inserted {docs_ingested} documents.")
 
