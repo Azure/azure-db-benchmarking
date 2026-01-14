@@ -244,6 +244,7 @@ static_resources:
         auto_config:
           http2_protocol_options:
             max_concurrent_streams: 100
+            initial_stream_window_size: 1048576
             connection_keepalive:
               interval: 60s
               timeout: 20s  
