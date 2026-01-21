@@ -41,9 +41,12 @@ def get_cosmos_client(endpoint: str,
         connector=proxied_connector,
     )
     cosmos_endpoint = endpoint #"https://localhost:5100" if (use_envoy == True) else endpoint
+    
+    credential = DefaultAzureCredential()
+    
     return (CosmosClient(
         url=cosmos_endpoint,
-        credential=account_key,
+        credential=credential,
         transport=AioHttpTransport(session=session, session_owner=False),  # type: ignore
         logging_enable=False,
         consistency_level=ConsistencyLevel.Session,
@@ -53,7 +56,7 @@ def get_cosmos_client(endpoint: str,
         retry_total=3,
     ) if (use_envoy == True) else CosmosClient(
         url=cosmos_endpoint,
-        credential=account_key,
+        credential=credential,
         #transport=AioHttpTransport(session=session, session_owner=False),  # type: ignore
         logging_enable=False,
         consistency_level=ConsistencyLevel.Session,
