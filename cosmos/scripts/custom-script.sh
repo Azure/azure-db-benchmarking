@@ -177,9 +177,6 @@ elif [[ $DB_BINDING_NAME == "cassandra"* ]]; then
   tool_api="ycsb_cassandra"
 fi
 
-# Track whether storage operations are available
-STORAGE_AVAILABLE=true
-
 if [ $MACHINE_INDEX -eq 1 ]; then
   table_exist=$(az storage table exists --name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING | jq '.exists')
   if [ "$table_exist" = true ]; then
@@ -218,8 +215,8 @@ if [ $MACHINE_INDEX -eq 1 ]; then
 
   latest_table_entry=$(az storage entity insert --entity PartitionKey="${tool_api}" RowKey="${GUID}" JobStartTime=$job_start_time JobFinishTime="" JobStatus="Started" NoOfClientsCompleted=0 NoOfClientsStarted=1 SAS_URL=$result_storage_url --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING)
   if [ -z "$latest_table_entry" ]; then
-    echo "Warning: Unable to access storage account. Results will not be uploaded."
-    STORAGE_AVAILABLE=false
+    echo "Error while accessing storage account, exiting from this machine"
+    exit 1
   fi
 else
   for i in $(seq 1 10); do
@@ -234,11 +231,8 @@ else
     break
   done
   if [ -z "$job_start_time" ] || [ -z "$result_storage_url" ]; then
-    echo "Warning: Unable to get job_start_time/result_storage_url from storage. Results will not be uploaded."
-    STORAGE_AVAILABLE=false
-    # Use default values to continue execution
-    job_start_time=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
-    result_storage_url=""
+    echo "Error while getting job_start_time/result_storage_url, exiting from this machine"
+    exit 1
   fi
   for j in $(seq 1 60); do
     etag=$(echo $latest_table_entry | jq .etag)
@@ -283,11 +277,7 @@ if [[ $USE_PYTHON_SDK == true ]]; then
   if [ -f metrics_log.csv ]; then
     mv metrics_log.csv "$VM_NAME-metrics_log.csv"
   fi
-  if [ "$STORAGE_AVAILABLE" = true ]; then
-    sudo azcopy copy "$VM_NAME-metrics_log.csv" "$result_storage_url"
-  else
-    echo "Skipping upload of metrics_log.csv - storage not available"
-  fi
+  sudo azcopy copy "$VM_NAME-metrics_log.csv" "$result_storage_url"
 else
   #Execute YCSB test
   if [ "$WRITE_ONLY_OPERATION" = True ] || [ "$WRITE_ONLY_OPERATION" = true ]; then
@@ -332,72 +322,36 @@ else
     fi
     sudo rm -f "$user_home/$VM_NAME-ycsb-load.log"
     cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb-load.log"
-    if [ "$STORAGE_AVAILABLE" = true ]; then
-      sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.log" "$result_storage_url"
-    else
-      echo "Skipping upload - storage not available"
-    fi
+    sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.log" "$result_storage_url"
     # Clearing log file from above load operation
     sudo rm -f /tmp/ycsb.log
-    if [ "$STORAGE_AVAILABLE" = true ]; then
-      sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.1.log" "$result_storage_url"
-    else
-      echo "Skipping upload - storage not available"
-    fi
+    sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.1.log" "$result_storage_url"
     # Starting chaos script if opt in
     if [ "$fault" = true ]; then
       databaseid="ycsb" containerid="usertable" endpoint=$COSMOS_URI masterkey=$COSMOS_KEY wait_for_fault_to_start_in_sec=$WAIT_FOR_FAULT_TO_START_IN_SEC duration_of_fault_in_sec=$DURATION_OF_FAULT_IN_SEC drop_probability=$DROP_PROBABILITY fault_region=$FAULT_REGION delay_in_ms=$DELAY_IN_MS bash chaos_script.sh >"/home/${ADMIN_USER_NAME}/chaos.out" 2>"/home/${ADMIN_USER_NAME}/chaos.err" &
-      if [ "$STORAGE_AVAILABLE" = true ]; then
-        sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.2.log" "$result_storage_url"
-      else
-        echo "Skipping upload - storage not available"
-      fi
+      sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.2.log" "$result_storage_url"
     fi
 
     ## Execute run phase for YCSB tests
     echo "########## Run operation for YCSB tests ###########"
-    if [ "$STORAGE_AVAILABLE" = true ]; then
-      sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.3.log" "$result_storage_url"
-    else
-      echo "Skipping upload - storage not available"
-    fi
+    sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.3.log" "$result_storage_url"
     uri=$COSMOS_URI primaryKey=$COSMOS_KEY workload_type=$WORKLOAD_TYPE ycsb_operation="run" recordcount=$totalrecordcount operationcount=$YCSB_OPERATION_COUNT threads=$THREAD_COUNT target=$TARGET_OPERATIONS_PER_SECOND useUpsert=$USE_UPSERT insertproportion=$INSERT_PROPORTION readproportion=$READ_PROPORTION updateproportion=$UPDATE_PROPORTION scanproportion=$SCAN_PROPORTION useGateway=$USE_GATEWAY diagnosticsLatencyThresholdInMS=$DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS requestdistribution=$REQUEST_DISTRIBUTION insertorder=$INSERT_ORDER includeExceptionStackInLog=$INCLUDE_EXCEPTION_STACK fieldcount=$FIELD_COUNT appInsightConnectionString=$APP_INSIGHT_CONN_STR userAgent=$USER_AGENT preferredRegionList=$PREFERRED_REGION_LIST consistencyLevel=$CONSISTENCY_LEVEL bash $DB_BINDING_NAME-run.sh
-    if [ "$STORAGE_AVAILABLE" = true ]; then
-      sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.4.log" "$result_storage_url"
-    else
-      echo "Skipping upload - storage not available"
-    fi
+    sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.4.log" "$result_storage_url"
   fi
 fi
 
 #Copy YCSB log to storage account
 echo "########## Copying Results to Storage ###########"
-if [ "$STORAGE_AVAILABLE" = true ]; then
-  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.5.log" "$result_storage_url"
-else
-  echo "Skipping upload - storage not available"
-fi
+sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.5.log" "$result_storage_url"
 # Clearing log file from last run if applicable
 sudo rm -f $user_home/"$VM_NAME-ycsb.log"
-if [ "$STORAGE_AVAILABLE" = true ]; then
-  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.7.log" "$result_storage_url"
-else
-  echo "Skipping upload - storage not available"
-fi
+sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.7.log" "$result_storage_url"
 cp /tmp/ycsb.log $user_home/"$VM_NAME-ycsb.log"
-if [ "$STORAGE_AVAILABLE" = true ]; then
-  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.8.log" "$result_storage_url"
-else
-  echo "Skipping upload - storage not available"
-fi
+sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.8.log" "$result_storage_url"
 sudo python3 converting_log_to_csv.py $user_home/"$VM_NAME-ycsb.log"
-if [ "$STORAGE_AVAILABLE" = true ]; then
-  sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.9.log" "$result_storage_url"
-  sudo azcopy copy "$VM_NAME-ycsb.csv" "$result_storage_url"
-  sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
-else
-  echo "Skipping upload - storage not available"
-fi
+sudo azcopy copy $user_home/"$VM_NAME-ycsb-load.9.log" "$result_storage_url"
+sudo azcopy copy "$VM_NAME-ycsb.csv" "$result_storage_url"
+sudo azcopy copy "$user_home/$VM_NAME-ycsb.log" "$result_storage_url"
 sudo mkdir "/tmp/$VM_NAME-system-diagnostics"
 sudo mv /tmp/cosmos_client_logs "/tmp/$VM_NAME-system-diagnostics"
 sudo cp "$user_home/agent.out" "$user_home/agent.err" "/tmp/$VM_NAME-system-diagnostics"
@@ -418,14 +372,10 @@ if [ -f "$user_home/chaos.out" ] || [ -f "$user_home/chaos.err" ]; then
   sudo cp "$user_home/chaos.out" "$user_home/chaos.err" "/tmp/$VM_NAME-system-diagnostics"
 fi
 
-if [ "$STORAGE_AVAILABLE" = true ]; then
-  sudo azcopy copy "/tmp/$VM_NAME-system-diagnostics" "$result_storage_url" --recursive=true
-else
-  echo "Skipping upload of system diagnostics - storage not available"
-fi
+sudo azcopy copy "/tmp/$VM_NAME-system-diagnostics" "$result_storage_url" --recursive=true
 
 if [ $MACHINE_INDEX -eq 1 ]; then
-  if [ $VM_COUNT -gt 1 ] && [ "$STORAGE_AVAILABLE" = true ]; then
+  if [ $VM_COUNT -gt 1 ]; then
     for j in $(seq 1 12); do
       latest_table_entry=$(az storage entity show --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --partition-key "${tool_api}" --row-key "${GUID}")
       no_of_clients_completed=$(echo $latest_table_entry | jq .NoOfClientsCompleted)
@@ -438,26 +388,38 @@ if [ $MACHINE_INDEX -eq 1 ]; then
       fi
     done
   fi
-  
-  if [ "$STORAGE_AVAILABLE" = true ]; then
-    cd $user_home
-    mkdir "aggregation"
-    cd aggregation
-    # Clearing aggregation folder from last run if applicable
-    sudo rm *
-    index_for_regex=$(expr index "$result_storage_url" '?')
-    regex_to_append="/*"
-    url_first_part=$(echo $result_storage_url | cut -c 1-$((index_for_regex - 1)))
-    url_second_part=$(echo $result_storage_url | cut -c $((index_for_regex))-${#result_storage_url})
-    new_storage_url="$url_first_part$regex_to_append$url_second_part"
-    aggregation_dir="$user_home/aggregation"
-    sudo azcopy copy $new_storage_url $aggregation_dir --recursive=true
-    sudo rm -rf $aggregation_dir/*load.log
-    sudo python3 /tmp/ycsb/$ycsb_folder_name/aggregate_multiple_file_results.py $aggregation_dir
-    sudo azcopy copy aggregation.csv "$result_storage_url"
+  cd $user_home
+  mkdir "aggregation"
+  cd aggregation
+  # Clearing aggregation folder from last run if applicable
+  sudo rm *
+  index_for_regex=$(expr index "$result_storage_url" '?')
+  regex_to_append="/*"
+  url_first_part=$(echo $result_storage_url | cut -c 1-$((index_for_regex - 1)))
+  url_second_part=$(echo $result_storage_url | cut -c $((index_for_regex))-${#result_storage_url})
+  new_storage_url="$url_first_part$regex_to_append$url_second_part"
+  aggregation_dir="$user_home/aggregation"
+  sudo azcopy copy $new_storage_url $aggregation_dir --recursive=true
+  sudo rm -rf $aggregation_dir/*load.log
+  sudo python3 /tmp/ycsb/$ycsb_folder_name/aggregate_multiple_file_results.py $aggregation_dir
+  sudo azcopy copy aggregation.csv "$result_storage_url"
 
-    #Updating table entry to change JobStatus to 'Finished' and increment NoOfClientsCompleted
-    echo "Reading latest table entry"
+  #Updating table entry to change JobStatus to 'Finished' and increment NoOfClientsCompleted
+  echo "Reading latest table entry"
+  latest_table_entry=$(az storage entity show --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --partition-key "${tool_api}" --row-key "${GUID}")
+  etag=$(echo $latest_table_entry | jq .etag)
+  etag=${etag:1:-1}
+  etag=$(echo "$etag" | tr -d '\')
+  no_of_clients_completed=$(echo $latest_table_entry | jq .NoOfClientsCompleted)
+  no_of_clients_completed=$(echo "$no_of_clients_completed" | tr -d '"')
+  no_of_clients_completed=$((no_of_clients_completed + 1))
+  finish_time="$(date '+%Y-%m-%dT%H:%M:%SZ')"
+  echo "Updating latest table entry with incremented NoOfClientsCompleted"
+  az storage entity merge --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --entity PartitionKey="${tool_api}" RowKey="${GUID}" JobFinishTime=$finish_time JobStatus="Finished" NoOfClientsCompleted=$no_of_clients_completed --if-match=$etag
+  echo "Job finished successfully at $finish_time"
+else
+  for j in $(seq 1 60); do
+    echo "Reading latest table entry for updating NoOfClientsCompleted"
     latest_table_entry=$(az storage entity show --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --partition-key "${tool_api}" --row-key "${GUID}")
     etag=$(echo $latest_table_entry | jq .etag)
     etag=${etag:1:-1}
@@ -465,37 +427,14 @@ if [ $MACHINE_INDEX -eq 1 ]; then
     no_of_clients_completed=$(echo $latest_table_entry | jq .NoOfClientsCompleted)
     no_of_clients_completed=$(echo "$no_of_clients_completed" | tr -d '"')
     no_of_clients_completed=$((no_of_clients_completed + 1))
-    finish_time="$(date '+%Y-%m-%dT%H:%M:%SZ')"
     echo "Updating latest table entry with incremented NoOfClientsCompleted"
-    az storage entity merge --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --entity PartitionKey="${tool_api}" RowKey="${GUID}" JobFinishTime=$finish_time JobStatus="Finished" NoOfClientsCompleted=$no_of_clients_completed --if-match=$etag
-    echo "Job finished successfully at $finish_time"
-  else
-    echo "Skipping aggregation and table updates - storage not available"
-    echo "Job finished successfully at $(date '+%Y-%m-%dT%H:%M:%SZ')"
-  fi
-else
-  if [ "$STORAGE_AVAILABLE" = true ]; then
-    for j in $(seq 1 60); do
-      echo "Reading latest table entry for updating NoOfClientsCompleted"
-      latest_table_entry=$(az storage entity show --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --partition-key "${tool_api}" --row-key "${GUID}")
-      etag=$(echo $latest_table_entry | jq .etag)
-      etag=${etag:1:-1}
-      etag=$(echo "$etag" | tr -d '\')
-      no_of_clients_completed=$(echo $latest_table_entry | jq .NoOfClientsCompleted)
-      no_of_clients_completed=$(echo "$no_of_clients_completed" | tr -d '"')
-      no_of_clients_completed=$((no_of_clients_completed + 1))
-      echo "Updating latest table entry with incremented NoOfClientsCompleted"
-      replace_entry_result=$(az storage entity merge --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --entity PartitionKey="${tool_api}" RowKey="${GUID}" NoOfClientsCompleted=$no_of_clients_completed --if-match=$etag)
-      if [ -z "$replace_entry_result" ]; then
-        echo "Hit race condition on table entry for updating no_of_clients_completed"
-        sleep 1s
-      else
-        echo "Task finished successfully"
-        break
-      fi
-    done
-  else
-    echo "Skipping table updates - storage not available"
-    echo "Task finished successfully"
-  fi
+    replace_entry_result=$(az storage entity merge --table-name "${benchmarkname}Metadata" --connection-string $RESULT_STORAGE_CONNECTION_STRING --entity PartitionKey="${tool_api}" RowKey="${GUID}" NoOfClientsCompleted=$no_of_clients_completed --if-match=$etag)
+    if [ -z "$replace_entry_result" ]; then
+      echo "Hit race condition on table entry for updating no_of_clients_completed"
+      sleep 1s
+    else
+      echo "Task finished successfully"
+      break
+    fi
+  done
 fi
