@@ -6,22 +6,23 @@ packages:
   - jq
 
 runcmd:
+  - export DEBIAN_FRONTEND=noninteractive
   - wget https://aka.ms/downloadazcopy-v10-linux
   - tar -xvf downloadazcopy-v10-linux
   - sudo cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
-  - sudo apt-get update
-  - sudo apt-get install -y wget apt-transport-https software-properties-common
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get update
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wget apt-transport-https software-properties-common
   - wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
-  - sudo dpkg -i packages-microsoft-prod.deb
+  - sudo DEBIAN_FRONTEND=noninteractive dpkg -i packages-microsoft-prod.deb
   - rm packages-microsoft-prod.deb
-  - sudo apt-get update
-  - sudo apt-get install -y powershell
-  - sudo apt install net-tools
-  - sudo mkdir /etc/apt/keyrings/
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get update
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y powershell
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y net-tools
+  - sudo mkdir -p /etc/apt/keyrings/
   - wget -O- https://apt.envoyproxy.io/signing.key | sudo gpg --dearmor -o /etc/apt/keyrings/envoy-keyring.gpg
   - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/envoy-keyring.gpg] https://apt.envoyproxy.io bookworm main" | sudo tee /etc/apt/sources.list.d/envoy.list
-  - sudo apt-get update
-  - sudo apt-get install envoy=1.31.0
-  - sudo apt-get update
-  - sudo apt-get install openssl
-  - sudo apt-get install python3-pip
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get update
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y envoy
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get update
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y openssl
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pip
