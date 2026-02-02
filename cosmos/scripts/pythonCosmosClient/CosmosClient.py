@@ -3,10 +3,12 @@ import argparse
 import asyncio
 import random
 import time
+import logging
 
 from azure.cosmos import PartitionKey, ConsistencyLevel
 from azure.cosmos.aio import CosmosClient, DatabaseProxy
 from azure.core.pipeline.transport import AioHttpTransport
+from azure.identity.aio import DefaultAzureCredential
 
 from datetime import datetime, timezone
 from ProxyConnector import ProxiedTCPConnector
@@ -14,6 +16,11 @@ from AsyncAtomicInt import AsyncAtomicInt
 from datetime import datetime
 from Metrics import Metrics
 from WorkloadType import WorkloadType
+
+# Enable logging to see which credential DefaultAzureCredential is using
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('azure.identity')
+logger.setLevel(logging.DEBUG)
 
 REPORT_INTERVAL = 10  # seconds
 CSV_FILENAME = "metrics_log.csv"
@@ -42,7 +49,9 @@ def get_cosmos_client(endpoint: str,
     )
     cosmos_endpoint = endpoint #"https://localhost:5100" if (use_envoy == True) else endpoint
     
+    print("Initializing DefaultAzureCredential...")
     credential = DefaultAzureCredential()
+    print(f"DefaultAzureCredential initialized: {type(credential).__name__}")
     
     return (CosmosClient(
         url=cosmos_endpoint,

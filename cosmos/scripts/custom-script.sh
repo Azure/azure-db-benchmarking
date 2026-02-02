@@ -23,6 +23,7 @@
 # The APP_INSIGHT_CONN_STR variable is used to set the Application Insights connection string.
 # The USE_MANAGED_IDENTITY_FOR_STORAGE variable enables user-assigned managed identity authentication for Azure Storage (set to true to enable).
 # The STORAGE_ACCOUNT_NAME variable specifies the storage account name when using managed identity authentication.
+# The MANAGED_IDENTITY_CLIENT_ID variable specifies the client ID of the user-assigned managed identity (optional, required only if multiple identities are assigned).
 
 # The script starts by printing the values of all the input variables.
 # It then clones the benchmarking tools and YCSB repositories, and builds YCSB from source.
@@ -66,6 +67,7 @@ echo "###########USE_PYTHON_SDK########: $USE_PYTHON_SDK"
 echo "###########PROXY_DNS_NAME########: $PROXY_DNS_NAME"
 echo "###########USE_MANAGED_IDENTITY_FOR_STORAGE########: $USE_MANAGED_IDENTITY_FOR_STORAGE"
 echo "###########STORAGE_ACCOUNT_NAME########: $STORAGE_ACCOUNT_NAME"
+echo "###########MANAGED_IDENTITY_CLIENT_ID########: $MANAGED_IDENTITY_CLIENT_ID"
 
 # The index of the record to start at during the Load
 insertstart=$((YCSB_RECORD_COUNT * (MACHINE_INDEX - 1)))
@@ -188,8 +190,27 @@ fi
 # Setup authentication mode for Azure Storage
 if [[ $USE_MANAGED_IDENTITY_FOR_STORAGE == true ]]; then
   echo "########## Using Managed Identity for Azure Storage authentication ##########"
-  # Login azcopy with managed identity
-  sudo azcopy login --identity
+  
+  # Diagnose VM identity configuration
+  echo "########## Checking VM Identity Configuration ##########"
+  echo "Querying IMDS for identity information..."
+  curl -s -H Metadata:true "http://169.254.169.254/metadata/identity/info?api-version=2021-02-01" | jq '.'
+  
+  # Login Azure CLI with managed identity
+  if [[ -n $MANAGED_IDENTITY_CLIENT_ID ]]; then
+    echo "########## Using User-Assigned Managed Identity with Client ID: $MANAGED_IDENTITY_CLIENT_ID ##########"
+    az login --identity --username $MANAGED_IDENTITY_CLIENT_ID --allow-no-subscriptions
+    sudo azcopy login --identity --identity-client-id $MANAGED_IDENTITY_CLIENT_ID
+  else
+    echo "########## Using default Managed Identity (System-Assigned or single User-Assigned) ##########"
+    az login --identity --allow-no-subscriptions
+    sudo azcopy login --identity
+  fi
+  
+  # Verify which identity is being used
+  echo "########## Verifying logged-in identity ##########"
+  az account show | jq '{name: .name, user: .user}'
+  
   AUTH_MODE="--auth-mode login"
   ACCOUNT_NAME_PARAM="--account-name $STORAGE_ACCOUNT_NAME"
 else
