@@ -89,6 +89,11 @@ if [ $WAIT_FOR_FAULT_TO_START_IN_SEC -gt 0 ] && [ $DURATION_OF_FAULT_IN_SEC -gt 
   fi
 fi
 
+echo "########## Installing Azure CLI ##########"
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+az version
+echo "########## Azure CLI installed ##########"
+
 #Cloning Test Bench Repo
 echo "########## Cloning Test Bench repository ##########"
 git clone -b "$BENCHMARKING_TOOLS_BRANCH_NAME" --single-branch "$BENCHMARKING_TOOLS_URL"
