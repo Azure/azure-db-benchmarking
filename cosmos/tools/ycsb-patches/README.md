@@ -6,7 +6,8 @@ without review; apply it to a fork or branch and point the deployment at it.
 
 Status: compiled and checkstyle-clean with JDK 17 and Maven 3.9.6
 (`mvn -pl site.ycsb:azurecosmos-binding -am -DskipTests package`); `git apply --check` passes on Azure/YCSB commit
-`34539b4` (main). It has not been run against a Cosmos DB endpoint.
+`34539b4` (main). The metadata option parsing and percentage sampling were exercised with a reflection smoke test; the
+metadata calls and the token credential have not been run against a Cosmos DB endpoint.
 
 ## What it changes
 
@@ -19,7 +20,20 @@ Status: compiled and checkstyle-clean with JDK 17 and Maven 3.9.6
     now + 1 hour).
   - `unique`: returns the next token (round robin, `AtomicLong` index) on each `getToken` call.
 - `azurecosmos/pom.xml`: adds `com.azure:azure-identity:1.13.3` (it is not a dependency of `azure-cosmos`).
-- `azurecosmos/conf/azurecosmos.properties`: commented defaults for the three new properties.
+- `azurecosmos/conf/azurecosmos.properties`: commented defaults for the new properties.
+- Metadata load: `azurecosmos.metadataOperation` = `none` (default) | `listDatabases` | `listContainers` | `mixed`, and
+  `azurecosmos.metadataPercentage` (0-100, default 100 when the operation is not `none`) = share of YCSB `read()` calls
+  that execute the metadata operation instead of the point read.
+  - `listDatabases`: `client.readAllDatabases()`; `listContainers`: `database.readAllContainers()` of
+    `azurecosmos.databaseName`; both iterate every page (`iterableByPage()`). `mixed` picks one at random per call.
+  - The names were checked against azure-cosmos 4.67.0 (`CosmosClient.readAllDatabases()`,
+    `CosmosDatabase.readAllContainers()`, `FeedResponse.getCosmosDiagnostics()`).
+  - YCSB still reports these calls as `READ`. Slow-call diagnostics use `azurecosmos.diagnosticsLatencyThresholdInMS`
+    (`METADATA_DIAGNOSTIC` marker), failures are logged with `METADATA_EXCEPTION` and return `Status.ERROR`. The optional
+    Application Insights metrics get separate `Metadata Successful/Unsuccessful Operations` and
+    `Metadata Successful Latency` meters.
+  - Where these requests are served (RNTBD to a master partition in direct mode, gateway HTTPS in gateway mode, in
+    4.67.0) is described in `cosmos/docs/aad-token-size-testing.md`.
 
 ## Apply
 
