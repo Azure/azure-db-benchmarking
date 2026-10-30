@@ -90,6 +90,17 @@ if [ ! -z "$aadTokenMode" ]; then
    grep -q "^azurecosmos.aadTokenMode =" azurecosmos.properties || echo "azurecosmos.aadTokenMode = $aadTokenMode" >> azurecosmos.properties
 fi
 
+# Optional metadata requests (list databases/containers) replacing point reads. Only applied when the operation is not "none".
+if [ ! -z "$metadataOperation" ] && [ "$metadataOperation" != "none" ]; then
+   sed -i "s/^[#]*\s*azurecosmos.metadataOperation\ =.*/azurecosmos.metadataOperation\ =\ $metadataOperation/" azurecosmos.properties
+   grep -q "^azurecosmos.metadataOperation =" azurecosmos.properties || echo "azurecosmos.metadataOperation = $metadataOperation" >> azurecosmos.properties
+
+   if [ ! -z "$metadataPercentage" ]; then
+      sed -i "s/^[#]*\s*azurecosmos.metadataPercentage\ =.*/azurecosmos.metadataPercentage\ =\ $metadataPercentage/" azurecosmos.properties
+      grep -q "^azurecosmos.metadataPercentage =" azurecosmos.properties || echo "azurecosmos.metadataPercentage = $metadataPercentage" >> azurecosmos.properties
+   fi
+fi
+
 if [ ! -z "$appInsightConnectionString" ]; then
    sed -i "s|^[#]*\s*azurecosmos.appInsightConnectionString\ =.*|azurecosmos.appInsightConnectionString\ =\ $appInsightConnectionString|" azurecosmos.properties
 fi

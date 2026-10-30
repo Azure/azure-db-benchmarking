@@ -29,6 +29,12 @@
     "aadTokenMode": {
       "value": "single"
     },
+    "metadataOperation": {
+      "value": "none"
+    },
+    "metadataPercentage": {
+      "value": 100
+    },
     "vmCount": {
       "value": 1
     },
