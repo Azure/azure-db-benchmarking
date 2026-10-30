@@ -74,6 +74,22 @@ if [ ! -z "$primaryKey" ]; then
    sed -i "s/^[#]*\s*azurecosmos.primaryKey\ =.*/azurecosmos.primaryKey\ =\ $primaryKey/" azurecosmos.properties
 fi
 
+# Optional Entra (AAD) authentication. The properties are appended if the properties template does not contain them.
+if [ ! -z "$managedIdentityClientId" ]; then
+   sed -i "s/^[#]*\s*azurecosmos.managedIdentityClientId\ =.*/azurecosmos.managedIdentityClientId\ =\ $managedIdentityClientId/" azurecosmos.properties
+   grep -q "^azurecosmos.managedIdentityClientId =" azurecosmos.properties || echo "azurecosmos.managedIdentityClientId = $managedIdentityClientId" >> azurecosmos.properties
+fi
+
+if [ ! -z "$aadTokenFile" ]; then
+   sed -i "s|^[#]*\s*azurecosmos.aadTokenFile\ =.*|azurecosmos.aadTokenFile\ =\ $aadTokenFile|" azurecosmos.properties
+   grep -q "^azurecosmos.aadTokenFile =" azurecosmos.properties || echo "azurecosmos.aadTokenFile = $aadTokenFile" >> azurecosmos.properties
+fi
+
+if [ ! -z "$aadTokenMode" ]; then
+   sed -i "s/^[#]*\s*azurecosmos.aadTokenMode\ =.*/azurecosmos.aadTokenMode\ =\ $aadTokenMode/" azurecosmos.properties
+   grep -q "^azurecosmos.aadTokenMode =" azurecosmos.properties || echo "azurecosmos.aadTokenMode = $aadTokenMode" >> azurecosmos.properties
+fi
+
 if [ ! -z "$appInsightConnectionString" ]; then
    sed -i "s|^[#]*\s*azurecosmos.appInsightConnectionString\ =.*|azurecosmos.appInsightConnectionString\ =\ $appInsightConnectionString|" azurecosmos.properties
 fi

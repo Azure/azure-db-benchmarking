@@ -17,6 +17,18 @@
     "cosmosKey": {
       "value": ""
     },
+    "managedIdentityName": {
+      "value": ""
+    },
+    "managedIdentityClientId": {
+      "value": ""
+    },
+    "aadTokenFileUrl": {
+      "value": ""
+    },
+    "aadTokenMode": {
+      "value": "single"
+    },
     "vmCount": {
       "value": 1
     },

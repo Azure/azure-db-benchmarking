@@ -83,6 +83,38 @@
                 "description": "Specifies the key for the Cosmos DB account"
             }
         },
+        "managedIdentityName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Optional. Name of an existing User Assigned Managed Identity (in the same resource group) to attach to the VMs. Leave empty to deploy without a managed identity."
+            }
+        },
+        "managedIdentityClientId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Optional. Client id of the User Assigned Managed Identity used to authenticate to Cosmos DB with Entra (AAD) tokens. Leave empty to use the account key."
+            }
+        },
+        "aadTokenFileUrl": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Optional. Blob SAS URL of a text file with one AAD token per line (see cosmos/tools/aad-token-minter). When set, the YCSB client authenticates with these tokens instead of the account key."
+            }
+        },
+        "aadTokenMode": {
+            "type": "string",
+            "defaultValue": "single",
+            "allowedValues": [
+                "single",
+                "unique"
+            ],
+            "metadata": {
+                "description": "How tokens from aadTokenFileUrl are used. 'single' always presents the first token; 'unique' presents a different token on each token acquisition."
+            }
+        },
         "vmCount": {
             "type": "int",
             "defaultValue": 1,
@@ -501,6 +533,7 @@
                     }
                 }
             },
+            "identity": "[if(empty(parameters('managedIdentityName')), json('null'), createObject('type', 'UserAssigned', 'userAssignedIdentities', createObject(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')), createObject())))]",
             "copy": {
                 "name": "vmcopy",
                 "count": "[parameters('vmCount')]"
@@ -522,7 +555,7 @@
                 "settings": {
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat('DB_BINDING_NAME=',parameters('ycsbDatabaseBindingName'),' ','ADMIN_USER_NAME=',parameters('adminUsername'),' ','PROJECT_NAME=',parameters('projectName'),' ','BENCHMARKING_TOOLS_URL=',variables('benchmarkingToolsURL'),' ','BENCHMARKING_TOOLS_BRANCH_NAME=',parameters('benchmarkingToolsBranchName'),' ','YCSB_GIT_REPO_URL=',variables('ycsbGitHubRepoUrl'),' ','GUID=',parameters('guidValue'),' ','YCSB_GIT_BRANCH_NAME=',parameters('ycsbGitHubBranchName'),' ','TARGET_OPERATIONS_PER_SECOND=',parameters('targetOperationsPerSecond'),' ','THREAD_COUNT=',parameters('threads'),' ','YCSB_OPERATION_COUNT=',parameters('ycsbOperationCount'), ' ','WORKLOAD_TYPE=',parameters('workloadType'),' ','VM_NAME=',variables('vmName'),copyIndex(1), ' ','RESULT_STORAGE_CONNECTION_STRING=','\"',parameters('resultsStorageConnectionString'),'\"',' ','COSMOS_URI=','\"',parameters('cosmosURI'),'\"', ' ','COSMOS_KEY=',parameters('cosmosKey'), ' ','VM_COUNT=',parameters('vmCount'), ' ','USE_UPSERT=',parameters('useUpsert'), ' ','USE_GATEWAY=',parameters('useGateway'), ' ','DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS=',parameters('diagnosticsLatencyThresholdInMS'), ' ','YCSB_RECORD_COUNT=',parameters('ycsbRecordCount'), ' ','WRITE_ONLY_OPERATION=',parameters('writeOnlyOperation'), ' ','READ_PROPORTION=',parameters('readproportion'), ' ','SCAN_PROPORTION=',parameters('scanproportion'), ' ','UPDATE_PROPORTION=',parameters('updateproportion'), ' ','INSERT_PROPORTION=',parameters('insertproportion'), ' ','REQUEST_DISTRIBUTION=',parameters('requestdistribution'), ' ','INSERT_ORDER=',parameters('insertorder'), ' ','CUSTOM_SCRIPT_URL=',variables('customScriptUrl'), ' ','MACHINE_INDEX=',copyIndex(1), ' ','INCLUDE_EXCEPTION_STACK=',parameters('includeExceptionStackInLog'), ' ','FIELD_COUNT=',parameters('fieldcount'), ' ','SKIP_LOAD_PHASE=',parameters('skipLoadPhase'), ' ','WAIT_FOR_FAULT_TO_START_IN_SEC=',parameters('waitForFaultToStartInSec'), ' ','DURATION_OF_FAULT_IN_SEC=',parameters('durationOfFaultInSec'), ' ','DROP_PROBABILITY=',parameters('dropProbability'), ' ','FAULT_REGION=','\"',parameters('faultRegion'),'\"',' ','DELAY_IN_MS=',parameters('delayInMs'),' ','USER_AGENT=',parameters('userAgent'),' ','CONSISTENCY_LEVEL=',parameters('consistencyLevel'),' ','PREFERRED_REGION_LIST=','\"',parameters('preferredRegionList'),'\"',' ','APP_INSIGHT_CONN_STR=','\"',parameters('appInsightConnectionString'),'\"',' ', 'bash ',variables('vmScriptExtensionScriptName'))]",
+                    "commandToExecute": "[concat('DB_BINDING_NAME=',parameters('ycsbDatabaseBindingName'),' ','ADMIN_USER_NAME=',parameters('adminUsername'),' ','PROJECT_NAME=',parameters('projectName'),' ','BENCHMARKING_TOOLS_URL=',variables('benchmarkingToolsURL'),' ','BENCHMARKING_TOOLS_BRANCH_NAME=',parameters('benchmarkingToolsBranchName'),' ','YCSB_GIT_REPO_URL=',variables('ycsbGitHubRepoUrl'),' ','GUID=',parameters('guidValue'),' ','YCSB_GIT_BRANCH_NAME=',parameters('ycsbGitHubBranchName'),' ','TARGET_OPERATIONS_PER_SECOND=',parameters('targetOperationsPerSecond'),' ','THREAD_COUNT=',parameters('threads'),' ','YCSB_OPERATION_COUNT=',parameters('ycsbOperationCount'), ' ','WORKLOAD_TYPE=',parameters('workloadType'),' ','VM_NAME=',variables('vmName'),copyIndex(1), ' ','RESULT_STORAGE_CONNECTION_STRING=','\"',parameters('resultsStorageConnectionString'),'\"',' ','COSMOS_URI=','\"',parameters('cosmosURI'),'\"', ' ','COSMOS_KEY=',parameters('cosmosKey'), ' ','MANAGED_IDENTITY_CLIENT_ID=',parameters('managedIdentityClientId'), ' ','AAD_TOKEN_FILE_URL=','\"',parameters('aadTokenFileUrl'),'\"', ' ','AAD_TOKEN_MODE=',parameters('aadTokenMode'), ' ','VM_COUNT=',parameters('vmCount'), ' ','USE_UPSERT=',parameters('useUpsert'), ' ','USE_GATEWAY=',parameters('useGateway'), ' ','DIAGNOSTICS_LATENCY_THRESHOLD_IN_MS=',parameters('diagnosticsLatencyThresholdInMS'), ' ','YCSB_RECORD_COUNT=',parameters('ycsbRecordCount'), ' ','WRITE_ONLY_OPERATION=',parameters('writeOnlyOperation'), ' ','READ_PROPORTION=',parameters('readproportion'), ' ','SCAN_PROPORTION=',parameters('scanproportion'), ' ','UPDATE_PROPORTION=',parameters('updateproportion'), ' ','INSERT_PROPORTION=',parameters('insertproportion'), ' ','REQUEST_DISTRIBUTION=',parameters('requestdistribution'), ' ','INSERT_ORDER=',parameters('insertorder'), ' ','CUSTOM_SCRIPT_URL=',variables('customScriptUrl'), ' ','MACHINE_INDEX=',copyIndex(1), ' ','INCLUDE_EXCEPTION_STACK=',parameters('includeExceptionStackInLog'), ' ','FIELD_COUNT=',parameters('fieldcount'), ' ','SKIP_LOAD_PHASE=',parameters('skipLoadPhase'), ' ','WAIT_FOR_FAULT_TO_START_IN_SEC=',parameters('waitForFaultToStartInSec'), ' ','DURATION_OF_FAULT_IN_SEC=',parameters('durationOfFaultInSec'), ' ','DROP_PROBABILITY=',parameters('dropProbability'), ' ','FAULT_REGION=','\"',parameters('faultRegion'),'\"',' ','DELAY_IN_MS=',parameters('delayInMs'),' ','USER_AGENT=',parameters('userAgent'),' ','CONSISTENCY_LEVEL=',parameters('consistencyLevel'),' ','PREFERRED_REGION_LIST=','\"',parameters('preferredRegionList'),'\"',' ','APP_INSIGHT_CONN_STR=','\"',parameters('appInsightConnectionString'),'\"',' ', 'bash ',variables('vmScriptExtensionScriptName'))]",
                     "fileUris": [ "[concat(variables('vmScriptExtensionScriptURL'))]" ]
                 }
             },
